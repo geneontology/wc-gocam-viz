@@ -1,0 +1,10 @@
+:host {
+    display: block;
+  }
+  
+
+.gocam-viz {
+    display: block;
+    width: 800px;
+    height: 800px;
+}

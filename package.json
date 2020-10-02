@@ -22,8 +22,17 @@
     "generate": "stencil generate"
   },
   "dependencies": {
-    "@stencil/core": "2.0.3",
-    "cytoscape": "^3.16.1"
+    "@stencil/core": "^1.8.8",
+    "bbop-core": "0.0.5",
+    "bbop-graph-noctua": "0.0.35",
+    "bbop-manager-minerva": "0.0.20",
+    "bbop-response-barista": "0.0.11",
+    "bbop-rest-manager": "0.0.17",
+    "cytoscape": "^3.16.1",
+    "sync-request": "^6.1.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "rollup-plugin-node-polyfills": "^0.2.1"
+  }
 }

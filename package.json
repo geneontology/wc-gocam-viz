@@ -1,7 +1,7 @@
 {
   "name": "wc-gocam-viz",
   "version": "0.0.1",
-  "description": "Stencil Component Starter",
+  "description": "Web component to visualize GO-CAM",
   "main": "dist/index.cjs.js",
   "module": "dist/custom-elements/index.js",
   "es2015": "dist/esm/index.mjs",
@@ -30,8 +30,7 @@
     "bbop-rest-manager": "0.0.17",
     "cytoscape": "^3.16.1",
     "cytoscape-cose-bilkent": "^4.1.0",
-    "sync-request": "^6.1.0",
-    "underscore": "^1.11.0"
+    "sync-request": "^6.1.0"
   },
   "license": "MIT",
   "devDependencies": {

@@ -8,6 +8,10 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface WcGocamViz {
         "gocamId": string;
+        "graphFold": string;
+        "showActivity": boolean;
+        "showHasInput": boolean;
+        "showHasOutput": boolean;
     }
 }
 declare global {
@@ -24,6 +28,10 @@ declare global {
 declare namespace LocalJSX {
     interface WcGocamViz {
         "gocamId"?: string;
+        "graphFold"?: string;
+        "showActivity"?: boolean;
+        "showHasInput"?: boolean;
+        "showHasOutput"?: boolean;
     }
     interface IntrinsicElements {
         "wc-gocam-viz": WcGocamViz;

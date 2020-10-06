@@ -1,26 +1,48 @@
-<!DOCTYPE html>
 <html dir="ltr" lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
-    <title>GO-CAM visualization</title>
-
     <script type="module" src="/build/wc-gocam-viz.esm.js"></script>
     <script nomodule src="/build/wc-gocam-viz.js"></script>
   </head>
+  
   <body>
 
-    <!-- HEADER -->
-    <div style="width: 100%; height:100px">
-        <a href="http://www.geneontology.org" style="display:inline-block; width:250px;">
-            <img src="https://geneontology-test.s3.amazonaws.com/go-logo.large.png" style="width:100%">
-        </a>
-        <h1 style="display:inline-block; width:80%; text-align:center; vertical-align: text-bottom;">GO-CAM Viewer - Web Component</h1>
-    </div>
+    <wc-gocam-viz 
+      gocam-id="gomodel:5e72450500004237"
+      show-has-input=false
+      show-activity=false
+    />
+
+    <!-- <wc-gocam-viz 
+      gocam-id="gomodel:5f46c3b700001031"
+      show-has-input=true
+      show-has-output=true
+      show-activity=false
+    /> -->
+
+    <!-- <wc-gocam-viz 
+      gocam-id="gomodel:5f46c3b700002146"
+      show-has-input=false
+      show-has-output=false
+      show-activity=false
+    /> -->
+<!-- 
+    <wc-gocam-viz 
+      gocam-id="5e72450500004019"
+      show-has-input=false
+      show-has-output=false
+      show-activity=false
+    /> -->
 
 
-    <!-- GO-CAM VIZ -->
-    <wc-gocam-viz gocam-id="gomodel:5e72450500004237"></wc-gocam-viz>
+
+    <!-- <wc-gocam-viz 
+      gocam-id="5f46c3b700002102"
+      show-has-input=false
+      show-has-output=false
+      show-activity=false
+    /> -->
+
+    
 
 
   </body>

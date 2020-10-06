@@ -5,9 +5,6 @@ import minerva_manager from 'bbop-manager-minerva';
 import barista_response from 'bbop-response-barista';
 import { jquery as jquery_engine } from 'bbop-rest-manager';
 
-import * as us from 'underscore';
-import bbop from 'bbop-core';
-
 import cytoscape from 'cytoscape';
 import coseBilkent from 'cytoscape-cose-bilkent';
 
@@ -25,11 +22,75 @@ export class GoCamViz {
 
     @Prop() gocamId: string;
 
+    @Prop() showHasInput: boolean = false;
+
+    @Prop() showHasOutput: boolean = false;
+
+    @Prop() showActivity: boolean = false;
+
+    @Prop() graphFold: string = "editor";
+
+    // @Prop()
+
     @Watch('gocamId')
     gocamIdChanged(newValue, oldValue) {
         if (newValue != oldValue) {
             this.loadGoCam(newValue);
         }
+    }
+
+
+    relations_enabled_by = ['http://purl.obolibrary.org/obo/RO_0002333', 'RO_0002333', 'RO:0002333'];
+    relations_collapsible = ["RO:0002333", "BFO:0000066", "RO:0002233", "RO:0002488", "RO:0002234"]; // 2233 : has input ; 2234 : has output
+    // relations_collapsible = ["RO:0002333", "BFO:0000066", "RO:0002233", "RO:0002488", "RO:0002234"]; // 2233 : has input ; 2234 : has output
+    relations_nestable = { };
+    relations_strippable = {
+        "BFO:0000050": true,    // part of
+        "BFO:0000051": true,    // has part
+        "RO:0002220": true,     // adjacent to
+        "BFO:0000066": true,    // occurs in
+        "RO:0012005" : true     // is small molecule activator
+    };
+
+    
+
+    glyph(relation) {
+        switch(relation) {
+            case "BFO:0000050":
+                return { glyph: null, label: "part of", color: '#add8e6'};
+            case "BFO:0000051":
+                return { glyph: null, label: "has part", color: '#6495ED'};
+            case "BFO:0000066":
+                return { glyph: null, label: "occurs in", color: '#66CDAA'};
+            case "RO:0002211":
+                return { glyph: null, label: "regulates", color: '#2F4F4F'};
+            case "RO:0002212":
+                return { glyph: "tee", label: "negatively regulates", color: '#FF0000'};
+            case "RO:0002630":
+                return { glyph: "tee", label: "directly negatively regulates", color: '#FF0000'};                
+            case "RO:0002213":
+                return { glyph : "triangle", label: "positively regulates", color: '#008000'};
+            case "RO:0002629":
+                return { glyph : "triangle", label: "directly positively regulates", color: '#008000'};
+            case "RO:0002233":
+                return { glyph : null, label: "has input", color: '#6495ED'};
+            case "RO:0002234":
+                return { glyph : null, label: "has output", color: '#ED6495'};
+            case "RO:0002331":
+                return { glyph : null, label: "involved in", color: '#E9967A'};
+
+            case "RO:0002333":
+                return { glyph : null, label: "enabled by", color: '#B8860B'};
+            case "RO:0002411":
+                return { glyph : null, label: "causally upstream of", color: '#483D8B'};
+
+            case "annotation":
+                return { glyph : "diamond", label: "annotation", color: '#483D8B'};
+            case "instance_of":
+                return { glyph : null, label: "activity", color: '#FFFAFA'};
+        }
+        console.log("No glyph found for relation '" + relation + "'");
+        return { glyph: null, label: relation, color: "black" };
     }
 
 
@@ -39,10 +100,9 @@ export class GoCamViz {
 
     engine;
     initEngine() {
-        // let engine = new sync_request(barista_response);
         this.engine = new jquery_engine(barista_response);
         this.engine.method('POST');
-        console.log("engine: " , this.engine);
+        // console.log("engine: " , this.engine);
     }
 
     manager;
@@ -57,7 +117,7 @@ export class GoCamViz {
             console.log("rebuild: ", resp , man);
             let graph = new noctua_graph();
             graph.load_data_basic(resp.data());
-            this.renderGoCam(this.gocamId, graph);
+            this.renderGoCam(resp._data.id, graph);
         });
         this.manager.register('meta', function(resp, man){
             console.log(resp);
@@ -71,29 +131,20 @@ export class GoCamViz {
         this.manager.register('warning', function(resp, man){
             console.log(resp);
         });
-        console.log("manager: " , this.manager);
+        // console.log("manager: " , this.manager);
     }
 
     loadGoCam(gocamId) {
         let viz = this.gocamviz.querySelector("#gocam-viz");
+        if(!gocamId.startsWith("gomodel:")) {
+            gocamId = "gomodel:" + gocamId;
+        }
         viz.innerHTML = "Loading GO-CAM (" + gocamId + ")";
-
         this.manager.get_model(gocamId);
-
-
     }
 
-    relations = ['http://purl.obolibrary.org/obo/RO_0002333', 'RO_0002333', 'RO:0002333'];
-    relations_collapsible = ["RO:0002333", "BFO:0000066", "RO:0002233", "RO:0002488"];
-    relations_nestable = { };
-    relations_strippable = {
-        "BFO:0000050": true, // part of
-        "RO:0002220": true, // adjacent to
-        "BFO:0000066": true // occurs in
-    };
 
-
-    renderGoCam(gocamId, graph, fold = "editor", nest = "no", show_hi_p = "no", show_mf_p = "no") {
+    renderGoCam(gocamId, graph, nest = "no") {
 
         // Showing loading message
         let viz = this.gocamviz.querySelector("#gocam-viz");
@@ -102,35 +153,34 @@ export class GoCamViz {
 
 
         // Prepare graph
-        let g = graph.clone();
-        let graph_fold = fold;
-        g.unfold();
-        if(fold == "evidence") {
-            g.fold_evidence();
-        } else if(fold == "editor") {
-            g.fold_go_noctua()
+        graph.unfold();
+        if(this.graphFold == "evidence") {
+            graph.fold_evidence();
+        } else if(this.graphFold == "editor") {
+            graph.fold_go_noctua(this.relations_collapsible)
         }
 
+        let g = graph.clone();
 
         // Get a list of all the singletons we start with.
         var all_starting_singletons_by_id = {};
         var sings = g.get_singleton_nodes();
-        us.each(sings, function(sing){
+        for(let sing of sings) {
             all_starting_singletons_by_id[sing.id()] = true;
-        });
+        }
 
 
         // Remove all of the undesireable rels.
         var parent_trap = {};
         var note_sink = {}; // keep the reverse lookup info of parent_trap
         if( nest && nest === 'yes' ){
-            console.log('adding nestable rels');
+            // console.log('adding nestable rels');
             this.relations_nestable["BFO:0000050"] = true; // part of
         }
 
         for(let e of g.all_edges()) {
             if(this.relations_nestable.hasOwnProperty(e.predicate_id())) {
-                if(!parent_trap[e.subject_id()]) {
+                if(!parent_trap.hasOwnProperty(e.subject_id())) {
                     parent_trap[e.subject_id()] = [];
                 }
                 parent_trap[e.subject_id()].push(e.object_id());
@@ -159,23 +209,29 @@ export class GoCamViz {
             }
         };
 
-        let cat_list = [];
+        // let cat_list = [];
+        // for(let enode of g.all_nodes()) {
+        //     for(let in_type of enode.types()) {
+        //         cat_list.push(in_type.category());
+        //     }
+        // }
+        // // is this just creating a set ???
+        // let tmph = bbop.hashify(cat_list);
+        // cat_list = us.keys(tmph);
+
+        let cat_set = new Set();
         for(let enode of g.all_nodes()) {
             for(let in_type of enode.types()) {
-                cat_list.push(in_type.category());
+                cat_set.add(in_type.category());
             }
         }
-
-        // is this just creating a set ???
-        let tmph = bbop.hashify(cat_list);
-        cat_list = us.keys(tmph);
+        let cat_list = Array.from(cat_set);
 
 
         let elements = [];
         for(let node of g.all_nodes()) {
 
             let nid = node.id();
-
 
             // Where we'll assemble the label.
     	    var table_row = [];
@@ -197,9 +253,11 @@ export class GoCamViz {
             }
 
 
+            // First, extract any GP info (or has_input, depending on
+            // rel), if it's there.  If it is, it is the exclusive
+            // displayed info.
             let gp_identified_p = false;
             let has_input_collection = [];
-
             let sub = node.subgraph();
             if(sub) {
                 for(let snode of sub.all_nodes()) {
@@ -210,10 +268,8 @@ export class GoCamViz {
 
                         for(let edge of edges) {
 
-                            if(this.relations.includes(edge.predicate_id())) {
-                            // if( edge.predicate_id() == 'http://purl.obolibrary.org/obo/RO_0002333' ||
-                            //     edge.predicate_id() === 'RO_0002333' ||
-                            //     edge.predicate_id() === 'RO:0002333' ) {
+                            // If enabled by relation is present, use primary that node label
+                            if(this.relations_enabled_by.includes(edge.predicate_id())) {
 
                                 let gpn = sub.get_node(snid);
 
@@ -221,11 +277,13 @@ export class GoCamViz {
                                 for(let gpl of gp_labels) {
                                     let last = gpl.lastIndexOf(" ");
                                     if(last > 0) { gpl = gpl.substring(0, last); }
+                                    console.log("GP: ", gpl);
                                     table_row.push(gpl);
                                     gp_identified_p = true;                                    
                                 }
 
-                            } else if(show_hi_p == "yes" && edge.predicate_id() == "RO:0002233") {
+                            // If we consider has input relationship, look for node label here too
+                            } else if(this.showHasInput && edge.predicate_id() == "RO:0002233") {
                                 let hin = sub.get_node(snid);
 
                                 let hi_labels = this._node_labels(hin, cat_list);
@@ -242,27 +300,29 @@ export class GoCamViz {
 
 
             let bgc = "white";
+            // If no GP has been identified, then add any label from that node
             if(!gp_identified_p) {
                 for(let nl of this._node_labels(node, cat_list)) {
-                    if(show_mf_p == "yes") {
+                    if(this.showActivity) {
                         table_row.push("[" + nl + "]");
                     } else {
                         table_row.push(nl);
                     }
                 }
 
-            } else if(show_mf_p == "yes") {
+            } else if(this.showActivity) {
                 for(let nl of this._node_labels(node, cat_list)) {
                     table_row.push("[" + nl + "]");
                 }
 
             } else {
                 bgc = "yellow";
+
             }
 
             // Add the has_inputs last.
             for(let itm of has_input_collection) {
-                table_row.push("(" + itm + ")");
+                table_row.push("(" + itm + "➔)");
             }
 
             let nlabel = table_row.join("\n");
@@ -305,35 +365,7 @@ export class GoCamViz {
         for(let e of g.all_edges()) {
             // Detect endpoint type as best as possible.
             var rn = e.relation() || 'n/a';
-            // var rglyph = aid.glyph(rn);
-            var rglyph = "arrow";
-            var glyph = null;
-            if( rglyph === 'arrow' ){ // Arrow is explicit filled "PlainArrow".
-                glyph = 'triangle';
-            } else if( rglyph === 'bar' ){ // Bar simulated by flattened arrow.
-                glyph = 'tee';
-            } else if( ! rglyph || rglyph === 'none' ){ // Default is small "V".
-                // Choosing circle over backcurve as the latter looks
-                // essentially just like the triangle, and the circle
-                // is the target endpoint in the GE anyways.
-                glyph = 'circle';
-                //glyph = 'triangle-backcurve';
-            } else {
-                // Unpossible.
-                // throw new Error('unpossible glyph...is apparently possible');
-                // For things like diamonds, and other currently unspecified
-                // relations.
-                glyph = 'circle';
-            }
-
-            // var readable_rn = aid.readable(rn) || rn;
-            // // If context aid doesn't work, see if it comes with a label.
-            // if( readable_rn === rn && typeof(e.label) === 'function' ){
-            // var label_rn = e.label();
-            // if( label_rn !== rn ){
-            //     readable_rn = label_rn; // use label
-            // }
-            // }
+            var rglyph = this.glyph(rn);
 
             // Push final edge data.
             elements.push({
@@ -343,9 +375,9 @@ export class GoCamViz {
                     source: e.subject_id(),
                     target: e.object_id(),
                     predicate: e.predicate_id(),
-                    label: e.label(),
-                    color: "black",
-                    glyph: glyph
+                    label: rglyph.label ? rglyph.label : e.label(),
+                    color: rglyph.color ? rglyph.color : "black",
+                    glyph: rglyph.glyph ? rglyph.glyph : "circle"
                 }
             });            
         }
@@ -377,6 +409,9 @@ export class GoCamViz {
             'cose-bilkent': {
                 name: 'cose-bilkent',
                 randomize: true,
+                padding: 100,
+                fit: true,
+                spacingFactor: 1.5
             },
             'noctuadef': {
                 'name': 'preset',
@@ -471,39 +506,40 @@ export class GoCamViz {
                 {
                     selector: 'node',
                     style: {
-                    'content': 'data(label)',
-                    'width': 70,
-                    'height': 35,
-                    'background-color': 'white',
-                    'border-width': 1,
-                    'border-color': 'black',
-                    'font-size': 8,
-                    'min-zoomed-font-size': 1, //10,
-                                'text-valign': 'center',
-                                'color': 'black',
-                    'shape': show_shape,
-                    'text-wrap': 'wrap',
-                    'text-overflow-wrap': "anywhere",
-                    'text-max-width': '62px'
+                        'content': 'data(label)',
+                        'width': 105,
+                        'height': 35,
+                        'background-color': 'white',
+                        'border-width': 1,
+                        'border-color': 'black',
+                        'font-size': 8,
+                        'min-zoomed-font-size': 1, //10,
+                        'text-valign': 'center',
+                        'color': 'black',
+                        'shape': show_shape,
+                        'text-wrap': 'wrap',
+                        'text-overflow-wrap': "anywhere",
+                        'text-max-width': '95px'
                     }
                 },
                 {
                     selector: 'edge',
                     style: {
-                    'curve-style': 'bezier',
-                    'text-rotation': 'autorotate',
-                    'text-margin-y': '-6px',
-                    'target-arrow-color': 'data(color)',
-                    'target-arrow-shape': 'data(glyph)',
-                    'target-arrow-fill': 'filled',
-                    'line-color': 'data(color)',
-                    'content': 'data(label)',
-                    'font-size': 6,
-                    'min-zoomed-font-size': 3, //10,
-                                'text-valign': 'center',
-                                'color': 'white',
-                                'text-outline-width': 1,
-                    'text-outline-color': '#222222'
+                        'curve-style': 'bezier',
+                        'text-rotation': 'autorotate',
+                        'text-margin-y': '-6px',
+                        'text-margin-x': '-3px',                    
+                        'target-arrow-color': 'data(color)',
+                        'target-arrow-shape': 'data(glyph)',
+                        'target-arrow-fill': 'filled',
+                        'line-color': 'data(color)',
+                        'content': 'data(label)',
+                        'font-size': 6,
+                        'min-zoomed-font-size': 1, //10,
+                        'color': 'white',
+                        'text-outline-width': 1,
+                        'text-outline-color': '#222222',
+                        'width': 12
                     }
                 }
                 ],            
@@ -525,12 +561,6 @@ export class GoCamViz {
         });
 
 
-        // cy.add({
-        //     group: 'nodes',
-        //     data: { weight: 75 },
-        //     position: { x: 200, y: 200 }
-        // });
-
 
         cy.on("mouseover", this.onMouseOver);
         cy.on("mouseout", this.onMouseOut);
@@ -543,7 +573,7 @@ export class GoCamViz {
         var bin = {};
         for(let in_type of n.types()) {
             var cat = in_type.category();
-            if( ! bin[cat] ){ bin[cat] = []; }
+            if( ! bin[cat] ) { bin[cat] = []; }
             bin[cat].push(in_type);
         }
         for(let cat_id of cat_list) {
@@ -563,11 +593,11 @@ export class GoCamViz {
     }
 
     onMouseOver(evt) {
-        console.log("cy over ", evt);
+        // console.log("cy over ", evt);
     }
 
     onMouseOut(evt) {
-        console.log("cy out ", evt);
+        // console.log("cy out ", evt);
     }
 
 

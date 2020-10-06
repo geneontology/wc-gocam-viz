@@ -120,16 +120,16 @@ export class GoCamViz {
             this.renderGoCam(resp._data.id, graph);
         });
         this.manager.register('meta', function(resp, man){
-            console.log(resp);
+            console.log(resp, man);
         });
         this.manager.register('manager_error', function(resp, man){
-            console.error(resp);
+            console.error(resp, man);
         });
         this.manager.register('error', function(resp, man){
-            console.error(resp);
+            console.error(resp, man);
         });
         this.manager.register('warning', function(resp, man){
-            console.log(resp);
+            console.log(resp, man);
         });
         // console.log("manager: " , this.manager);
     }
@@ -593,11 +593,11 @@ export class GoCamViz {
     }
 
     onMouseOver(evt) {
-        // console.log("cy over ", evt);
+        console.log("Mouse over ", evt);
     }
 
     onMouseOut(evt) {
-        // console.log("cy out ", evt);
+        console.log("Mouse out ", evt);
     }
 
 

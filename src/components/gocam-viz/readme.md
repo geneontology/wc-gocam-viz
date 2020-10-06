@@ -7,9 +7,13 @@
 
 ## Properties
 
-| Property  | Attribute  | Description | Type     | Default     |
-| --------- | ---------- | ----------- | -------- | ----------- |
-| `gocamId` | `gocam-id` |             | `string` | `undefined` |
+| Property        | Attribute         | Description | Type      | Default     |
+| --------------- | ----------------- | ----------- | --------- | ----------- |
+| `gocamId`       | `gocam-id`        |             | `string`  | `undefined` |
+| `graphFold`     | `graph-fold`      |             | `string`  | `"editor"`  |
+| `showActivity`  | `show-activity`   |             | `boolean` | `false`     |
+| `showHasInput`  | `show-has-input`  |             | `boolean` | `false`     |
+| `showHasOutput` | `show-has-output` |             | `boolean` | `false`     |
 
 
 ----------------------------------------------

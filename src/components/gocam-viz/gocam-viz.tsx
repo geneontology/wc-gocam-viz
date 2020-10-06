@@ -109,7 +109,7 @@ export class GoCamViz {
     initManager() {
         let global_barista_location = "http://barista.berkeleybop.org/";
         let global_minerva_definition_name = "minerva_public";
-        let user_token = "qfmsf7j12312v0ihr17j";
+        let user_token = "";
 
         this.manager = new minerva_manager(global_barista_location, global_minerva_definition_name, user_token, this.engine, "async");
         

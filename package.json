@@ -32,8 +32,17 @@
     "cytoscape-cose-bilkent": "^4.1.0",
     "sync-request": "^6.1.0"
   },
-  "license": "MIT",
   "devDependencies": {
     "rollup-plugin-node-polyfills": "^0.2.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geneontology/wc-gocam-viz.git"
+  },
+  "bugs": {
+    "url": "https://github.com/geneontology/wc-gocam-viz/issues"
+  },
+  "homepage": "https://github.com/geneontology/wc-gocam-viz#readme",
+  "author": "Laurent-Philippe Albou",
+  "license": "BSD-3"
 }

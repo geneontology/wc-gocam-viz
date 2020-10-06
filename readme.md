@@ -4,3 +4,29 @@
 
 This web component allows to visualize GO-CAM from any website and create entity/activity views to highlight the flow of causal relationships.
 
+## Usage
+
+NPM package: https://www.npmjs.com/package/@geneontology/wc-gocam-viz
+
+In any HTML page:
+````
+<html>
+
+<head>
+  <script type="module" src="https://unpkg.com/@geneontology/wc-gocam-viz/dist/wc-gocam-viz/wc-gocam-viz.esm.js"></script>
+  <script nomodule="" src="https://unpkg.com/@geneontology/wc-gocam-viz/dist/wc-gocam-viz/wc-gocam-viz.js"></script>
+
+</head>
+<body>
+
+    <wc-gocam-viz 
+      gocam-id="5e72450500004237"
+      show-has-input=false
+      show-has-output=false
+      show-activity=false
+    />
+
+</body>
+</html>
+
+````

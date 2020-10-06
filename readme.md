@@ -30,3 +30,7 @@ In any HTML page:
 </html>
 
 ````
+
+This will render a GO-CAM model highlighting the flow of regulations between genes/activities
+
+![GO-CAM example](Example.png)

@@ -87,6 +87,8 @@ export class GoCamViz {
             case "RO:0002418":
                 return { glyph : null, label: "causally upstream of or within", color: '#483D8B'};
 
+            case "RO:0002406":
+                return { glyph: "tee", label: "directly activates", color: '#008000'};                
               
             case "RO:0002305":
                 return { glyph : null, label: "causally upstream of, negative effect", color: '#FF0000'};
@@ -149,14 +151,12 @@ export class GoCamViz {
     }
 
     loadGoCam(gocamId) {
-        // let viz = this.gocamviz.querySelector("#gocam-viz");
+        let viz = this.gocamviz.querySelector("#gocam-viz");
+        viz.innerHTML = ""
         if(!gocamId.startsWith("gomodel:")) {
             gocamId = "gomodel:" + gocamId;
         }
         this.loading = true;
-
-        // viz.innerHTML = "<wc-spinner spinner-style='default' spinner-color='blue'></wc-spinner>"
-        // viz.innerHTML = "Loading GO-CAM (" + gocamId + ")";
         this.manager.get_model(gocamId);
     }
 
@@ -420,9 +420,10 @@ export class GoCamViz {
             'cose-bilkent': {
                 name: 'cose-bilkent',
                 randomize: true,
-                padding: 100,
-                fit: true,
-                spacingFactor: 1.5
+                idealEdgeLength: 100,
+                // padding: 100,
+                // spacingFactor: 1.5
+                // nodeRepulsion: 450000
             },
             'noctuadef': {
                 'name': 'preset',
@@ -522,8 +523,8 @@ export class GoCamViz {
                     selector: 'node',
                     style: {
                         'content': 'data(label)',
-                        'width': 105,
-                        'height': 35,
+                        'width': 95,
+                        'height': 37,
                         'background-color': 'white',
                         'border-width': 1,
                         'border-color': 'black',
@@ -534,21 +535,21 @@ export class GoCamViz {
                         'shape': show_shape,
                         'text-wrap': 'wrap',
                         'text-overflow-wrap': "anywhere",
-                        'text-max-width': '95px'
+                        'text-max-width': '85px'
                     }
                 },
                 {
                     selector: 'edge',
                     style: {
+                        'content': 'data(label)',
+                        'line-color': 'data(color)',
+                        'target-arrow-color': 'data(color)',
+                        'target-arrow-shape': 'data(glyph)',
                         'curve-style': 'bezier',
                         'text-rotation': 'autorotate',
                         'text-margin-y': '-6px',
                         'text-margin-x': '-3px',                    
-                        'target-arrow-color': 'data(color)',
-                        'target-arrow-shape': 'data(glyph)',
                         'target-arrow-fill': 'filled',
-                        'line-color': 'data(color)',
-                        'content': 'data(label)',
                         'font-size': 6,
                         'min-zoomed-font-size': 1, //10,
                         'color': 'white',
@@ -575,9 +576,10 @@ export class GoCamViz {
             ready: this.finishRendering          
         });
 
+        // cy.fit();
+        // cy.center();
 
         this.loading = false;
-
 
         cy.on("mouseover", this.onMouseOver);
         cy.on("mouseout", this.onMouseOut);

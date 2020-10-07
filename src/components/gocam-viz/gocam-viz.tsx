@@ -7,6 +7,7 @@ import { jquery as jquery_engine } from 'bbop-rest-manager';
 
 import cytoscape from 'cytoscape';
 import coseBilkent from 'cytoscape-cose-bilkent';
+import { State } from '@stencil/core';
 
 cytoscape.use( coseBilkent );
 
@@ -30,7 +31,8 @@ export class GoCamViz {
 
     @Prop() graphFold: string = "editor";
 
-    // @Prop()
+    @State() loading: boolean = false;
+
 
     @Watch('gocamId')
     gocamIdChanged(newValue, oldValue) {
@@ -78,11 +80,23 @@ export class GoCamViz {
                 return { glyph : null, label: "has output", color: '#ED6495'};
             case "RO:0002331":
                 return { glyph : null, label: "involved in", color: '#E9967A'};
-
             case "RO:0002333":
                 return { glyph : null, label: "enabled by", color: '#B8860B'};
             case "RO:0002411":
                 return { glyph : null, label: "causally upstream of", color: '#483D8B'};
+            case "RO:0002418":
+                return { glyph : null, label: "causally upstream of or within", color: '#483D8B'};
+
+              
+            case "RO:0002305":
+                return { glyph : null, label: "causally upstream of, negative effect", color: '#FF0000'};
+            case "RO:0004046":
+                return { glyph : null, label: "causally upstream of or within, negative effect", color: '#FF0000'};
+
+            case "RO:0002304":
+                return { glyph : null, label: "causally upstream of, positive effect", color: '#008000'};
+            case "RO:0004047":
+                return { glyph : null, label: "causally upstream of or within, positive effect", color: '#008000'};
 
             case "annotation":
                 return { glyph : "diamond", label: "annotation", color: '#483D8B'};
@@ -135,22 +149,19 @@ export class GoCamViz {
     }
 
     loadGoCam(gocamId) {
-        let viz = this.gocamviz.querySelector("#gocam-viz");
+        // let viz = this.gocamviz.querySelector("#gocam-viz");
         if(!gocamId.startsWith("gomodel:")) {
             gocamId = "gomodel:" + gocamId;
         }
-        viz.innerHTML = "Loading GO-CAM (" + gocamId + ")";
+        this.loading = true;
+
+        // viz.innerHTML = "<wc-spinner spinner-style='default' spinner-color='blue'></wc-spinner>"
+        // viz.innerHTML = "Loading GO-CAM (" + gocamId + ")";
         this.manager.get_model(gocamId);
     }
 
 
     renderGoCam(gocamId, graph, nest = "no") {
-
-        // Showing loading message
-        let viz = this.gocamviz.querySelector("#gocam-viz");
-        viz.innerHTML = "";
-        console.log("Displaying GO-CAM ", gocamId , graph);
-
 
         // Prepare graph
         graph.unfold();
@@ -491,6 +502,10 @@ export class GoCamViz {
 
 
 
+        // Showing loading message
+        let viz = this.gocamviz.querySelector("#gocam-viz");
+        // viz.innerHTML = "";
+        console.log("Displaying GO-CAM ", gocamId , graph);
 
 
         // let show_shape = "ellipse";
@@ -561,9 +576,12 @@ export class GoCamViz {
         });
 
 
+        this.loading = false;
+
 
         cy.on("mouseover", this.onMouseOver);
         cy.on("mouseout", this.onMouseOut);
+        cy.on("tap", "node", this.onMouseClick);
     }
 
 
@@ -590,6 +608,8 @@ export class GoCamViz {
 
     finishRendering() {
         console.log("Rendering of the GO-CAM complete");
+        // tableElement.innerHTML = "<wc-spinner spinner-style='default' spinner-color='blue'></wc-spinner>"
+        
     }
 
     onMouseOver(evt) {
@@ -598,6 +618,10 @@ export class GoCamViz {
 
     onMouseOut(evt) {
         console.log("Mouse out ", evt);
+    }
+
+    onMouseClick(evt) {
+        console.log("Mouse click ", evt);
     }
 
 
@@ -620,12 +644,10 @@ export class GoCamViz {
     }
 
     render() {
-        return (
-            <div>
-                <div id="gocam-viz" class="gocam-viz">
-                    Loading GO-CAM...
-                </div>
-            </div>
-        );
+        let classes = this.loading ? "" : "gocam-viz";
+        return [
+            this.loading ? <div class="gocam-viz-loader">Loading GO-CAM {this.gocamId} ...</div> : "",
+            <div id="gocam-viz" class={classes}></div>
+        ];
     }
 }

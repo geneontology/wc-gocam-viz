@@ -27,6 +27,8 @@ export class GoCamViz {
 
     @Prop() showHasOutput: boolean = false;
 
+    @Prop() showGeneProduct: boolean = false;
+    
     @Prop() showActivity: boolean = false;
 
     @Prop() graphFold: string = "editor";
@@ -87,8 +89,10 @@ export class GoCamViz {
             case "RO:0002418":
                 return { glyph : null, label: "causally upstream of or within", color: '#483D8B'};
 
+            case "RO:0002408":
+                return { glyph: "tee", label: "directly inhibits", color: '#FF0000'};                
             case "RO:0002406":
-                return { glyph: "tee", label: "directly activates", color: '#008000'};                
+                return { glyph: "triangle", label: "directly activates", color: '#008000'};                
               
             case "RO:0002305":
                 return { glyph : null, label: "causally upstream of, negative effect", color: '#FF0000'};
@@ -220,15 +224,6 @@ export class GoCamViz {
             }
         };
 
-        // let cat_list = [];
-        // for(let enode of g.all_nodes()) {
-        //     for(let in_type of enode.types()) {
-        //         cat_list.push(in_type.category());
-        //     }
-        // }
-        // // is this just creating a set ???
-        // let tmph = bbop.hashify(cat_list);
-        // cat_list = us.keys(tmph);
 
         let cat_set = new Set();
         for(let enode of g.all_nodes()) {
@@ -244,6 +239,8 @@ export class GoCamViz {
 
             let nid = node.id();
 
+            let nlink = null;
+
             // Where we'll assemble the label.
     	    var table_row = [];
             
@@ -255,6 +252,7 @@ export class GoCamViz {
                     // Capture rdfs:label annotation for visual override
                     // if extant. Allow clobber of last.
                     if( ann.key() === 'rdfs:label' ){
+                        console.log(node , " rdfs:label: ", ann.value());
                         rdfs_label = ann.value();
                     }
                 }
@@ -288,8 +286,11 @@ export class GoCamViz {
                                 for(let gpl of gp_labels) {
                                     let last = gpl.lastIndexOf(" ");
                                     if(last > 0) { gpl = gpl.substring(0, last); }
-                                    console.log("GP: ", gpl);
-                                    table_row.push(gpl);
+                                    console.log("GP: ", gpl, gpn);
+                                    if(this.showGeneProduct) {
+                                        table_row.push(gpl);
+                                        nlink = gpn.types()[0]
+                                    }
                                     gp_identified_p = true;                                    
                                 }
 
@@ -315,7 +316,9 @@ export class GoCamViz {
             if(!gp_identified_p) {
                 for(let nl of this._node_labels(node, cat_list)) {
                     if(this.showActivity) {
-                        table_row.push("[" + nl + "]");
+                        table_row.push(nl);
+                        // console.log("activity: ", nl);
+                        // table_row.push("[" + nl + "]");
                     } else {
                         table_row.push(nl);
                     }
@@ -323,7 +326,9 @@ export class GoCamViz {
 
             } else if(this.showActivity) {
                 for(let nl of this._node_labels(node, cat_list)) {
-                    table_row.push("[" + nl + "]");
+                    table_row.push(nl);
+                    // console.log("activity: ", nl);
+                    // table_row.push("[" + nl + "]");
                 }
 
             } else {
@@ -347,12 +352,11 @@ export class GoCamViz {
             if( parent_trap.hasOwnProperty(nid) ){
                 var parents = parent_trap[nid];
                 if( parents.length === 1 ){
-                    console.log('adding parent for: ' + nid);
                     parent = parents[0];
                     text_v_align = 'top';
                     text_h_align = 'left';
                 }
-            }            
+            }
 
             elements.push(
                 {
@@ -360,6 +364,7 @@ export class GoCamViz {
                     data: {
                         id: nid,
                         label: nlabel,
+                        link: nlink,
                         parent: parent,
                         'text-valign': text_v_align,
                         'text-halign': text_h_align,
@@ -420,9 +425,9 @@ export class GoCamViz {
             'cose-bilkent': {
                 name: 'cose-bilkent',
                 randomize: true,
-                idealEdgeLength: 100,
+                // idealEdgeLength: 100,
                 // padding: 100,
-                // spacingFactor: 1.5
+                spacingFactor: 1.5
                 // nodeRepulsion: 450000
             },
             'noctuadef': {
@@ -523,19 +528,19 @@ export class GoCamViz {
                     selector: 'node',
                     style: {
                         'content': 'data(label)',
-                        'width': 95,
-                        'height': 37,
+                        'width': 105,
+                        'height': 42,
                         'background-color': 'white',
                         'border-width': 1,
                         'border-color': 'black',
-                        'font-size': 8,
+                        'font-size': 12,
                         'min-zoomed-font-size': 1, //10,
                         'text-valign': 'center',
                         'color': 'black',
                         'shape': show_shape,
                         'text-wrap': 'wrap',
-                        'text-overflow-wrap': "anywhere",
-                        'text-max-width': '85px'
+                        // 'text-overflow-wrap': "anywhere",
+                        'text-max-width': '100px'
                     }
                 },
                 {
@@ -588,6 +593,26 @@ export class GoCamViz {
 
 
     // Adapted from widgetry.
+    _node_ids_labels(n, cat_list){
+        var retlist = [];
+        var bin = {};
+        for(let in_type of n.types()) {
+            var cat = in_type.category();
+            if( ! bin[cat] ) { bin[cat] = []; }
+            bin[cat].push(in_type);
+        }
+        for(let cat_id of cat_list) {
+            var accumulated_types = bin[cat_id];
+            var cell_cache = [];
+            for(let atype of accumulated_types) {
+                var id = atype.class_id();
+                var label = atype.class_label();
+                cell_cache.push({ id : id, label : label });
+            }
+            retlist.push(cell_cache);
+        };
+        return retlist;
+    }
     _node_labels(n, cat_list){
         var retlist = [];
         var bin = {};
@@ -600,7 +625,26 @@ export class GoCamViz {
             var accumulated_types = bin[cat_id];
             var cell_cache = [];
             for(let atype of accumulated_types) {
-                var tt = atype.to_string();
+                var tt = atype.class_label();
+                cell_cache.push(tt);
+            }
+            retlist.push(cell_cache.join("\n"));
+        };
+        return retlist;
+    }
+    _node_ids(n, cat_list){
+        var retlist = [];
+        var bin = {};
+        for(let in_type of n.types()) {
+            var cat = in_type.category();
+            if( ! bin[cat] ) { bin[cat] = []; }
+            bin[cat].push(in_type);
+        }
+        for(let cat_id of cat_list) {
+            var accumulated_types = bin[cat_id];
+            var cell_cache = [];
+            for(let atype of accumulated_types) {
+                var tt = atype.class_id();
                 cell_cache.push(tt);
             }
             retlist.push(cell_cache.join("\n"));

@@ -10,6 +10,7 @@ export namespace Components {
         "gocamId": string;
         "graphFold": string;
         "showActivity": boolean;
+        "showGeneProduct": boolean;
         "showHasInput": boolean;
         "showHasOutput": boolean;
     }
@@ -30,6 +31,7 @@ declare namespace LocalJSX {
         "gocamId"?: string;
         "graphFold"?: string;
         "showActivity"?: boolean;
+        "showGeneProduct"?: boolean;
         "showHasInput"?: boolean;
         "showHasOutput"?: boolean;
     }

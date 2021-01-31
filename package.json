@@ -22,6 +22,7 @@
     "generate": "stencil generate"
   },
   "dependencies": {
+    "@geneontology/wc-light-modal": "0.0.3",
     "@stencil/core": "^1.8.8",
     "bbop-core": "0.0.5",
     "bbop-graph-noctua": "0.0.35",
@@ -30,6 +31,7 @@
     "bbop-rest-manager": "0.0.17",
     "cytoscape": "^3.16.1",
     "cytoscape-cose-bilkent": "^4.1.0",
+    "go-dbxrefs": "^1.0.1",
     "sync-request": "^6.1.0"
   },
   "devDependencies": {

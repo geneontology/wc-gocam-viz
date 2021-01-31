@@ -2,6 +2,9 @@
   <head>
     <script type="module" src="/build/wc-gocam-viz.esm.js"></script>
     <script nomodule src="/build/wc-gocam-viz.js"></script>
+
+    <script type="module" src="https://unpkg.com/@geneontology/wc-light-modal/dist/wc-light-modal/wc-light-modal.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/@geneontology/wc-light-modal/dist/wc-light-modal/wc-light-modal.js"></script>      
   </head>
   
   <body>
@@ -43,6 +46,7 @@
     /> -->
 
     <wc-gocam-viz 
+      id="gocam-1"
       gocam-id="568b0f9600000284"
       show-has-input=false
       show-has-output=false
@@ -50,7 +54,42 @@
       show-activity=false
     />
 
-    
+    <wc-light-modal modal-anchor="@" modal-content="<button>toto</button>" x=0 y=0 id="modal-1">
+    </wc-light-modal>
+
+    <script>
+
+        function createContent(payload) {
+          let content = "<table>";
+
+          content += "<tr><td>Gene</td><td>" + payload.uri ? "<a href=" + payload.uri + " target=\"blank\">" + payload.label + "</a>" : payload.label;
+          content += "</td></tr>"
+          if(payload.standardTypes && payload.standardTypes.length > 0) {
+            content += "<tr><td>Activity</td><td>" + "<a " + " target=\"blank\" href=http://amigo.geneontology.org/amigo/term/" + payload.standardTypes[0].class_id() + ">" + payload.standardTypes[0].class_label() + "</a>";
+            content += "</td></tr>"
+          }
+          content += "</table>"
+          return content;
+        }
+
+        document.addEventListener('nodeOver', function hideMenu(e, v) {
+          let payload = e.detail;
+          console.log('Node over' , payload);
+          let modal = document.getElementById("modal-1");
+          modal.x = payload.x;
+          modal.y = payload.y;
+          modal.modalTitle = payload.label;
+          modal.modalContent = createContent(payload);
+          modal.open();
+        });
+
+        document.addEventListener('nodeOut', function hideMenu(e, v) {
+          console.log('Node out' , e.detail);
+          let modal = document.getElementById("modal-1");
+          modal.close();
+        });
+        
+    </script>
     
 
     <!-- <wc-gocam-viz 

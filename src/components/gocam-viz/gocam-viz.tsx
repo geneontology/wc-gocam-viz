@@ -1,4 +1,4 @@
-import { Component, Prop, Element, Watch, h } from '@stencil/core';
+import { Component, Prop, Element, Event, EventEmitter, Watch, h } from '@stencil/core';
 
 import { graph as noctua_graph } from 'bbop-graph-noctua';
 import minerva_manager from 'bbop-manager-minerva';
@@ -10,6 +10,12 @@ import coseBilkent from 'cytoscape-cose-bilkent';
 import { State } from '@stencil/core';
 
 import { glyph, _node_labels } from '../../globals/utils';
+
+// import * as dbxrefs from "go-dbxrefs";
+
+// import {  } from '@geneontology/wc-light-modal';
+import '@geneontology/wc-light-modal';
+
 
 cytoscape.use( coseBilkent );
 
@@ -35,8 +41,43 @@ export class GoCamViz {
 
     @Prop() graphFold: string = "editor";
 
+    @Prop() autoHideModal: boolean = false;
+    
     @State() loading: boolean = false;
 
+    currentGraph = undefined;
+
+    // modal: HTMLWcLightModalElement;
+
+    cy = undefined;     // container of the cytoscape.js graph
+
+
+    defaultNodeStyle = {
+        'content': 'data(label)',
+        'width': 105,
+        'height': 42,
+        'background-color': 'white',
+        'border-width': 1,
+        'border-color': 'black',
+        'font-size': 12,
+        'min-zoomed-font-size': 1, //10,
+        'text-valign': 'center',
+        'color': 'black',
+        'shape': "round-rectangle",
+        'text-wrap': 'wrap',
+        // 'text-overflow-wrap': "anywhere",
+        'text-max-width': '100px'
+    }
+
+
+    // @Event({eventName: 'nodeOver', cancelable: true, bubbles: true}) nodeOver: EventEmitter;
+    // @Event({eventName: 'nodeOut', cancelable: true, bubbles: true}) nodeOut: EventEmitter;
+    // @Event({eventName: 'nodeClick', cancelable: true, bubbles: true}) nodeClick: EventEmitter;
+
+    @Event() nodeOver: EventEmitter;
+    @Event() nodeOut: EventEmitter;
+    @Event() nodeClick: EventEmitter;
+    
 
     @Watch('gocamId')
     gocamIdChanged(newValue, oldValue) {
@@ -78,8 +119,8 @@ export class GoCamViz {
 
         this.manager = new minerva_manager(global_barista_location, global_minerva_definition_name, user_token, this.engine, "async");
         
-        this.manager.register('rebuild', (resp, man) => {
-            console.log("rebuild: ", resp , man);
+        this.manager.register('rebuild', (resp) => {
+            // console.log("rebuild: ", resp , man);
             let graph = new noctua_graph();
             graph.load_data_basic(resp.data());
             this.renderGoCam(resp._data.id, graph);
@@ -96,7 +137,6 @@ export class GoCamViz {
         this.manager.register('warning', function(resp, man){
             console.log(resp, man);
         });
-        // console.log("manager: " , this.manager);
     }
 
     loadGoCam(gocamId) {
@@ -197,7 +237,7 @@ export class GoCamViz {
                     // Capture rdfs:label annotation for visual override
                     // if extant. Allow clobber of last.
                     if( ann.key() === 'rdfs:label' ){
-                        console.log(node , " rdfs:label: ", ann.value());
+                        // console.log(node , " rdfs:label: ", ann.value());
                         rdfs_label = ann.value();
                     }
                 }
@@ -231,7 +271,7 @@ export class GoCamViz {
                                 for(let gpl of gp_labels) {
                                     let last = gpl.lastIndexOf(" ");
                                     if(last > 0) { gpl = gpl.substring(0, last); }
-                                    console.log("GP: ", gpl, gpn);
+                                    // console.log("GP: ", gpl, gpn);
                                     if(this.showGeneProduct) {
                                         table_row.push(gpl);
                                         nlink = gpn.types()[0]
@@ -338,7 +378,8 @@ export class GoCamViz {
                     predicate: e.predicate_id(),
                     label: rglyph.label ? rglyph.label : e.label(),
                     color: rglyph.color ? rglyph.color : "black",
-                    glyph: rglyph.glyph ? rglyph.glyph : "circle"
+                    glyph: rglyph.glyph ? rglyph.glyph : "circle",
+                    lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid"
                 }
             });            
         }
@@ -451,7 +492,7 @@ export class GoCamViz {
 
 
 
-
+        this.currentGraph = g;
 
         // Showing loading message
         let viz = this.gocamviz.querySelector("#gocam-viz");
@@ -459,40 +500,26 @@ export class GoCamViz {
         console.log("Displaying GO-CAM ", gocamId , graph);
 
 
-        // let show_shape = "ellipse";
-        let show_shape = "round-rectangle";
         let layout = 'cose-bilkent';
         // let layout = "noctuadef";
 
-        let cy = cytoscape({
+
+        this.cy = cytoscape({
             container: viz,
             elements: elements,
             layout: layout_opts[layout],
+
             style: [
                 {
                     selector: 'node',
-                    style: {
-                        'content': 'data(label)',
-                        'width': 105,
-                        'height': 42,
-                        'background-color': 'white',
-                        'border-width': 1,
-                        'border-color': 'black',
-                        'font-size': 12,
-                        'min-zoomed-font-size': 1, //10,
-                        'text-valign': 'center',
-                        'color': 'black',
-                        'shape': show_shape,
-                        'text-wrap': 'wrap',
-                        // 'text-overflow-wrap': "anywhere",
-                        'text-max-width': '100px'
-                    }
+                    style: this.defaultNodeStyle
                 },
                 {
                     selector: 'edge',
                     style: {
                         'content': 'data(label)',
                         'line-color': 'data(color)',
+                        'line-style': 'data(lineStyle)',
                         'target-arrow-color': 'data(color)',
                         'target-arrow-shape': 'data(glyph)',
                         'curve-style': 'bezier',
@@ -508,7 +535,8 @@ export class GoCamViz {
                         'width': 12
                     }
                 }
-                ],            
+            ],            
+                
             minZoom: 0.1,
             maxZoom: 3.0,
             zoomingEnabled: true,
@@ -531,9 +559,17 @@ export class GoCamViz {
 
         this.loading = false;
 
-        cy.on("mouseover", this.onMouseOver);
-        cy.on("mouseout", this.onMouseOut);
-        cy.on("tap", "node", this.onMouseClick);
+        
+        this.cy.on("mouseover", (evt) => this.onMouseOver(evt));
+        this.cy.on("mouseout", (evt) => this.onMouseOut(evt));
+        this.cy.on("click", (evt) => this.onMouseClick(evt));
+
+        // Events whenever the layout is changes, eg to remove modal
+        this.cy.on("pan", evt => this.onLayoutChange(evt));
+        this.cy.on("zoom", evt => this.onLayoutChange(evt));
+        this.cy.on("viewport", evt => this.onLayoutChange(evt));
+        this.cy.on("resize", evt => this.onLayoutChange(evt));
+        
     }
 
 
@@ -544,18 +580,115 @@ export class GoCamViz {
         
     }
 
+    selectedNode = undefined;
+    selectedEvent = undefined;
     onMouseOver(evt) {
-        console.log("Mouse over ", evt);
+        console.log(evt);
+        if(evt && evt.target && evt.target.id) {
+            // evt.target.style("background-color", "#ebebeb")
+            evt.target.style("border-width", "2px")
+            evt.target.style("border-color", "black")
+            this.selectedNode = evt.target;
+            this.selectedEvent = evt;
+            let entity_id = evt.target.id();
+            if(entity_id.substr(0, 8) == "gomodel:") {
+                let data = evt.target.data();
+                let node = this.currentGraph.get_node(entity_id);
+                let labels = [];
+                for(let ann of node.annotations()) {
+                    if(ann.key() == "rdfs:label") {
+                        labels.push(ann.value());
+                    }
+                }
+
+                let inferredTypes = node.get_unique_inferred_types();
+                let standardTypes = node.types();
+
+                let id = data.link && data.link._class_id ? data.link.class_id() : undefined
+                let payload = {
+                    entityId : entity_id,
+                    id : id,
+                    uri : id ? "https://www.alliancegenome.org/gene/" + id : undefined,
+                    meta : this.annotate(id),
+                    label : data.label,
+                    data : data.link,
+                    standardTypes : standardTypes,
+                    inferredTypes : inferredTypes,
+                    x : evt.renderedPosition.x,
+                    y : evt.renderedPosition.y
+                }
+                this.nodeOver.emit(payload);
+                // this.modal.x = payload.x;
+                // this.modal.y = payload.y;
+                // this.modal.open();
+            }
+        }
     }
 
     onMouseOut(evt) {
-        console.log("Mouse out ", evt);
+        if(this.selectedNode) {
+            this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
+            this.selectedNode.style("border-width", "1px")
+            this.selectedNode.style("border-color", "black")
+            this.selectedNode = undefined;
+        }
+        if(this.autoHideModal && evt && evt.target && evt.target.id) {
+            let entity_id = evt.target.id();
+            // evt.target.style("background-color", this.defaultNodeStyle["background-color"]);
+            // evt.target.style("border-width", "1px")
+            // evt.target.style("border-color", "black")
+            if(entity_id.substr(0, 8) == "gomodel:") {
+                this.nodeOut.emit(evt);
+            }
+        }
     }
 
     onMouseClick(evt) {
         console.log("Mouse click ", evt);
+        if(evt && evt.target && evt.target.id) {
+            let entity_id = evt.target.id();
+            if(entity_id.substr(0, 8) == "gomodel:") {
+                this.nodeOut.emit(evt);
+            }
+        }
+        if(this.selectedNode) {
+            this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
+            this.selectedNode = undefined;
+        }
+        
+        // this.nodeClick.emit(evt);
     }
 
+    onLayoutChange(evt) {
+        if(this.selectedEvent) {
+            let entity_id = this.selectedEvent.target.id();
+            if(entity_id.substr(0, 8) == "gomodel:") {
+                this.nodeOut.emit(this.selectedEvent);
+            }
+            this.selectedEvent = undefined;
+        }
+        if(this.selectedNode) {
+            this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
+            this.selectedNode = undefined;
+        }
+    }
+
+    async annotate(id) {
+        if(!id) {
+            console.error("asked to annotated null id: ", id);
+            return "";
+        }
+        if(id.includes(":")) {
+            let smallid = id.split(":")[1];
+            let url = "http://mygene.info/v3/query?q=" + smallid;
+            await fetch(url)
+            .then(async function(data) { return data.json()})
+            .then(data => {
+                console.log("id: ", id , " data: ", data);
+                return data.hits[0];
+            })
+        }
+    }
 
     /** 
      * Before the component is rendered (executed once)
@@ -567,6 +700,8 @@ export class GoCamViz {
         this.initManager();
     }
 
+
+
     /** 
      * Once the component has loaded (executed once)
      * https://stenciljs.com/docs/component-lifecycle
@@ -577,10 +712,14 @@ export class GoCamViz {
 
     render() {
         let classes = this.loading ? "" : "gocam-viz";
+
         return [
             this.loading ? <div class="gocam-viz-loader">Loading GO-CAM {this.gocamId} ...</div> : "",
-            <div id="gocam-viz" class={classes}></div>
+            <div id="gocam-viz" class={classes}></div>,
+            // <wc-light-modal ref={(el) => this.modal = el as HTMLWcLightModalElement}
+            // modal-title="Title" modal-content="CONTENT"></wc-light-modal>
         ];
+
     }
     
 }

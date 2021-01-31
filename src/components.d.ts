@@ -7,6 +7,7 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface WcGocamViz {
+        "autoHideModal": boolean;
         "gocamId": string;
         "graphFold": string;
         "showActivity": boolean;
@@ -28,8 +29,12 @@ declare global {
 }
 declare namespace LocalJSX {
     interface WcGocamViz {
+        "autoHideModal"?: boolean;
         "gocamId"?: string;
         "graphFold"?: string;
+        "onNodeClick"?: (event: CustomEvent<any>) => void;
+        "onNodeOut"?: (event: CustomEvent<any>) => void;
+        "onNodeOver"?: (event: CustomEvent<any>) => void;
         "showActivity"?: boolean;
         "showGeneProduct"?: boolean;
         "showHasInput"?: boolean;

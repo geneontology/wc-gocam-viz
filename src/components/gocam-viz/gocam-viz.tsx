@@ -9,11 +9,10 @@ import cytoscape from 'cytoscape';
 import coseBilkent from 'cytoscape-cose-bilkent';
 import { State } from '@stencil/core';
 
-import { glyph, _node_labels } from '../../globals/utils';
+import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globals/utils';
 
-// import * as dbxrefs from "go-dbxrefs";
+import * as dbxrefs from "@geneontology/dbxrefs";
 
-// import {  } from '@geneontology/wc-light-modal';
 import '@geneontology/wc-light-modal';
 
 
@@ -49,7 +48,9 @@ export class GoCamViz {
 
     // modal: HTMLWcLightModalElement;
 
-    cy = undefined;     // container of the cytoscape.js graph
+    cy = undefined;             // container of the cytoscape.js graph
+
+    dbXrefsReady = false;      // check if dbxrefs is initialized
 
 
     defaultNodeStyle = {
@@ -59,7 +60,7 @@ export class GoCamViz {
         'background-color': 'white',
         'border-width': 1,
         'border-color': 'black',
-        'font-size': 12,
+        'font-size': 16,
         'min-zoomed-font-size': 1, //10,
         'text-valign': 'center',
         'color': 'black',
@@ -70,15 +71,13 @@ export class GoCamViz {
     }
 
 
-    // @Event({eventName: 'nodeOver', cancelable: true, bubbles: true}) nodeOver: EventEmitter;
-    // @Event({eventName: 'nodeOut', cancelable: true, bubbles: true}) nodeOut: EventEmitter;
-    // @Event({eventName: 'nodeClick', cancelable: true, bubbles: true}) nodeClick: EventEmitter;
-
-    @Event() nodeOver: EventEmitter;
-    @Event() nodeOut: EventEmitter;
-    @Event() nodeClick: EventEmitter;
+    // Events triggered by this component
+    @Event({eventName: 'nodeOver', cancelable: true, bubbles: true}) nodeOver: EventEmitter;
+    @Event({eventName: 'nodeOut', cancelable: true, bubbles: true}) nodeOut: EventEmitter;
+    @Event({eventName: 'nodeClick', cancelable: true, bubbles: true}) nodeClick: EventEmitter;
     
 
+    // If the gocam id is changed, update the current graph to the new gocam
     @Watch('gocamId')
     gocamIdChanged(newValue, oldValue) {
         if (newValue != oldValue) {
@@ -137,6 +136,12 @@ export class GoCamViz {
         this.manager.register('warning', function(resp, man){
             console.log(resp, man);
         });
+    }
+
+    initDBXrefs() {
+        dbxrefs.init(() => {
+            this.dbXrefsReady = true;
+        })
     }
 
     loadGoCam(gocamId) {
@@ -442,6 +447,7 @@ export class GoCamViz {
                 }
 
                 var hint_anns = node.get_annotations_by_key(hint_str);
+                console.log("hint anns: ", hint_anns);
                 if( hint_anns.length === 1 ){
                     ret = parseInt(hint_anns[0].value());
                     //ll('extracted coord ' + x_or_y + ': ' + ret);
@@ -580,10 +586,7 @@ export class GoCamViz {
         
     }
 
-    selectedNode = undefined;
-    selectedEvent = undefined;
-    onMouseOver(evt) {
-        console.log(evt);
+    showPopup(evt) {
         if(evt && evt.target && evt.target.id) {
             // evt.target.style("background-color", "#ebebeb")
             evt.target.style("border-width", "2px")
@@ -601,31 +604,115 @@ export class GoCamViz {
                     }
                 }
 
-                let inferredTypes = node.get_unique_inferred_types();
+                // this concern the activity itself
                 let standardTypes = node.types();
+                let inferredTypes = node.get_unique_inferred_types();
+
+                // this will detect the associated biological context
+                let subgraph = node.subgraph();
+                let biocontext = { };
+                let hook_list = []
+                if(subgraph) {
+                    // Do it both ways--upstream and downstream.
+                    _folded_stack_gather(node, this.currentGraph, subgraph, 'standard', hook_list, biocontext, dbxrefs);
+                    _folded_stack_gather(node, this.currentGraph, subgraph, 'reverse', hook_list, biocontext, dbxrefs);
+                    // convert to array
+                    for(let key of Object.keys(biocontext)) {
+                        biocontext[key] = Array.from(biocontext[key]);
+                    }
+                }
+                
+                // console.log("BIOCONTEXT: ", biocontext);
+                // console.log("std types: ", standardTypes);
+                // console.log("inf types: ", inferredTypes);
+
+                // console.log("node anns: ", annotations);
+
+                // var x_node = subgraph.get_node(entity_id);
+                // if(x_node) {
+                //     var ev_node_anns = x_node.get_annotations_by_key('evidence');
+                //     // console.log("node evs: ", ev_node_anns);
+                // }
+
+                let annotations = node.annotations();
+                let annotationMap = { };
+                for(let ann of annotations) {
+                    if(ann.key() == "evidence") {
+                        let cs = new Set();
+                        if(ann.key() in annotationMap) {
+                            cs = annotationMap[ann.key()]
+                        } else {
+                            annotationMap[ann.key()] = cs;
+                        }
+                        cs.add(ann.value());
+                    } else if(ann.key() == "rdfs:label") {
+                        let cs = new Set();
+                        if(ann.key() in annotationMap) {
+                            cs = annotationMap[ann.key()]
+                        } else {
+                            annotationMap[ann.key()] = cs;
+                        }
+                        cs.add(ann.value());
+                    } else if(ann.key() == "contributor") {
+                        let cs = new Set();
+                        if(ann.key() in annotationMap) {
+                            cs = annotationMap[ann.key()]
+                        } else {
+                            annotationMap[ann.key()] = cs;
+                        }
+                        cs.add(ann.value());
+                    } else if(ann.key() == "providedBy") {
+                        let cs = new Set();
+                        if(ann.key() in annotationMap) {
+                            cs = annotationMap[ann.key()]
+                        } else {
+                            annotationMap[ann.key()] = cs;
+                        }
+                        cs.add(ann.value());
+                    }
+                }
+                // convert to array
+                for(let key of Object.keys(annotationMap)) {
+                    annotationMap[key] = Array.from(annotationMap[key]);
+                }
+                // console.log("node annotations: ", annotationMap);
 
                 let id = data.link && data.link._class_id ? data.link.class_id() : undefined
-                let payload = {
-                    entityId : entity_id,
-                    id : id,
-                    uri : id ? "https://www.alliancegenome.org/gene/" + id : undefined,
-                    meta : this.annotate(id),
-                    label : data.label,
-                    data : data.link,
-                    standardTypes : standardTypes,
-                    inferredTypes : inferredTypes,
-                    x : evt.renderedPosition.x,
-                    y : evt.renderedPosition.y
-                }
-                this.nodeOver.emit(payload);
-                // this.modal.x = payload.x;
-                // this.modal.y = payload.y;
-                // this.modal.open();
+                let meta = annotate(id, dbxrefs);
+                meta.then(metaData => {
+                    let payload = {
+                        entityId : entity_id,
+                        id : id,
+                        uri : id ? "https://www.alliancegenome.org/gene/" + id : undefined,
+                        annotation : annotationMap,
+                        biocontext : biocontext,
+                        meta : metaData,
+                        label : data.label,
+                        data : data.link,
+                        standardTypes : standardTypes,
+                        inferredTypes : inferredTypes,
+                        x : evt.renderedPosition.x,
+                        y : evt.renderedPosition.y
+                    }
+                    this.nodeOver.emit(payload);
+                })
             }
         }
     }
 
+    selectedNode = undefined;
+    selectedEvent = undefined;
+    timerPopup = undefined;
+    delayPopup = 400;
+    onMouseOver(evt) {
+        // console.log(evt);
+        this.timerPopup = setTimeout(() => this.showPopup(evt), this.delayPopup);
+    }
+
     onMouseOut(evt) {
+        if(this.timerPopup) {
+            clearTimeout(this.timerPopup);
+        }
         if(this.selectedNode) {
             this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
             this.selectedNode.style("border-width", "1px")
@@ -634,27 +721,36 @@ export class GoCamViz {
         }
         if(this.autoHideModal && evt && evt.target && evt.target.id) {
             let entity_id = evt.target.id();
-            // evt.target.style("background-color", this.defaultNodeStyle["background-color"]);
-            // evt.target.style("border-width", "1px")
-            // evt.target.style("border-color", "black")
             if(entity_id.substr(0, 8) == "gomodel:") {
                 this.nodeOut.emit(evt);
             }
         }
+        this.timerPopup = undefined;
     }
 
     onMouseClick(evt) {
-        console.log("Mouse click ", evt);
-        if(evt && evt.target && evt.target.id) {
-            let entity_id = evt.target.id();
+        if(this.selectedEvent) {
+            let entity_id = this.selectedEvent.target.id();
             if(entity_id.substr(0, 8) == "gomodel:") {
-                this.nodeOut.emit(evt);
+                this.nodeOut.emit(this.selectedEvent);
             }
+            this.selectedEvent = undefined;
         }
         if(this.selectedNode) {
             this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
             this.selectedNode = undefined;
         }
+        // console.log("Mouse click ", evt);
+        // if(evt && evt.target && evt.target.id) {
+        //     let entity_id = evt.target.id();
+        //     if(entity_id.substr(0, 8) == "gomodel:") {
+        //         this.nodeOut.emit(evt);
+        //     }
+        // }
+        // if(this.selectedNode) {
+        //     this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
+        //     this.selectedNode = undefined;
+        // }
         
         // this.nodeClick.emit(evt);
     }
@@ -673,22 +769,7 @@ export class GoCamViz {
         }
     }
 
-    async annotate(id) {
-        if(!id) {
-            console.error("asked to annotated null id: ", id);
-            return "";
-        }
-        if(id.includes(":")) {
-            let smallid = id.split(":")[1];
-            let url = "http://mygene.info/v3/query?q=" + smallid;
-            await fetch(url)
-            .then(async function(data) { return data.json()})
-            .then(data => {
-                console.log("id: ", id , " data: ", data);
-                return data.hits[0];
-            })
-        }
-    }
+
 
     /** 
      * Before the component is rendered (executed once)
@@ -698,6 +779,7 @@ export class GoCamViz {
         this.initCytoscape();
         this.initEngine();
         this.initManager();
+        this.initDBXrefs();
     }
 
 

@@ -5,6 +5,23 @@
 
     <script type="module" src="https://unpkg.com/@geneontology/wc-light-modal/dist/wc-light-modal/wc-light-modal.esm.js"></script>
     <script nomodule="" src="https://unpkg.com/@geneontology/wc-light-modal/dist/wc-light-modal/wc-light-modal.js"></script>      
+
+    <style>
+      .pop-line {
+          line-height: 1.1rem;
+          text-decoration: none;
+      }
+
+      .span-left {
+          margin-left: 0.5rem;
+      }
+
+      .span-right {
+          margin-left: 0.5rem;
+          margin-right: 0.5rem;
+      }    
+    </style>
+
   </head>
   
   <body>
@@ -52,23 +69,44 @@
       show-has-output=false
       show-gene-product=true
       show-activity=false
-    />
+      style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);"
+    ></wc-gocam-viz>
 
     <wc-light-modal modal-anchor="@" modal-content="<button>toto</button>" x=0 y=0 id="modal-1">
     </wc-light-modal>
 
     <script>
 
-        function createContent(payload) {
-          let content = "<table>";
+        function lineStyle() {
+          return "line-height: 1.2rem; padding: 0.2rem;"
+        }
 
-          content += "<tr><td>Gene</td><td>" + payload.uri ? "<a href=" + payload.uri + " target=\"blank\">" + payload.label + "</a>" : payload.label;
-          content += "</td></tr>"
+        function leftStyle() {
+          return "margin-left: 0.5rem; margin-right: 0.5rem; width: 5rem; display: inline-block;"
+        }
+        function leftStyle2() {
+          return "margin-right: 0.5rem; width: 5rem; display: inline-block;"
+        }
+
+        function rightStyle() {
+          return ""
+        }
+
+
+        function createContent(payload) {
+          let content = "";
+          content += "<div class='pop-line' style='" + lineStyle() + "'><span class='span-left' style='" + leftStyle() + "'>Gene</span><a href='" + payload.meta.url + "' class='span-right' target='blank' style='" + rightStyle() + "'>" + ((payload && payload.meta && payload.meta.label && payload.meta.label.length > 0) ? payload.meta.label[0] : "N/A") + "</a></div>";
+          content += "<div class='pop-line' style='" + lineStyle() + "'><span class='span-left' style='" + leftStyle() + "'>Taxon</span><a href='" + payload.meta.taxon_url + "' class='span-right' target='blank' style='" + rightStyle() + "'>" + payload.meta.taxon_label + "</a></div>";
           if(payload.standardTypes && payload.standardTypes.length > 0) {
-            content += "<tr><td>Activity</td><td>" + "<a " + " target=\"blank\" href=http://amigo.geneontology.org/amigo/term/" + payload.standardTypes[0].class_id() + ">" + payload.standardTypes[0].class_label() + "</a>";
-            content += "</td></tr>"
+            content += "<div class='pop-line' style='" + lineStyle() + "'><span class='span-left' style='" + leftStyle() + "'>Activity</span><a href='http://amigo.geneontology.org/amigo/term/" + payload.standardTypes[0].class_id() + "' class='span-right' target='blank' style='" + rightStyle() + "'>" + payload.standardTypes[0].class_label() + "</a></div>";
           }
-          content += "</table>"
+          for(let contexts of Object.keys(payload.biocontext)) {
+            if(contexts == "RO:0002333") continue;  // discard enabled_by info
+            for(let context of payload.biocontext[contexts]) {
+              content += "<div class='pop-line' style='" + lineStyle() + "'><span class='span-left' style='" + leftStyle2() + "'></span><span class='span-left' style='" + leftStyle() + "'>" + context.relationLabel + "</span><a href=" + context.termURL + " class='span-right' target='blank' style='" + rightStyle() + "'>" + context.termLabel + "</a></div>";
+              
+            }
+          }
           return content;
         }
 
@@ -80,11 +118,12 @@
           modal.y = payload.y;
           modal.modalTitle = payload.label;
           modal.modalContent = createContent(payload);
+          
           modal.open();
         });
 
         document.addEventListener('nodeOut', function hideMenu(e, v) {
-          console.log('Node out' , e.detail);
+          // console.log('Node out' , e.detail);
           let modal = document.getElementById("modal-1");
           modal.close();
         });

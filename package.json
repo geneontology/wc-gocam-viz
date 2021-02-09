@@ -22,7 +22,8 @@
     "generate": "stencil generate"
   },
   "dependencies": {
-    "@geneontology/wc-light-modal": "0.0.3",
+    "@geneontology/dbxrefs": "^1.0.9",
+    "@geneontology/wc-light-modal": "0.0.6",
     "@stencil/core": "^1.8.8",
     "bbop-core": "0.0.5",
     "bbop-graph-noctua": "0.0.35",

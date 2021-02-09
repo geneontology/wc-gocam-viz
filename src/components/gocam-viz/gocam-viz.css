@@ -37,3 +37,17 @@
     background: yellow;
     border: 5px solid green;
 }
+
+.pop-line {
+    line-height: 1.1rem;
+    text-decoration: none;
+}
+
+.span-left {
+    margin-left: 0.5rem;
+}
+
+.span-right {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}

@@ -207,6 +207,7 @@ export function _folded_stack_gather(enode, graph, subgraph, direction, hook_lis
         return relationMeta(e1.relation())["priority"] - relationMeta(e2.relation())["priority"];
     });
     
+    // for a specific aspect of the activity
     for(let x_edge of x_edges) {
         // Edge info.
         var rel = x_edge.relation() || 'n/a';
@@ -224,36 +225,36 @@ export function _folded_stack_gather(enode, graph, subgraph, direction, hook_lis
             rel = rel_readable; // use context
         }
 
-        // console.log("utils: x_edge.subgraph: ", x_edge, x_edge.referenced_subgraphs());
-        let gathered_evidences = []
+        // collecting all the evidences for that aspect.... (seriously this business logic should be on the server side to avoid those kind of smelly/spaghetti code)
+        let gathered_evidences = { "pmid": [], "eco": [], "label": [], "url" : [] }
         var refsubgraphs = x_edge.referenced_subgraphs();
         for(var refsubgraph of refsubgraphs) {
             var refevnodes = refsubgraph.get_nodes()
             for(let nodeid of Object.keys(refevnodes)) {
-                let temp = { "pmid": [], "eco": [], "label": [] }
                 let node = refsubgraph.get_node(nodeid);
-                // console.log("node: ", nodeid , node);
                 let anns = node.annotations();
                 for(let ann of anns) {
                     if(ann._properties["key"] == "source") {
-                        // console.log("SOURCE: ", ann._properties["value"]);
-                        temp["pmid"].push(ann._properties["value"]);
+                        let id = ann._properties["value"];
+                        gathered_evidences["pmid"].push(id);
+                        if(id && id.includes(":")) {
+                            gathered_evidences["url"].push(dbxrefs.getURL(id.split(":")[0], undefined, id.split(":")[1]))
+                        } else {
+                            // could not resolve
+                            gathered_evidences["url"].push("#");
+                        }
                     }
                 }
                 let types = node.types();
                 for(let type of types) {
-                    // console.log(type.class_id() , type.class_label());
-                    temp["eco"].push(type.class_id());
-                    temp["label"].push(type.class_label());
+                    gathered_evidences["eco"].push(type.class_id());
+                    gathered_evidences["label"].push(type.class_label());
                 }
-                gathered_evidences.push(temp);
             }
         }
 
-        // console.log("FINAL EVIDENCES: ", gathered_evidences);
-        // Try and extract proof of evidence.
         var ev_edge_anns = x_edge.get_annotations_by_key('evidence');
-        // console.log("utils : ev_edge_anns: ", ev_edge_anns);
+
         // Get node.
         var x_ent_id = null;
         if( direction === 'standard' ){
@@ -292,13 +293,13 @@ export function _folded_stack_gather(enode, graph, subgraph, direction, hook_lis
                         relationLabel : edge_label,
                         relationURL : dbxrefs.getURL(relid.split(":")[0], undefined, relid.split(":")[1]),
                         relationEvidence : ev_edge_anns,
-                        test: gathered_evidences,
+                        evidences: gathered_evidences,
                         nodeId : elt_id,
                         termId : x_type.class_id(),
                         termLabel : x_type.class_label(),
                         termURL : dbxrefs.getURL(x_type.class_id().split(":")[0], undefined, x_type.class_id().split(":")[1]),
                     });
-                    console.log(cs);
+
                     // In this case (which should be the only possible
                     // case), we'll capture the ID and pair it with an
                     // ID.
@@ -315,7 +316,7 @@ export function _folded_stack_gather(enode, graph, subgraph, direction, hook_lis
                         relationId: edge_id,
                         relationLabel : edge_label,
                         relationURL : dbxrefs.getURL(relid.split(":")[0], undefined, relid.split(":")[1]),
-                        test: gathered_evidences,
+                        evidences: gathered_evidences,
                         nodeId : elt_id,
                         termId : x_type.class_id(),
                         termLabel : x_type.class_label(),

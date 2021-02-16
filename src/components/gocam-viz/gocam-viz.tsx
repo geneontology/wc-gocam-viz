@@ -14,6 +14,8 @@ import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globa
 import * as dbxrefs from "@geneontology/dbxrefs";
 
 import '@geneontology/wc-light-modal';
+import { GraphHandler } from '../../globals/graphHandler';
+import { Listen } from '@stencil/core';
 
 
 cytoscape.use( coseBilkent );
@@ -52,11 +54,13 @@ export class GoCamViz {
 
     dbXrefsReady = false;      // check if dbxrefs is initialized
 
+    ghandler : GraphHandler;
+
 
     defaultNodeStyle = {
         'content': 'data(label)',
-        'width': 105,
-        'height': 42,
+        'width': 115,
+        'height': 55,
         'background-color': 'white',
         'border-width': 1,
         'border-color': 'black',
@@ -75,7 +79,22 @@ export class GoCamViz {
     @Event({eventName: 'nodeOver', cancelable: true, bubbles: true}) nodeOver: EventEmitter;
     @Event({eventName: 'nodeOut', cancelable: true, bubbles: true}) nodeOut: EventEmitter;
     @Event({eventName: 'nodeClick', cancelable: true, bubbles: true}) nodeClick: EventEmitter;
+    @Event({eventName: 'layoutChange', cancelable: true, bubbles: true}) layoutChange: EventEmitter;
     
+
+
+    @Listen('selectChanged',{target: "body"})
+    newSelection(event: CustomEvent) {
+        if (event.detail) {
+            let data = event.detail;
+
+            let sel = this.cy.elements('[id="' + data.nodeId + '"]')
+            if(sel.size() > 0) {
+                this.cy.center(sel);
+            }
+        }
+    }
+
 
     // If the gocam id is changed, update the current graph to the new gocam
     @Watch('gocamId')
@@ -140,7 +159,8 @@ export class GoCamViz {
 
     initDBXrefs() {
         dbxrefs.init(() => {
-            this.dbXrefsReady = true;
+            console.log("dbxrefs ready");
+            this.dbXrefsReady = true;    
         })
     }
 
@@ -499,6 +519,11 @@ export class GoCamViz {
 
 
         this.currentGraph = g;
+        this.ghandler = new GraphHandler(graph.clone());
+        this.ghandler.setDBXrefs(dbxrefs);
+        let activities = this.ghandler.getAllActivities();
+        console.log("activities: ", activities);
+            
 
         // Showing loading message
         let viz = this.gocamviz.querySelector("#gocam-viz");
@@ -560,8 +585,10 @@ export class GoCamViz {
             ready: this.finishRendering          
         });
 
-        // cy.fit();
-        // cy.center();
+
+        setTimeout(() => {
+            this.resetView();
+        }, 1000);
 
         this.loading = false;
 
@@ -594,6 +621,12 @@ export class GoCamViz {
             this.selectedNode = evt.target;
             this.selectedEvent = evt;
             let entity_id = evt.target.id();
+
+            let activity = this.ghandler.getActivity(entity_id);
+            console.log("graph handler: " , activity);
+
+            this.ghandler.enrichActivity(activity);
+
             if(entity_id.substr(0, 8) == "gomodel:") {
                 let data = evt.target.data();
                 let node = this.currentGraph.get_node(entity_id);
@@ -700,6 +733,18 @@ export class GoCamViz {
         }
     }
 
+    @Listen('keydown')
+    handleKeyDown(ev: KeyboardEvent){
+      if (ev.key === 'ArrowDown'){
+        console.log('down arrow pressed')
+      }
+    }
+    
+    resetView() {
+        this.cy.fit();
+        this.cy.center();
+    }
+
     selectedNode = undefined;
     selectedEvent = undefined;
     timerPopup = undefined;
@@ -752,7 +797,7 @@ export class GoCamViz {
         //     this.selectedNode = undefined;
         // }
         
-        // this.nodeClick.emit(evt);
+        this.nodeClick.emit(evt);
     }
 
     onLayoutChange(evt) {
@@ -767,6 +812,9 @@ export class GoCamViz {
             this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
             this.selectedNode = undefined;
         }
+        // this.cy.fit();
+        // this.cy.center();
+        this.layoutChange.emit(evt);
     }
 
 
@@ -776,10 +824,10 @@ export class GoCamViz {
      * https://stenciljs.com/docs/component-lifecycle
     */
     componentWillLoad() {
+        this.initDBXrefs();
         this.initCytoscape();
         this.initEngine();
         this.initManager();
-        this.initDBXrefs();
     }
 
 
@@ -797,7 +845,11 @@ export class GoCamViz {
 
         return [
             this.loading ? <div class="gocam-viz-loader">Loading GO-CAM {this.gocamId} ...</div> : "",
-            <div id="gocam-viz" class={classes}></div>,
+            <div>
+                <div id="gocam-viz" class={classes}></div>
+                <wc-genes-panel ghandler={this.ghandler}></wc-genes-panel>
+            </div>
+
             // <wc-light-modal ref={(el) => this.modal = el as HTMLWcLightModalElement}
             // modal-title="Title" modal-content="CONTENT"></wc-light-modal>
         ];

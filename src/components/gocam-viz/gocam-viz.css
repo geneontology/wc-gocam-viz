@@ -1,26 +1,26 @@
 :host {
-    display: block;
-  }
+}
   
 
 .gocam-viz {
-    display: flex;
+    /* display: flex; */
+    display: inline-block;
     justify-content: center;
     align-items: center;
     margin: auto;
-    width: 1200px;
+    width: 800px;
     height: 800px;
     border: 2px solid rgba(214,214,214,0.94);
     border-radius: 15px;
 }
 
 .gocam-viz-loader {
-    width: 1200px;
+    width: 800px;
     height:800px;
     margin: auto;
     font-size: 24px;
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
 }
 

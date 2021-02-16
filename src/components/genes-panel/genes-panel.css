@@ -1,0 +1,79 @@
+* {
+    font-family: "Lato", sans-serif;    
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: blue;
+}
+
+.not-clickable {
+    cursor: default;
+}
+
+h1 {
+    color: #002379;
+    text-align:right; 
+    padding-right: 1rem;
+}
+
+.genes-panel__container {
+    /* display: block; */
+    width: 650px;
+    height: 800px;
+    line-height: 1.5;
+    overflow: scroll;
+    display: inline-block;
+    vertical-align: top;    
+}
+
+.genes-panel__item {
+    display: block;
+    margin: 1rem;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 15px;
+    -webkit-box-shadow: 0px 0px 20px 0px rgb(194 194 194);
+    -moz-box-shadow: 0px 0px 20px 0px rgba(194,194,194,1);
+    box-shadow: 0px 0px 20px 0px rgb(194 194 194);
+    cursor: pointer;
+}
+
+.genes-panel__item:hover {
+    box-shadow: 4px 6px 42px 2px rgb(194 194 194);
+    
+}
+
+.genes-panel__item__title {
+    font-weight: 800;
+    font-size: 18px;
+    color: #002379;
+    padding-bottom: 0.5rem;
+}
+
+.genes-panel__item__gene__block {
+
+}
+
+.genes-panel__item__activity__block {
+
+}
+
+.genes-panel__item__activity {
+
+}
+
+.block-left {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    width: 5rem;
+    display: inline-block;
+}
+
+.block-right {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;    
+}

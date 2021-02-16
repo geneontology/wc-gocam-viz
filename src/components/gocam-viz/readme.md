@@ -20,11 +20,12 @@
 
 ## Events
 
-| Event       | Description | Type               |
-| ----------- | ----------- | ------------------ |
-| `nodeClick` |             | `CustomEvent<any>` |
-| `nodeOut`   |             | `CustomEvent<any>` |
-| `nodeOver`  |             | `CustomEvent<any>` |
+| Event          | Description | Type               |
+| -------------- | ----------- | ------------------ |
+| `layoutChange` |             | `CustomEvent<any>` |
+| `nodeClick`    |             | `CustomEvent<any>` |
+| `nodeOut`      |             | `CustomEvent<any>` |
+| `nodeOver`     |             | `CustomEvent<any>` |
 
 
 ----------------------------------------------

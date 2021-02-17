@@ -45,6 +45,9 @@ export class GoCamViz {
     
     @State() loading: boolean = false;
 
+    // variables for bbop manager & graph
+    engine;
+    manager;    
     currentGraph = undefined;
 
     // modal: HTMLWcLightModalElement;
@@ -57,6 +60,13 @@ export class GoCamViz {
      * This state is updated whenever loading a new graph, in order to trigger a new rendering of genes-panel
      */
     @State() ghandler : GraphHandler;
+
+
+    // Variables for handling click and mouse over
+    selectedNode = undefined;
+    selectedEvent = undefined;
+    timerPopup = undefined;
+    delayPopup = 400;    
 
 
     defaultNodeStyle = {
@@ -138,14 +148,12 @@ export class GoCamViz {
         cytoscape.use( coseBilkent );
     }
 
-    engine;
     initEngine() {
         this.engine = new jquery_engine(barista_response);
         this.engine.method('POST');
         // console.log("engine: " , this.engine);
     }
 
-    manager;
     /** 
      * Init general communication to barista -> minerva
     */
@@ -186,6 +194,10 @@ export class GoCamViz {
         })
     }
 
+    /**
+     * Will request the gocam from the bbop manager; if manager approves, will trigger renderGoCam 
+     * @param gocamId valid gocam id gomodel:xxx
+     */
     loadGoCam(gocamId) {
         // just to make sure we are working with ID without base URL
         gocamId = gocamId.replace("http://model.geneontology.org/", "");
@@ -201,6 +213,12 @@ export class GoCamViz {
     }
 
 
+    /**
+     * Actual method to render the GO-CAM graph
+     * @param gocamId valid gocam id (e.g. gomodel:xxx)
+     * @param graph bbop graph
+     * @param nest nesting strategy (default = "no")
+     */
     renderGoCam(gocamId, graph, nest = "no") {
 
         // Prepare graph
@@ -464,10 +482,10 @@ export class GoCamViz {
             'cose-bilkent': {
                 name: 'cose-bilkent',
                 randomize: true,
-                // idealEdgeLength: 100,
+                // idealEdgeLength: 30,
                 // padding: 100,
-                spacingFactor: 1.5
-                // nodeRepulsion: 450000
+                spacingFactor: 1.1,
+                nodeRepulsion: 450000
             },
             'noctuadef': {
                 'name': 'preset',
@@ -634,7 +652,6 @@ export class GoCamViz {
     }
 
 
-
     /** 
      * Called when cytoscape.ready is called
     */
@@ -643,6 +660,11 @@ export class GoCamViz {
         // tableElement.innerHTML = "<wc-spinner spinner-style='default' spinner-color='blue'></wc-spinner>"
     }
 
+
+    /**
+     * If desired, this can render a pop up with information about the gene & its activity
+     * @param evt 
+     */
     showPopup(evt) {
         if(evt && evt.target && evt.target.id) {
             // evt.target.style("background-color", "#ebebeb")
@@ -773,10 +795,7 @@ export class GoCamViz {
         this.cy.center();
     }
 
-    selectedNode = undefined;
-    selectedEvent = undefined;
-    timerPopup = undefined;
-    delayPopup = 400;
+
     onMouseOver(evt) {
         // console.log(evt);
         this.timerPopup = setTimeout(() => this.showPopup(evt), this.delayPopup);

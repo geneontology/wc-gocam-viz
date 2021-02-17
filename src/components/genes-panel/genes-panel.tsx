@@ -28,10 +28,15 @@ export class GenesPanel {
     @Event({ bubbles: true, composed: true }) selectChanged: EventEmitter;
 
 
-    // must be provided to build the side panel - see gocam-viz component
+    /**
+     * BBOP Graph Handler -> GO-CAM
+     * Must be provided to build the side panel
+     */
     @Prop() ghandler : GraphHandler
 
-    @Prop() parentHighlightMethod;
+    /**
+     * Passed by the parent to highlight & clear highlight nodes
+     */
     @Prop() parentCy;
 
     @State() enrichedActivities;
@@ -72,7 +77,7 @@ export class GenesPanel {
         if(sel.size() > 0) {
             sel.style("border-width", "2px")
             sel.style("border-color", "blue")
-            sel.style("background-color", "#ebebeb")
+            sel.style("background-color", "#eef2ff")
             this.previousElt = sel;
         }    
     }

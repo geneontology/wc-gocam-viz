@@ -84,7 +84,6 @@ h1 {
     text-overflow: ellipsis;
     width: 420px;
     display: inline-block;
-    vertical-align: text-top;
 }
 
 .block-left {
@@ -125,8 +124,8 @@ h1 {
 }
 
 .reference-article {
-    color: limegreen;
-    margin-left: 0.2rem;    
+    color: #1a9e1a;;
+    margin-left: 0.3rem;    
 }
 
 .reference {

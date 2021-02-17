@@ -18,7 +18,6 @@ export class GoCamSelector {
     list = [
         "",
         "http://model.geneontology.org/568b0f9600000284",
-        "http://model.geneontology.org/57ea2dae00000004",
         "http://model.geneontology.org/5e72450500003881",
         "http://model.geneontology.org/5c4605cc00003261",
         "http://model.geneontology.org/5b91dbd100001993",
@@ -26,6 +25,7 @@ export class GoCamSelector {
         "http://model.geneontology.org/5df932e000000330",
         "http://model.geneontology.org/5b528b1100000489",
         "http://model.geneontology.org/5835403200000017",
+        "http://model.geneontology.org/57ea2dae00000004",
         "http://model.geneontology.org/5b91dbd100002241",
         "http://model.geneontology.org/5b91dbd100002039",
         "http://model.geneontology.org/5b318d0900000583",

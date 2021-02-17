@@ -586,13 +586,9 @@ export class GoCamViz {
         };
 
 
-
-
         this.currentGraph = g;
         this.ghandler = new GraphHandler(graph.clone());
         this.ghandler.setDBXrefs(dbxrefs);
-        let activities = this.ghandler.getAllActivities();
-        console.log("activities: ", activities);
             
 
         // Showing loading message
@@ -672,6 +668,10 @@ export class GoCamViz {
         this.cy.on("zoom", evt => this.onLayoutChange(evt));
         this.cy.on("viewport", evt => this.onLayoutChange(evt));
         this.cy.on("resize", evt => this.onLayoutChange(evt));
+
+        if(this.genesPanel) {
+            this.genesPanel.parentCy = this.cy;
+        }
         
     }
 
@@ -690,7 +690,7 @@ export class GoCamViz {
         if(sel.size() > 0) {
             sel.style("border-width", "2px")
             sel.style("border-color", "blue")
-            sel.style("background-color", "#ebebeb")
+            sel.style("background-color", "#eef2ff")
             this.selectedNode = sel;
         }    
     }
@@ -967,14 +967,9 @@ export class GoCamViz {
     render() {
         let classes = this.loading ? "" : "gocam-viz";
 
-        if(this.genesPanel && !this.genesPanel.parentHighlightMethod) {
-            this.genesPanel.parentHighlightMethod = this.highlight;
-        }
-
         if(this.genesPanel && !this.genesPanel.parentCy) {
             this.genesPanel.parentCy = this.cy;
         }
-
 
         return [
 

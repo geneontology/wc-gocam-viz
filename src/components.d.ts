@@ -8,9 +8,14 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { GraphHandler } from "./globals/graphHandler";
 export namespace Components {
     interface WcGenesPanel {
+        /**
+          * BBOP Graph Handler -> GO-CAM Must be provided to build the side panel
+         */
         "ghandler": GraphHandler;
+        /**
+          * Passed by the parent to highlight & clear highlight nodes
+         */
         "parentCy": any;
-        "parentHighlightMethod": any;
     }
     interface WcGocamSelector {
     }
@@ -74,10 +79,15 @@ declare global {
 }
 declare namespace LocalJSX {
     interface WcGenesPanel {
+        /**
+          * BBOP Graph Handler -> GO-CAM Must be provided to build the side panel
+         */
         "ghandler"?: GraphHandler;
         "onSelectChanged"?: (event: CustomEvent<any>) => void;
+        /**
+          * Passed by the parent to highlight & clear highlight nodes
+         */
         "parentCy"?: any;
-        "parentHighlightMethod"?: any;
     }
     interface WcGocamSelector {
         "onSelectGOCAM"?: (event: CustomEvent<any>) => void;

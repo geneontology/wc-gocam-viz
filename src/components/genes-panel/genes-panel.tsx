@@ -84,9 +84,9 @@ export class GenesPanel {
       
         return(
             <div class="genes-panel__container">
-                <div style={{"padding":"1rem"}}>
-                <h1>Gene Products and Activities</h1>
-                <hr/>
+                <div class="genes-panel__container__title">
+                    <h1>Gene Products and Activities</h1>
+                    <hr/>
                 </div>
                 {
                     this.enrichedActivities.map((activity) => {

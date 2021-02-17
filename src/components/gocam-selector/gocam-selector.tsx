@@ -16,10 +16,11 @@ export class GoCamSelector {
     url = "https://geneontology-public.s3.amazonaws.com/gocams.json";
 
     list = [
+        "",
+        "http://model.geneontology.org/568b0f9600000284",
         "http://model.geneontology.org/5b91dbd100002039",
         "http://model.geneontology.org/5b318d0900000583",
         "http://model.geneontology.org/57ea2dae00000004",
-        "http://model.geneontology.org/568b0f9600000284",
         "http://model.geneontology.org/5e72450500001046",
         "http://model.geneontology.org/5f46c3b700000011",
         "http://model.geneontology.org/5e72450500003881",

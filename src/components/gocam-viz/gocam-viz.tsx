@@ -31,12 +31,30 @@ export class GoCamViz {
 
     @Prop() gocamId: string;
 
+    /**
+     * If true, this will show the list of available GO-CAM in GO
+     * For more information, please refer to http://geneontology.org/docs/gocam-overview/
+     */
+    @Prop() showGoCamSelector: boolean = false;
+
+    /**
+     * Show/hide the input of an activity
+     */
     @Prop() showHasInput: boolean = false;
 
+    /**
+     * Show/hide the output of an activity
+     */
     @Prop() showHasOutput: boolean = false;
 
+    /**
+     * Show/hide the gene product in the activity node
+     */    
     @Prop() showGeneProduct: boolean = false;
     
+    /**
+     * Show/hide the activity in the activity node
+     */    
     @Prop() showActivity: boolean = false;
 
     @Prop() graphFold: string = "editor";
@@ -901,7 +919,7 @@ export class GoCamViz {
         return [
 
             <div class="control__panel">
-                <wc-gocam-selector></wc-gocam-selector>
+                {this.showGoCamSelector ? <wc-gocam-selector></wc-gocam-selector> : ""}                
                 <button class='open__in_noctua__label' onClick={() => this.openInNoctua()}>Open in Noctua</button>
                 <button class='reset__view' onClick={() => this.resetView()}>Reset View</button>
             </div>,

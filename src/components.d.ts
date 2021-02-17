@@ -20,9 +20,25 @@ export namespace Components {
           * Center the cytoscape graph to fit the whole graph
          */
         "resetView": () => Promise<void>;
+        /**
+          * Show/hide the activity in the activity node
+         */
         "showActivity": boolean;
+        /**
+          * Show/hide the gene product in the activity node
+         */
         "showGeneProduct": boolean;
+        /**
+          * If true, this will show the list of available GO-CAM in GO For more information, please refer to http://geneontology.org/docs/gocam-overview/
+         */
+        "showGoCamSelector": boolean;
+        /**
+          * Show/hide the input of an activity
+         */
         "showHasInput": boolean;
+        /**
+          * Show/hide the output of an activity
+         */
         "showHasOutput": boolean;
     }
 }
@@ -67,9 +83,25 @@ declare namespace LocalJSX {
         "onNodeClick"?: (event: CustomEvent<any>) => void;
         "onNodeOut"?: (event: CustomEvent<any>) => void;
         "onNodeOver"?: (event: CustomEvent<any>) => void;
+        /**
+          * Show/hide the activity in the activity node
+         */
         "showActivity"?: boolean;
+        /**
+          * Show/hide the gene product in the activity node
+         */
         "showGeneProduct"?: boolean;
+        /**
+          * If true, this will show the list of available GO-CAM in GO For more information, please refer to http://geneontology.org/docs/gocam-overview/
+         */
+        "showGoCamSelector"?: boolean;
+        /**
+          * Show/hide the input of an activity
+         */
         "showHasInput"?: boolean;
+        /**
+          * Show/hide the output of an activity
+         */
         "showHasOutput"?: boolean;
     }
     interface IntrinsicElements {

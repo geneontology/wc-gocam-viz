@@ -28,6 +28,32 @@
 | `nodeOver`     |             | `CustomEvent<any>` |
 
 
+## Methods
+
+### `resetView() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
+## Dependencies
+
+### Depends on
+
+- [wc-genes-panel](../genes-panel)
+
+### Graph
+```mermaid
+graph TD;
+  wc-gocam-viz --> wc-genes-panel
+  style wc-gocam-viz fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

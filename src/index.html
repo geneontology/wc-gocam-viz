@@ -71,7 +71,7 @@
       show-has-output=false
       show-gene-product=true
       show-activity=false
-      style="position: fixed; top: 50%; left: 10%; transform: translate(0%, -50%); width:1900px;"
+      style="position: fixed; top: 50%; left: 10%; transform: translate(0%, -50%);"
     ></wc-gocam-viz>
 
     <wc-light-modal modal-anchor="@" modal-content="<button>toto</button>" x=0 y=0 id="modal-1">
@@ -125,6 +125,15 @@
           }
           return content;
         }
+
+        document.addEventListener('keydown', (key) => {
+          // console.log(key , key.code == 'Space');
+          key.preventDefault();
+          if(key.code == 'Space') {
+            let viz = document.getElementById("gocam-1");
+            if(viz) { viz.resetView(); }
+          }
+        })
 
         document.addEventListener('nodeOver', function hideMenu(e, v) {
           let payload = e.detail;

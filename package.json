@@ -22,7 +22,7 @@
     "generate": "stencil generate"
   },
   "dependencies": {
-    "@geneontology/dbxrefs": "^1.0.10",
+    "@geneontology/dbxrefs": "^1.0.11",
     "@geneontology/wc-light-modal": "0.0.7",
     "@stencil/core": "^1.8.8",
     "bbop-core": "0.0.5",

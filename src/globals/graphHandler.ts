@@ -115,6 +115,10 @@ export class GraphHandler {
         this.dbxrefs = dbxrefs;
     }
 
+    /** 
+     * Return the dbxrefs object currently loaded
+     * Used to map CURIE <-> resolvable Web URLs
+    */
     getDBXrefs() {
         return this.dbxrefs;
     }
@@ -229,6 +233,11 @@ export class GraphHandler {
     }    
 
 
+    /**
+     * This will return a list of activities enriched with additional meta data, such as gene taxon and URLs
+     * Note: require dbxrefs to be set
+     * @param activities : array of activities returned for instance by getAllActivities()
+     */
     async enrichActivities(activities) {
         let enriched = [];
         for(let activity of activities) {
@@ -240,8 +249,8 @@ export class GraphHandler {
 
     /**
      * This will return an activity enriched with additional meta data, such as gene taxon and URLs
-     * Note: this require dbxrefs to be set
-     * @param activity activity object returned by getActivity()
+     * Note: require dbxrefs to be set
+     * @param activity : activity object returned by getActivity()
      */
     async enrichActivity(activity) {
 
@@ -274,6 +283,9 @@ export class GraphHandler {
         return activity;
     }
 
+    /**
+     * Return the URL, taxon and taxon URL for a gene CURIE
+     */
     async annotate(id) {
         if(!id) {
             console.error("asked to annotated null id: ", id);
@@ -298,25 +310,9 @@ export class GraphHandler {
     }
 
 
-//         let id = data.link && data.link._class_id ? data.link.class_id() : undefined
-//         let meta = annotate(id, dbxrefs);
 
-//         meta.then(metaData => {
-//             let payload = {
-//                 entityId : nodeId,
-//                 id : id,
-//                 uri : id ? "https://www.alliancegenome.org/gene/" + id : undefined,
-//                 annotation : annotationMap,
-//                 biocontext : biocontext,
-//                 meta : metaData,
-//                 label : data.label,
-//                 data : data.link,
-//                 standardTypes : standardTypes,
-//                 inferredTypes : inferredTypes,
-//                 x : evt.renderedPosition.x,
-//                 y : evt.renderedPosition.y
-//             }
-//         });        
+
+
 
 
 

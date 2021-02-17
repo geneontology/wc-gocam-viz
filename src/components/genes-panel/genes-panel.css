@@ -1,3 +1,6 @@
+
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css");
+
 * {
     font-family: "Lato", sans-serif;    
 }
@@ -14,10 +17,14 @@ a:hover {
     cursor: default;
 }
 
+.bold {
+    font-weight: 800;    
+}
+
 h1 {
     color: #002379;
     text-align:right; 
-    padding-right: 1rem;
+    /* padding-right: 1rem; */
 }
 
 .genes-panel__container {
@@ -27,7 +34,19 @@ h1 {
     line-height: 1.5;
     overflow: scroll;
     display: inline-block;
-    vertical-align: top;    
+    vertical-align: top;  
+    
+
+    /* border: 1px solid black;
+    border-radius: 15px; */
+    padding: 1rem 0rem 1rem 0.5rem;
+    margin-left: 1rem;
+    
+    border-radius: 15px;
+    -webkit-box-shadow: 0px 0px 20px 0px rgb(194 194 194);
+    -moz-box-shadow: 0px 0px 20px 0px rgba(194,194,194,1);
+    box-shadow: 0px 0px 20px 0px rgb(194 194 194);
+
 }
 
 .genes-panel__item {
@@ -63,7 +82,10 @@ h1 {
 }
 
 .genes-panel__item__activity {
-
+    text-overflow: ellipsis;
+    width: 420px;
+    display: inline-block;
+    vertical-align: text-top;
 }
 
 .block-left {
@@ -76,4 +98,54 @@ h1 {
 .block-right {
     margin-left: 0.5rem;
     margin-right: 0.5rem;    
+}
+
+.flex-container {
+    display: -ms-inline-flexbox;
+    display: -webkit-inline-flex;
+    display: inline-flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-align-content: stretch;
+    -ms-flex-line-pack: stretch;
+    align-content: stretch;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;    
+}
+
+.reference-list {
+    margin-left: 0.5rem;
+}
+
+.reference-article {
+    color: limegreen;
+    margin-left: 0.2rem;    
+}
+
+.reference {
+    box-sizing: border-box;
+    text-decoration: none;
+    color: black;
+    margin-left: 0.2rem;
+    -webkit-box-shadow: 4px 6px 42px 0px rgb(194 194 194);
+    -moz-box-shadow: 4px 6px 42px 0px rgba(194,194,194,1);
+    box-shadow: 4px 6px 42px 0px rgb(194 194 194);
+    border: 1px solid green;
+    display: inline-block;
+    width: 15px;
+    border-radius: 5px;
+    background-color: greenyellow;
+    text-align: center;
+    display: inline-block;
+    height: 16px;
+    font-size: 10px;
+    vertical-align: middle;
 }

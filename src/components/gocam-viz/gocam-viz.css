@@ -1,4 +1,8 @@
-:host {
+
+:root {
+    --gocam-width: 800px;
+    --gocam-height: 800px;
+    --gocam-border-radius: 15px;
 }
   
 
@@ -8,15 +12,19 @@
     justify-content: center;
     align-items: center;
     margin: auto;
-    width: 800px;
-    height: 800px;
+    width: var(--gocam-width);
+    height: var(--gocam-height);
     border: 2px solid rgba(214,214,214,0.94);
-    border-radius: 15px;
+    border-radius: var(--gocam-border-radius);
+    padding: 1rem;
+    -webkit-box-shadow: 0px 0px 20px 0px rgb(194 194 194);
+    -moz-box-shadow: 0px 0px 20px 0px rgba(194,194,194,1);
+    box-shadow: 0px 0px 20px 0px rgb(194 194 194);
 }
 
 .gocam-viz-loader {
-    width: 800px;
-    height:800px;
+    width: var(--gocam-width);
+    height:var(--gocam-height);
     margin: auto;
     font-size: 24px;
     display: flex;
@@ -50,4 +58,37 @@
 .span-right {
     margin-left: 0.5rem;
     margin-right: 0.5rem;
+}
+
+.open__in_noctua__label {
+    margin-left: 2rem;
+}
+
+.control__panel {
+    position: relative;
+    width: var(--gocam-width);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: var(--gocam-border-radius);
+    -webkit-box-shadow: 0px 0px 20px 0px rgb(194 194 194);
+    -moz-box-shadow: 0px 0px 20px 0px rgba(194,194,194,1);
+    box-shadow: 0px 0px 20px 0px rgb(194 194 194);
+}
+
+button, select {
+    padding: 0.2rem 0.4rem;
+    border-radius: 10px;        
+}
+
+button:hover {
+    -webkit-box-shadow: 0px 0px 20px 0px rgb(194 194 194);
+    -moz-box-shadow: 0px 0px 20px 0px rgba(194,194,194,1);
+    box-shadow: 0px 0px 20px 0px rgb(194 194 194);    
+}
+
+.reset__view {
+    position: absolute;
+    /* top: 0px; */
+    right: 0px;
+    margin-right: 1rem;    
 }

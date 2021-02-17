@@ -1,4 +1,5 @@
 import { Component, Prop, Element, Event, EventEmitter, Watch, h } from '@stencil/core';
+import { Listen, Method, State } from '@stencil/core';
 
 import { graph as noctua_graph } from 'bbop-graph-noctua';
 import minerva_manager from 'bbop-manager-minerva';
@@ -7,7 +8,6 @@ import { jquery as jquery_engine } from 'bbop-rest-manager';
 
 import cytoscape from 'cytoscape';
 import coseBilkent from 'cytoscape-cose-bilkent';
-import { State } from '@stencil/core';
 
 import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globals/utils';
 
@@ -15,7 +15,6 @@ import * as dbxrefs from "@geneontology/dbxrefs";
 
 import '@geneontology/wc-light-modal';
 import { GraphHandler } from '../../globals/graphHandler';
-import { Listen } from '@stencil/core';
 
 
 cytoscape.use( coseBilkent );
@@ -54,12 +53,15 @@ export class GoCamViz {
 
     dbXrefsReady = false;      // check if dbxrefs is initialized
 
-    ghandler : GraphHandler;
+    /**
+     * This state is updated whenever loading a new graph, in order to trigger a new rendering of genes-panel
+     */
+    @State() ghandler : GraphHandler;
 
 
     defaultNodeStyle = {
         'content': 'data(label)',
-        'width': 115,
+        'width': 'data(width)',
         'height': 55,
         'background-color': 'white',
         'border-width': 1,
@@ -71,7 +73,7 @@ export class GoCamViz {
         'shape': "round-rectangle",
         'text-wrap': 'wrap',
         // 'text-overflow-wrap': "anywhere",
-        'text-max-width': '100px'
+        'text-max-width': 'data(textwidth)'
     }
 
 
@@ -83,6 +85,9 @@ export class GoCamViz {
     
 
 
+    /**
+     * Called whenever an activity has been selected from the genes-panel
+     */
     @Listen('selectChanged',{target: "body"})
     newSelection(event: CustomEvent) {
         if (event.detail) {
@@ -95,7 +100,18 @@ export class GoCamViz {
         }
     }
 
-
+    /**
+     * Called whenever there is a selection of a new GO-CAM
+     * @param event 
+     */
+    @Listen('selectGOCAM',{target: "body"})
+    selectGOCAM(event: CustomEvent) {
+        if (event.detail) {
+            let data = event.detail;
+            this.loadGoCam(data.id);
+        }
+    }
+    
     // If the gocam id is changed, update the current graph to the new gocam
     @Watch('gocamId')
     gocamIdChanged(newValue, oldValue) {
@@ -130,6 +146,9 @@ export class GoCamViz {
     }
 
     manager;
+    /** 
+     * Init general communication to barista -> minerva
+    */
     initManager() {
         let global_barista_location = "http://barista.berkeleybop.org/";
         let global_minerva_definition_name = "minerva_public";
@@ -157,6 +176,9 @@ export class GoCamViz {
         });
     }
 
+    /** 
+     * Init the GO dbxrefs.yaml, in order to build URL meta
+    */
     initDBXrefs() {
         dbxrefs.init(() => {
             console.log("dbxrefs ready");
@@ -165,12 +187,16 @@ export class GoCamViz {
     }
 
     loadGoCam(gocamId) {
+        // just to make sure we are working with ID without base URL
+        gocamId = gocamId.replace("http://model.geneontology.org/", "");
+
         let viz = this.gocamviz.querySelector("#gocam-viz");
         viz.innerHTML = ""
         if(!gocamId.startsWith("gomodel:")) {
             gocamId = "gomodel:" + gocamId;
         }
         this.loading = true;
+        this.ghandler = undefined;
         this.manager.get_model(gocamId);
     }
 
@@ -374,6 +400,8 @@ export class GoCamViz {
                     data: {
                         id: nid,
                         label: nlabel,
+                        width: Math.max(115, nlabel.length * 8),
+                        textwidth: Math.max(115, nlabel.length * 7),
                         link: nlink,
                         parent: parent,
                         'text-valign': text_v_align,
@@ -452,32 +480,32 @@ export class GoCamViz {
 
                 // Somewhat vary the intitial placement.
                 function _vari(){
-                var min = -25;
-                var max = 25;
-                var rand = Math.random();
-                var seed = Math.floor(rand * (max-min+1) +min);
-                return seed + 100;
+                    var min = -25;
+                    var max = 25;
+                    var rand = Math.random();
+                    var seed = Math.floor(rand * (max-min+1) +min);
+                    return seed + 100;
                 }
                 function _extract_node_position(node, x_or_y){
-                var ret = null;
+                    var ret = null;
 
-                var hint_str = null;
-                if( x_or_y === 'x' || x_or_y === 'y' ){
-                    hint_str = 'hint-layout-' + x_or_y;
-                }
+                    var hint_str = null;
+                    if( x_or_y === 'x' || x_or_y === 'y' ){
+                        hint_str = 'hint-layout-' + x_or_y;
+                    }
 
-                var hint_anns = node.get_annotations_by_key(hint_str);
-                console.log("hint anns: ", hint_anns);
-                if( hint_anns.length === 1 ){
-                    ret = parseInt(hint_anns[0].value());
-                    //ll('extracted coord ' + x_or_y + ': ' + ret);
-                }else if( hint_anns.length === 0 ){
-                    //ll('no coord');
-                }else{
-                    //ll('too many coord');
-                }
+                    var hint_anns = node.get_annotations_by_key(hint_str);
+                    console.log("hint anns: ", hint_anns);
+                    if( hint_anns.length === 1 ){
+                        ret = parseInt(hint_anns[0].value());
+                        //ll('extracted coord ' + x_or_y + ': ' + ret);
+                    }else if( hint_anns.length === 0 ){
+                        //ll('no coord');
+                    }else{
+                        //ll('too many coord');
+                    }
 
-                return ret;
+                    return ret;
                 }
 
                 var old_x = _extract_node_position(node, 'x') || _vari();
@@ -593,9 +621,9 @@ export class GoCamViz {
         this.loading = false;
 
         
-        this.cy.on("mouseover", (evt) => this.onMouseOver(evt));
-        this.cy.on("mouseout", (evt) => this.onMouseOut(evt));
-        this.cy.on("click", (evt) => this.onMouseClick(evt));
+        this.cy.on("mouseover", evt => this.onMouseOver(evt));
+        this.cy.on("mouseout", evt => this.onMouseOut(evt));
+        this.cy.on("click", evt => this.onMouseClick(evt));
 
         // Events whenever the layout is changes, eg to remove modal
         this.cy.on("pan", evt => this.onLayoutChange(evt));
@@ -607,10 +635,12 @@ export class GoCamViz {
 
 
 
+    /** 
+     * Called when cytoscape.ready is called
+    */
     finishRendering() {
         console.log("Rendering of the GO-CAM complete");
         // tableElement.innerHTML = "<wc-spinner spinner-style='default' spinner-color='blue'></wc-spinner>"
-        
     }
 
     showPopup(evt) {
@@ -623,7 +653,7 @@ export class GoCamViz {
             let entity_id = evt.target.id();
 
             let activity = this.ghandler.getActivity(entity_id);
-            console.log("graph handler: " , activity);
+            // console.log("graph handler: " , activity);
 
             this.ghandler.enrichActivity(activity);
 
@@ -733,14 +763,12 @@ export class GoCamViz {
         }
     }
 
-    @Listen('keydown')
-    handleKeyDown(ev: KeyboardEvent){
-      if (ev.key === 'ArrowDown'){
-        console.log('down arrow pressed')
-      }
-    }
-    
-    resetView() {
+
+    /** 
+     * Center the cytoscape graph to fit the whole graph
+    */
+    @Method()
+    async resetView() {
         this.cy.fit();
         this.cy.center();
     }
@@ -830,8 +858,6 @@ export class GoCamViz {
         this.initManager();
     }
 
-
-
     /** 
      * Once the component has loaded (executed once)
      * https://stenciljs.com/docs/component-lifecycle
@@ -840,15 +866,34 @@ export class GoCamViz {
         this.loadGoCam(this.gocamId);
     }
 
+    /** 
+     * Method to open the current gocam model into noctua
+    */
+    openInNoctua() {
+        window.open("http://noctua.geneontology.org/editor/graph/" + this.currentGraph.id(), "_blank");
+    }
+
+    /** 
+     * Main render method; any change to a @Prop or @State triggers this
+    */
     render() {
         let classes = this.loading ? "" : "gocam-viz";
 
         return [
+
+            <div class="control__panel">
+                <wc-gocam-selector></wc-gocam-selector>
+                <button class='open__in_noctua__label' onClick={() => this.openInNoctua()}>Open in Noctua</button>
+                <button class='reset__view' onClick={() => this.resetView()}>Reset View</button>
+            </div>,
+
             this.loading ? <div class="gocam-viz-loader">Loading GO-CAM {this.gocamId} ...</div> : "",
+
             <div>
                 <div id="gocam-viz" class={classes}></div>
                 <wc-genes-panel ghandler={this.ghandler}></wc-genes-panel>
-            </div>
+            </div>,
+
 
             // <wc-light-modal ref={(el) => this.modal = el as HTMLWcLightModalElement}
             // modal-title="Title" modal-content="CONTENT"></wc-light-modal>

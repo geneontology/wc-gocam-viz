@@ -10,10 +10,16 @@ export namespace Components {
     interface WcGenesPanel {
         "ghandler": GraphHandler;
     }
+    interface WcGocamSelector {
+    }
     interface WcGocamViz {
         "autoHideModal": boolean;
         "gocamId": string;
         "graphFold": string;
+        /**
+          * Center the cytoscape graph to fit the whole graph
+         */
+        "resetView": () => Promise<void>;
         "showActivity": boolean;
         "showGeneProduct": boolean;
         "showHasInput": boolean;
@@ -27,6 +33,12 @@ declare global {
         prototype: HTMLWcGenesPanelElement;
         new (): HTMLWcGenesPanelElement;
     };
+    interface HTMLWcGocamSelectorElement extends Components.WcGocamSelector, HTMLStencilElement {
+    }
+    var HTMLWcGocamSelectorElement: {
+        prototype: HTMLWcGocamSelectorElement;
+        new (): HTMLWcGocamSelectorElement;
+    };
     interface HTMLWcGocamVizElement extends Components.WcGocamViz, HTMLStencilElement {
     }
     var HTMLWcGocamVizElement: {
@@ -35,6 +47,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "wc-genes-panel": HTMLWcGenesPanelElement;
+        "wc-gocam-selector": HTMLWcGocamSelectorElement;
         "wc-gocam-viz": HTMLWcGocamVizElement;
     }
 }
@@ -42,6 +55,9 @@ declare namespace LocalJSX {
     interface WcGenesPanel {
         "ghandler"?: GraphHandler;
         "onSelectChanged"?: (event: CustomEvent<any>) => void;
+    }
+    interface WcGocamSelector {
+        "onSelectGOCAM"?: (event: CustomEvent<any>) => void;
     }
     interface WcGocamViz {
         "autoHideModal"?: boolean;
@@ -58,6 +74,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "wc-genes-panel": WcGenesPanel;
+        "wc-gocam-selector": WcGocamSelector;
         "wc-gocam-viz": WcGocamViz;
     }
 }
@@ -66,6 +83,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "wc-genes-panel": LocalJSX.WcGenesPanel & JSXBase.HTMLAttributes<HTMLWcGenesPanelElement>;
+            "wc-gocam-selector": LocalJSX.WcGocamSelector & JSXBase.HTMLAttributes<HTMLWcGocamSelectorElement>;
             "wc-gocam-viz": LocalJSX.WcGocamViz & JSXBase.HTMLAttributes<HTMLWcGocamVizElement>;
         }
     }

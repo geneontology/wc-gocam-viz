@@ -39,30 +39,55 @@ export class GenesPanel {
     componentDidLoad() {
     }
 
+    // If the ghandler, should redraw
+    @Watch('ghandler')
+    ghandlerChanged(newValue, oldValue) {
+        if (newValue != oldValue) {
+            this.enrichedActivities = undefined;
+
+            // if an undefined handler was provided, do nothing
+            if(!this.ghandler) { return; }
+
+            let activities = this.ghandler.getAllActivities();
+            this.ghandler.enrichActivities(activities)
+            .then((data) => {
+                this.enrichedActivities = data;
+            })            
+        }
+    }
+
+
+
     select(activity) {
         this.selectChanged.emit(activity);
     }
 
+
+    renderReferences(context) {
+        let pos = Array.from(Array(context.evidences.pmid.length).keys())
+        return(
+            <span class='reference-list'>
+                {
+                    pos.map(i => {
+                        return <a class='reference-article far fa-newspaper' href={context.evidences.url[i]} target='_blank' title={"Source: " + context.evidences.pmid[i] + "\nEvidence: " + context.evidences.label[i]}></a>
+                    })
+                }
+            </span>
+        )
+    }
+
     render() {
 
-        if(!this.ghandler) {
-            return "Loading...";
+        if(!this.ghandler || !this.enrichedActivities) {
+            return "";
         }
-
-        if(!this.enrichedActivities) {
-            let activities = this.ghandler.getAllActivities();
-            // console.log("activities: ", activities);
-            this.ghandler.enrichActivities(activities)
-            .then((data) => {
-                this.enrichedActivities = data;
-            })
-            return "Loading...";
-        }
-        
+      
         return(
             <div class="genes-panel__container">
+                <div style={{"padding":"1rem"}}>
                 <h1>Gene Products and Activities</h1>
                 <hr/>
+                </div>
                 {
                     this.enrichedActivities.map((activity) => {
                         let contexts = Object.keys(activity.biocontexts);
@@ -89,8 +114,9 @@ export class GenesPanel {
                                                         return (
                                                             <div>
                                                                 <span class='block-left'></span>
-                                                                <a class='block-left' target='_blank' href={ctx.relationURL}>{ctx.relationLabel}</a>
+                                                                <a class='block-left' target='_blank' href={ctx.relationURL}><i>{ctx.relationLabel}</i></a>
                                                                 <a class='block-right' target='_blank' href={ctx.termURL}>{ctx.termLabel}</a>
+                                                                { this.renderReferences(ctx) }
                                                             </div>
                                                         )
                                                     })

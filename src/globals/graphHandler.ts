@@ -4,6 +4,35 @@
 
 export class GraphHandler {
 
+    // Derived from RO, Feb 16, 2021
+    // Reference 1: https://www.ebi.ac.uk/ols/ontologies/ro/properties?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FRO_0002418&viewMode=All&siblings=false
+    // Reference 2: http://purl.obolibrary.org/obo/ro.obo
+    // Note: should dynamically load RO OBO/OWL to get those relations
+    RO_CAUSAL = {
+        "RO:0002418" : "causally upstream of or within",
+        "RO:0002411" : "causally upstream of",
+        "RO:0004046" : "causally upstream of or within, negative effect",
+        "RO:0004047" : "causally upstream of or within, positive effect",
+        "RO:0002012" : "occurent part of",
+        "RO:0002010" : "regulates in other organism",
+        "RO:0002305" : "causally upstream of, negative effect",
+        "RO:0002304" : "causally upstream of, positive effect",
+        "RO:0002412" : "immediately causally upstream of",
+        "RO:0002211" : "regulates",
+        "RO:0002414" : "transitively provides input for",
+        "RO:0002212" : "negatively regulates",
+        "RO:0002630" : "directly negatively regulates",
+        "RO:0002408" : "directly inhibits",
+        "RO:0002409" : "indirectly inhibits",
+        "RO:0002213" : "positively regulates",
+        "RO:0002629" : "directly positively regulates",
+        "RO:0002406" : "directly activates",
+        "RO:0002407" : "indirectly activates",
+        "RO:0002413" : "directly provides input for",
+        "RO:0002578" : "directly regulates",
+    }
+
+
     dbxrefs;
     goApiUrl = "https://api.geneontology.org/api/search/entity/autocomplete/";
     
@@ -27,12 +56,53 @@ export class GraphHandler {
         this.setBBOPGraph(graph);
     }
 
+    
+    /**
+     * Set the current BBOP graph
+     * @param graph BBOP graph of a GO-CAM
+     */
     setBBOPGraph(graph) {
         this.bbopGraph = graph;
         this.bbopGraphBackup = graph.clone();
         this.preprocess(graph);
     }
+    
+    /** 
+     * Return the current BBOP graph (low level data)
+    */
+    getBBOPGraph() {
+        return this.bbopGraph;
+    }
 
+    /**
+     * Used to restore the BBO graph (low level data) to its original value before manipulation
+     */
+    resetBBOPGraph() {
+        this.setBBOPGraph(this.bbopGraphBackup);        
+    }
+
+    /** 
+     * Set the dbxrefs object
+     * Used to map CURIE <-> resolvable Web URLs
+    */
+    setDBXrefs(dbxrefs) {
+        this.dbxrefs = dbxrefs;
+    }
+
+    /** 
+     * Return the dbxrefs object currently loaded
+     * Used to map CURIE <-> resolvable Web URLs
+    */
+    getDBXrefs() {
+        return this.dbxrefs;
+    }
+
+    /**
+     * Fold a BBOP graph into a GO-CAM graph
+     * @param graph BBOP graph
+     * @param graphFold 
+     * @param nest 
+     */
     preprocess(graph, graphFold = "editor", nest = "no") {
 
         // Prepare graph
@@ -99,29 +169,7 @@ export class GraphHandler {
         }
         this.categories = Array.from(cat_set);    
     }
-    
-    getBBOPGraph() {
-        return this.bbopGraph;
-    }
 
-    /**
-     * Used to restore the graph as it was before any manipulation
-     */
-    resetBBOPGraph() {
-        this.setBBOPGraph(this.bbopGraphBackup);        
-    }
-    
-    setDBXrefs(dbxrefs) {
-        this.dbxrefs = dbxrefs;
-    }
-
-    /** 
-     * Return the dbxrefs object currently loaded
-     * Used to map CURIE <-> resolvable Web URLs
-    */
-    getDBXrefs() {
-        return this.dbxrefs;
-    }
 
 
     /** 
@@ -232,7 +280,6 @@ export class GraphHandler {
         }
     }    
 
-
     /**
      * This will return a list of activities enriched with additional meta data, such as gene taxon and URLs
      * Note: require dbxrefs to be set
@@ -245,7 +292,6 @@ export class GraphHandler {
         }
         return Promise.all(enriched);
     }
-
 
     /**
      * This will return an activity enriched with additional meta data, such as gene taxon and URLs
@@ -282,6 +328,15 @@ export class GraphHandler {
 
         return activity;
     }
+
+
+
+
+
+
+
+
+
 
     /**
      * Return the URL, taxon and taxon URL for a gene CURIE

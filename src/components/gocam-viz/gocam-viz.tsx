@@ -15,6 +15,7 @@ import * as dbxrefs from "@geneontology/dbxrefs";
 
 import '@geneontology/wc-light-modal';
 import { GraphHandler } from '../../globals/graphHandler';
+import { GenesPanel } from '../genes-panel/genes-panel';
 
 
 cytoscape.use( coseBilkent );
@@ -28,6 +29,7 @@ cytoscape.use( coseBilkent );
 export class GoCamViz {
 
     @Element() gocamviz;
+    genesPanel : HTMLWcGenesPanelElement;
 
     @Prop() gocamId: string;
 
@@ -59,9 +61,16 @@ export class GoCamViz {
 
     @Prop() graphFold: string = "editor";
 
+    /**
+     * Deprecated for the moment
+     */
     @Prop() autoHideModal: boolean = false;
     
+    /**
+     * Indicates if the component is loading some data
+     */
     @State() loading: boolean = false;
+
 
     // variables for bbop manager & graph
     engine;
@@ -72,7 +81,7 @@ export class GoCamViz {
 
     cy = undefined;             // container of the cytoscape.js graph
 
-    dbXrefsReady = false;      // check if dbxrefs is initialized
+    dbXrefsReady = false;       // check if dbxrefs is initialized
 
     /**
      * This state is updated whenever loading a new graph, in order to trigger a new rendering of genes-panel
@@ -120,11 +129,8 @@ export class GoCamViz {
     newSelection(event: CustomEvent) {
         if (event.detail) {
             let data = event.detail;
-
-            let sel = this.cy.elements('[id="' + data.nodeId + '"]')
-            if(sel.size() > 0) {
-                this.cy.center(sel);
-            }
+            this.cy.zoom(1);
+            this.center(data.nodeId);
         }
     }
 
@@ -679,15 +685,42 @@ export class GoCamViz {
     }
 
 
+    highlight(nodeId) {
+        let sel = this.cy.elements('[id="' + nodeId + '"]')
+        if(sel.size() > 0) {
+            sel.style("border-width", "2px")
+            sel.style("border-color", "blue")
+            sel.style("background-color", "#ebebeb")
+            this.selectedNode = sel;
+        }    
+    }
+
+    clearHighlight(cyNode) {
+        if(cyNode) {
+            cyNode.style("border-width", "1px");
+            cyNode.style("border-color", "black");
+            cyNode.style("background-color", "white");
+        }
+    }
+
+
+    center(nodeId) {
+        let sel = this.cy.elements('[id="' + nodeId + '"]')
+        if(sel.size() > 0) {
+            this.cy.center(sel);
+        }    
+    }
+
     /**
      * If desired, this can render a pop up with information about the gene & its activity
      * @param evt 
      */
     showPopup(evt) {
         if(evt && evt.target && evt.target.id) {
+            this.highlight(evt.target.id());
             // evt.target.style("background-color", "#ebebeb")
-            evt.target.style("border-width", "2px")
-            evt.target.style("border-color", "black")
+            // evt.target.style("border-width", "2px")
+            // evt.target.style("border-color", "black")
             this.selectedNode = evt.target;
             this.selectedEvent = evt;
             let entity_id = evt.target.id();
@@ -814,14 +847,32 @@ export class GoCamViz {
     }
 
 
+    previousPanelElt = undefined;
     onMouseOver(evt) {
-        // console.log(evt);
         this.timerPopup = setTimeout(() => this.showPopup(evt), this.delayPopup);
+
+        if(evt.target && evt.target.length) {
+            console.log("over: ", evt);
+            console.log("gp: ", this.genesPanel);
+
+            let elt = document.getElementById("gp_item_" + evt.target.id());
+            if(elt && !elt.classList.contains("gp_item_selected")) {
+                elt.classList.add("gp_item_selected");
+                this.previousPanelElt = elt;
+            }
+
+        }
     }
 
     onMouseOut(evt) {
         if(this.timerPopup) {
             clearTimeout(this.timerPopup);
+        }
+        if(this.previousPanelElt && this.previousPanelElt.classList) {
+            if(this.previousPanelElt.classList.contains("gp_item_selected")) {
+                this.previousPanelElt.classList.remove("gp_item_selected");
+            }
+            this.previousPanelElt = undefined;
         }
         if(this.selectedNode) {
             this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
@@ -916,6 +967,15 @@ export class GoCamViz {
     render() {
         let classes = this.loading ? "" : "gocam-viz";
 
+        if(this.genesPanel && !this.genesPanel.parentHighlightMethod) {
+            this.genesPanel.parentHighlightMethod = this.highlight;
+        }
+
+        if(this.genesPanel && !this.genesPanel.parentCy) {
+            this.genesPanel.parentCy = this.cy;
+        }
+
+
         return [
 
             <div class="control__panel">
@@ -928,7 +988,7 @@ export class GoCamViz {
 
             <div>
                 <div id="gocam-viz" class={classes}></div>
-                <wc-genes-panel ghandler={this.ghandler}></wc-genes-panel>
+                <wc-genes-panel ghandler={this.ghandler} ref={el => this.genesPanel = el}></wc-genes-panel>
             </div>,
 
 

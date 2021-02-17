@@ -31,6 +31,9 @@ export class GenesPanel {
     // must be provided to build the side panel - see gocam-viz component
     @Prop() ghandler : GraphHandler
 
+    @Prop() parentHighlightMethod;
+    @Prop() parentCy;
+
     @State() enrichedActivities;
 
     componentWillLoad() {
@@ -62,6 +65,27 @@ export class GenesPanel {
         this.selectChanged.emit(activity);
     }
 
+    previousElt = undefined;
+    highlight(nodeId) {
+        // console.log("highlight-child: ", this.parentCy, nodeId);
+        let sel = this.parentCy.elements('[id="' + nodeId + '"]')
+        if(sel.size() > 0) {
+            sel.style("border-width", "2px")
+            sel.style("border-color", "blue")
+            sel.style("background-color", "#ebebeb")
+            this.previousElt = sel;
+        }    
+    }
+
+    clearHighlight() {
+        if(this.previousElt) {
+            this.previousElt.style("border-width", "1px")
+            this.previousElt.style("border-color", "black")
+            this.previousElt.style("background-color", "white")
+            this.previousElt = undefined;
+        }
+    }
+
 
     renderReferences(context) {
         let pos = Array.from(Array(context.evidences.pmid.length).keys())
@@ -83,7 +107,7 @@ export class GenesPanel {
         }
       
         return(
-            <div class="genes-panel__container">
+            <div class="genes-panel__container" id={"gpc_" + this.ghandler.getBBOPGraph().id()}>
                 <div class="genes-panel__container__title">
                     <h1>Gene Products and Activities</h1>
                     <hr/>
@@ -92,7 +116,7 @@ export class GenesPanel {
                     this.enrichedActivities.map((activity) => {
                         let contexts = Object.keys(activity.biocontexts);
                         return (
-                            <div class="genes-panel__item" onClick={() => this.select(activity) }>
+                            <div class="genes-panel__item" id={"gp_item_" + activity.nodeId} onClick={() => this.select(activity) } onMouseOver={() => this.highlight(activity.nodeId)}  onMouseOut={() => this.clearHighlight()} >
                                 <div class='genes-panel__item__title'>
                                     {activity.geneProducts.length == 0 ? "N/A" : activity.geneProducts.map(gp => { return <a class='genes-panel__item__title__gp' href={gp.url} target='_blank'>{gp.label}</a> })}
                                 </div> 

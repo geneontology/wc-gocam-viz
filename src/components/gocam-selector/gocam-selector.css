@@ -1,3 +1,7 @@
 .gocam-selector {
     display: inline-block;
 }
+
+.select__gocam__label {
+    margin-right: 0.5rem;
+}

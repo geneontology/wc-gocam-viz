@@ -9,10 +9,15 @@ import { GraphHandler } from "./globals/graphHandler";
 export namespace Components {
     interface WcGenesPanel {
         "ghandler": GraphHandler;
+        "parentCy": any;
+        "parentHighlightMethod": any;
     }
     interface WcGocamSelector {
     }
     interface WcGocamViz {
+        /**
+          * Deprecated for the moment
+         */
         "autoHideModal": boolean;
         "gocamId": string;
         "graphFold": string;
@@ -71,11 +76,16 @@ declare namespace LocalJSX {
     interface WcGenesPanel {
         "ghandler"?: GraphHandler;
         "onSelectChanged"?: (event: CustomEvent<any>) => void;
+        "parentCy"?: any;
+        "parentHighlightMethod"?: any;
     }
     interface WcGocamSelector {
         "onSelectGOCAM"?: (event: CustomEvent<any>) => void;
     }
     interface WcGocamViz {
+        /**
+          * Deprecated for the moment
+         */
         "autoHideModal"?: boolean;
         "gocamId"?: string;
         "graphFold"?: string;

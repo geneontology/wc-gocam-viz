@@ -62,6 +62,13 @@
 
 .open__in_noctua__label {
     margin-left: 2rem;
+    background-color: rgb(74, 74, 211);
+    color: white;
+}
+
+button {
+    background-color: rgb(74, 74, 211);
+    color: white;    
 }
 
 .control__panel {

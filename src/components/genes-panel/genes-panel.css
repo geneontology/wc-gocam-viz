@@ -24,7 +24,7 @@ a:hover {
 h1 {
     color: #002379;
     text-align:right; 
-    /* padding-right: 1rem; */
+    margin: 0rem 0.5rem 0rem 0rem;
 }
 
 .genes-panel__container {
@@ -66,6 +66,7 @@ h1 {
 }
 
 .genes-panel__item__title {
+    width: 100%;
     font-weight: 800;
     font-size: 18px;
     color: #002379;
@@ -78,7 +79,7 @@ h1 {
 
 .genes-panel__list {
     overflow: scroll;    
-    height: 710px;
+    height: 740px;
 }
 
 .genes-panel__item__activity__block {
@@ -86,8 +87,10 @@ h1 {
 
 .genes-panel__item__activity {
     text-overflow: ellipsis;
-    width: 420px;
+    max-width: 320px;
+    vertical-align: top;
     display: inline-block;
+    color: #002379;
 }
 
 .block-left {
@@ -100,6 +103,7 @@ h1 {
 .block-right {
     margin-left: 0.5rem;
     margin-right: 0.5rem;    
+    color: black;
 }
 
 .flex-container {
@@ -155,4 +159,24 @@ h1 {
 
 .gp_item_selected {
     box-shadow: 4px 6px 42px 2px rgb(124 124 124);    
+}
+
+
+.genes-panel__item__title__gp {
+    color: #002379;
+    width: 50%;
+    display: inline-block;    
+}
+
+.genes-panel__item__title__gp__taxon {
+    color: black;
+    font-weight: 400;
+    text-align: right;
+    width: 50%;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.activity__references {
+    display: inline-block;
 }

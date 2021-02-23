@@ -866,7 +866,7 @@ export class GoCamViz {
                 let scrollList = document.getElementById("genes-panel__list");
                 let elt2 = document.getElementById("gp_item_" + evt.target.id());
                 if(scrollList && elt2) {
-                    scrollList.scroll(0, elt2.offsetTop-190)        
+                    scrollList.scroll(0, elt2.offsetTop-170)        
                 }
                         
                 // this.genesPanel.scrollToActivity(evt.target.id());

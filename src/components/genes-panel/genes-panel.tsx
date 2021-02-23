@@ -158,16 +158,17 @@ export class GenesPanel {
                             <div class="genes-panel__item" id={"gp_item_" + activity.nodeId} onClick={() => this.select(activity) } onMouseOver={() => this.highlight(activity.nodeId)}  onMouseOut={() => this.clearHighlight()} >
                                                             
                                 <div class='genes-panel__item__title'>
-                                    {activity.geneProducts.length == 0 ? "N/A" : activity.geneProducts.map(gp => { return <a class='genes-panel__item__title__gp' href={gp.url} target='_blank'>{gp.label}</a> })}
+                                    {activity.geneProducts.length == 0 ? <a class='genes-panel__item__title__gp' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> : activity.geneProducts.map(gp => { return <a class='genes-panel__item__title__gp' href={gp.url} target='_blank'>{gp.label}</a> })}
+                                    {activity.geneProducts.length == 0 ? <span class='block-right'>N/A</span> : activity.geneProducts.map(gp => { return <a class='genes-panel__item__title__gp__taxon' href={gp.taxonURL} target='_blank'>{gp.taxonLabel}</a> })}
                                 </div> 
 
-                                <div class='genes-panel__item__gene__block'>
+                                {/* <div class='genes-panel__item__gene__block'>
                                     <div><span class='block-left not-clickable'>Gene</span>{activity.geneProducts.length == 0 ? <span class='block-right'>N/A</span> : activity.geneProducts.map(gp => { return [<a class='genes-panel__item__title__gp block-right' href={gp.url} target='_blank'>{gp.label}</a>, this.renderGeneReferences(gp) ] })} </div>
                                     <div><span class='block-left not-clickable'>Taxon</span>{activity.geneProducts.length == 0 ? <span class='block-right'>N/A</span> : activity.geneProducts.map(gp => { return <a class='genes-panel__item__title__gp block-right' href={gp.taxonURL} target='_blank'>{gp.taxonLabel}</a> })}</div>
-                                </div>
+                                </div> */}
                                 
                                 <div class='genes-panel__item__activity__block'>
-                                    <span class='block-left not-clickable'>Activity</span><a class='genes-panel__item__activity block-right' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a>
+                                    <span class='block-left not-clickable'>Activity</span><a class='genes-panel__item__activity block-right' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> <span class="activity__references">{ activity.geneProducts.map(gp => { return this.renderGeneReferences(gp) }) }</span>
                                     {contexts.map(context => {
                                         if(context == "RO:0002333") { return ;}
                                         return (

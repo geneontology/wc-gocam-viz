@@ -59,11 +59,14 @@ export class GenesPanel {
             let activities = this.ghandler.getAllActivities();
             this.ghandler.enrichActivities(activities)
             .then((data) => {
+                // we sort activities by BP, as much as we can; ordered alphabetically and when no partOf = end of list
+                data.sort((a, b) => (a.partOf.length == 0) ? 1 : (b.partOf.length == 0) ? -1 : (a.partOf[0].label < b.partOf[0].label) ? -1 : 1)
                 this.enrichedActivities = data;
                 console.log("Activities: ", this.enrichedActivities);
             })            
         }
     }
+
 
 
     @Method()

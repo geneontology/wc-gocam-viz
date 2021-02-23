@@ -7,16 +7,16 @@
 
 ## Properties
 
-| Property            | Attribute              | Description | Type      | Default     |
-| ------------------- | ---------------------- | ----------- | --------- | ----------- |
-| `autoHideModal`     | `auto-hide-modal`      |             | `boolean` | `false`     |
-| `gocamId`           | `gocam-id`             |             | `string`  | `undefined` |
-| `graphFold`         | `graph-fold`           |             | `string`  | `"editor"`  |
-| `showActivity`      | `show-activity`        |             | `boolean` | `false`     |
-| `showGeneProduct`   | `show-gene-product`    |             | `boolean` | `false`     |
-| `showGoCamSelector` | `show-go-cam-selector` |             | `boolean` | `false`     |
-| `showHasInput`      | `show-has-input`       |             | `boolean` | `false`     |
-| `showHasOutput`     | `show-has-output`      |             | `boolean` | `false`     |
+| Property            | Attribute              | Description                                                                                                                                   | Type      | Default     |
+| ------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------- |
+| `autoHideModal`     | `auto-hide-modal`      | Deprecated for the moment                                                                                                                     | `boolean` | `false`     |
+| `gocamId`           | `gocam-id`             |                                                                                                                                               | `string`  | `undefined` |
+| `graphFold`         | `graph-fold`           |                                                                                                                                               | `string`  | `"editor"`  |
+| `showActivity`      | `show-activity`        | Show/hide the activity in the activity node                                                                                                   | `boolean` | `false`     |
+| `showGeneProduct`   | `show-gene-product`    | Show/hide the gene product in the activity node                                                                                               | `boolean` | `false`     |
+| `showGoCamSelector` | `show-go-cam-selector` | If true, this will show the list of available GO-CAM in GO For more information, please refer to http://geneontology.org/docs/gocam-overview/ | `boolean` | `false`     |
+| `showHasInput`      | `show-has-input`       | Show/hide the input of an activity                                                                                                            | `boolean` | `false`     |
+| `showHasOutput`     | `show-has-output`      | Show/hide the output of an activity                                                                                                           | `boolean` | `false`     |
 
 
 ## Events

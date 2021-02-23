@@ -5,6 +5,8 @@
 export class GraphHandler {
 
     EVIDENCE_PARENT = "ECO:0000000";
+    BFO_PART_OF = "BFO:0000050";
+    GO_BP = "GO:0008150";
 
     // Derived from RO, Feb 16, 2021
     // Reference 1: https://www.ebi.ac.uk/ols/ontologies/ro/properties?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FRO_0002418&viewMode=All&siblings=false
@@ -143,11 +145,11 @@ export class GraphHandler {
                 // Note the object for later checking.
                 note_sink[e.object_id()] = true;
             }
-            if(this.relations_strippable.hasOwnProperty(e.predicate_id())) {
-                graph.remove_edge(e.subject_id(),
-                        e.object_id(),
-                        e.predicate_id());
-            }
+            // if(this.relations_strippable.hasOwnProperty(e.predicate_id())) {
+            //     graph.remove_edge(e.subject_id(),
+            //             e.object_id(),
+            //             e.predicate_id());
+            // }
         }
 
 
@@ -225,6 +227,7 @@ export class GraphHandler {
     
                 let edges = subgraph.get_edges(node.id(), connected.id());
                 for(let edge of edges) {
+
                     // we are only interested in edges with enabled_by relation
                     if(!this.relations_enabled_by.includes(edge.predicate_id())) { continue }
     
@@ -243,7 +246,37 @@ export class GraphHandler {
             for(let key of Object.keys(biocontext)) {
                 biocontext[key] = Array.from(biocontext[key]);
             }
-        }        
+        }    
+        
+        
+        // the graph must NOT be processed to remove part of as it was before
+        let partOf = [];
+        let edges = this.bbopGraph.get_edges_by_subject(nodeId);
+        // console.log("ARE YOU GONNA TEST THIS ? ", edges);
+        for(let edge of edges) {
+            if(edge.predicate_id() == this.BFO_PART_OF) {
+                let object = this.bbopGraph.get_node(edge.object_id());
+                // if yes, we are locating a activity part of BP
+                if(object.root_types().some(elt => elt.class_id() == "GO:0008150")) {
+
+                    let keys = Object.keys(object._id2type)
+                    for(let key of keys) {
+                        let node = object._id2type[key];
+
+                        // console.log("id2type: ", node);
+                        if(node.class_id() == "GO:0008150") { continue; }
+                    
+                        partOf.push({
+                            id : node.class_id(),
+                            label : node.class_label(),
+                            evidences: this.nodeEvidences(edge)
+                        })
+                        
+                    }                    
+                }
+            }
+        }
+
 
         // var x_node = subgraph.get_node(entity_id);
         // if(x_node) {
@@ -272,6 +305,7 @@ export class GraphHandler {
             nodeId : nodeId,
             ids : standardTypes.map(elt => elt.class_id()),
             labels : standardTypes.map(elt => elt.class_label()),
+            partOf : partOf,
             biocontexts : biocontext,
             geneProducts : geneProducts,
             contributors : "contributor" in annotationMap ? annotationMap["contributor"] : [],

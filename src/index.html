@@ -29,11 +29,13 @@
     ></wc-gocam-viz>
 
 
-    <!-- SPECIAL HANDLING OF EVENTS -->
+    <!-- OPTIONAL: SPECIAL HANDLING OF EVENTS -->
     <script>
 
+        /**
+         * General Key listener, here to recenter the graph visualization
+         */
         document.addEventListener('keydown', (key) => {
-          // console.log(key , key.code == 'Space');
           key.preventDefault();
           if(key.code == 'Space') {
             let viz = document.getElementById("gocam-1");
@@ -41,14 +43,17 @@
           }
         })
 
+        /**
+         * Listen to a mouse over event on an activity node
+         */
         document.addEventListener('nodeOver', function hideMenu(e, v) {
           let payload = e.detail;
-          // console.log('Node over' , payload);
         });
 
+        /**
+         * Listen to a mouse out event from an activity node
+         */
         document.addEventListener('nodeOut', function hideMenu(e, v) {
-          // console.log('Node out' , e.detail);
-
         });
         
     </script>

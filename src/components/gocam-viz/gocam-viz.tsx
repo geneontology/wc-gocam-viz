@@ -1,4 +1,4 @@
-import { Component, Prop, Element, Event, EventEmitter, Watch, h } from '@stencil/core';
+import { Component, Prop, Element, Event, EventEmitter, Watch, getAssetPath, h } from '@stencil/core';
 import { Listen, Method, State } from '@stencil/core';
 
 import { graph as noctua_graph } from 'bbop-graph-noctua';
@@ -18,6 +18,7 @@ import { GraphHandler } from '../../globals/graphHandler';
 import { GenesPanel } from '../genes-panel/genes-panel';
 
 
+
 cytoscape.use( coseBilkent );
 
 
@@ -25,6 +26,7 @@ cytoscape.use( coseBilkent );
     tag: 'wc-gocam-viz',
     styleUrl: 'gocam-viz.css',
     shadow: false,
+    assetsDirs: ['assets']
 })
 export class GoCamViz {
 
@@ -614,7 +616,7 @@ export class GoCamViz {
                 {
                     selector: 'edge',
                     style: {
-                        'content': 'data(label)',
+                        // 'content': 'data(label)',
                         'line-color': 'data(color)',
                         'line-style': 'data(lineStyle)',
                         'target-arrow-color': 'data(color)',
@@ -995,7 +997,7 @@ export class GoCamViz {
                 <wc-genes-panel ghandler={this.ghandler} ref={el => this.genesPanel = el}></wc-genes-panel>
             </div>,
 
-            <img src="./legend.png"></img>
+            <img src={getAssetPath("./assets/legend.png")}></img>
 
         ];
 

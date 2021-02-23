@@ -17,13 +17,11 @@ In any HTML page:
     <script type="module" src="https://unpkg.com/@geneontology/wc-gocam-viz/dist/wc-gocam-viz/wc-gocam-viz.esm.js"></script>
     <script nomodule="" src="https://unpkg.com/@geneontology/wc-gocam-viz/dist/wc-gocam-viz/wc-gocam-viz.js"></script> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
   </head>
   
 
   <body>
 
-    <!-- ACTUAL INTEGRATION OF THE GOCAM-VIZ COMPONENT -->
     <wc-gocam-viz 
       id="gocam-1"
       gocam-id="568b0f9600000284"
@@ -34,37 +32,7 @@ In any HTML page:
       show-activity=false
       style="position: fixed; top: 50%; left: 10%; transform: translate(0%, -50%);"
     ></wc-gocam-viz>
-
-    <!-- OPTIONAL: SPECIAL HANDLING OF EVENTS -->
-    <script>
-
-        /**
-         * General Key listener, here to recenter the graph visualization
-         */
-        document.addEventListener('keydown', (key) => {
-          key.preventDefault();
-          if(key.code == 'Space') {
-            let viz = document.getElementById("gocam-1");
-            if(viz) { viz.resetView(); }
-          }
-        })
-
-        /**
-         * Listen to a mouse over event on an activity node
-         */
-        document.addEventListener('nodeOver', function hideMenu(e, v) {
-          let payload = e.detail;
-        });
-
-        /**
-         * Listen to a mouse out event from an activity node
-         */
-        document.addEventListener('nodeOut', function hideMenu(e, v) {
-        });
-        
-    </script>
-
-
+    >
   </body>
 </html>
 

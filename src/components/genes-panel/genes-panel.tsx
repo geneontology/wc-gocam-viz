@@ -1,4 +1,4 @@
-import { Component, Prop, Element, Event, EventEmitter, Watch, h } from '@stencil/core';
+import { Component, Prop, Element, Event, EventEmitter, Watch, h, Method } from '@stencil/core';
 import { State } from '@stencil/core';
 import { GraphHandler } from '../../globals/graphHandler';
 
@@ -65,6 +65,14 @@ export class GenesPanel {
     }
 
 
+    @Method()
+    async scrollToActivity(nodeId) {
+        let scrollList = document.getElementById("genes-panel__list");
+        let elt = document.getElementById("gp_item_" + nodeId);
+        if(scrollList && elt) {
+            scrollList.scroll(0, elt.offsetTop-150)        
+        }
+    }
 
     select(activity) {
         this.selectChanged.emit(activity);
@@ -117,11 +125,13 @@ export class GenesPanel {
                     <h1>Gene Products and Activities</h1>
                     <hr/>
                 </div>
+                <div class="genes-panel__list" id="genes-panel__list">
                 {
                     this.enrichedActivities.map((activity) => {
                         let contexts = Object.keys(activity.biocontexts);
                         return (
                             <div class="genes-panel__item" id={"gp_item_" + activity.nodeId} onClick={() => this.select(activity) } onMouseOver={() => this.highlight(activity.nodeId)}  onMouseOut={() => this.clearHighlight()} >
+                                                            
                                 <div class='genes-panel__item__title'>
                                     {activity.geneProducts.length == 0 ? "N/A" : activity.geneProducts.map(gp => { return <a class='genes-panel__item__title__gp' href={gp.url} target='_blank'>{gp.label}</a> })}
                                 </div> 
@@ -158,6 +168,7 @@ export class GenesPanel {
                         )
                     })
                 }
+                </div>
             </div>
         )
 

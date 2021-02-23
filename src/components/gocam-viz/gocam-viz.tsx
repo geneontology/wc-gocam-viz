@@ -861,6 +861,20 @@ export class GoCamViz {
                 this.previousPanelElt = elt;
             }
 
+            console.log("gp ??? " , this.genesPanel);
+            if(this.genesPanel) {
+
+                let scrollList = document.getElementById("genes-panel__list");
+                let elt2 = document.getElementById("gp_item_" + evt.target.id());
+                console.log("sclist: ", scrollList , elt2);
+                if(scrollList && elt2) {
+                    scrollList.scroll(0, elt2.offsetTop-150)        
+                    console.log("scrolling to ", elt2.offsetTop);
+                }
+                        
+                // this.genesPanel.scrollToActivity(evt.target.id());
+            }
+
         }
     }
 

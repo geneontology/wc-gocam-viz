@@ -14,8 +14,8 @@ In any HTML page:
 
 
   <head>
-    <script type="module" src="https://unpkg.com/@geneontology/wc-light-modal/dist/wc-light-modal/wc-light-modal.esm.js"></script>
-    <script nomodule="" src="https://unpkg.com/@geneontology/wc-light-modal/dist/wc-light-modal/wc-light-modal.js"></script>      
+    <script type="module" src="https://unpkg.com/@geneontology/wc-gocam-viz/dist/wc-gocam-viz/wc-gocam-viz.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/@geneontology/wc-gocam-viz/dist/wc-gocam-viz/wc-gocam-viz.js"></script> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   </head>

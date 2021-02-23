@@ -4,6 +4,8 @@
 
 export class GraphHandler {
 
+    EVIDENCE_PARENT = "ECO:0000000";
+
     // Derived from RO, Feb 16, 2021
     // Reference 1: https://www.ebi.ac.uk/ols/ontologies/ro/properties?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FRO_0002418&viewMode=All&siblings=false
     // Reference 2: http://purl.obolibrary.org/obo/ro.obo
@@ -52,11 +54,13 @@ export class GraphHandler {
 
     categories = undefined;
 
+
+
     constructor(graph) {
         this.setBBOPGraph(graph);
     }
 
-    
+
     /**
      * Set the current BBOP graph
      * @param graph BBOP graph of a GO-CAM
@@ -205,6 +209,7 @@ export class GraphHandler {
         // nodes connected to this activity
         let subgraph = node.subgraph();
 
+        // console.log("getActivity(", nodeId , "): ", subgraph);
 
         // this will detect the associated biological context
         let standardTypes = node.types();
@@ -225,7 +230,8 @@ export class GraphHandler {
     
                     geneProducts.push({
                         id : this.nodeIDs(connected)[0],
-                        label: this.nodeLabels(connected)[0]
+                        label: this.nodeLabels(connected)[0],
+                        evidences : this.nodeEvidences(edge)
                     });
                 }
             }
@@ -371,7 +377,42 @@ export class GraphHandler {
 
 
 
+    nodeEvidences(edge) {
+        // should always be there - should always have evidence, but just in case
+        if(!edge.referenced_subgraphs()) {
+            console.warn("edge ", edge , " does not have evidence !");
+            return [];
+        }
+        
+        let evidences = [];
+        for(let rfs of edge.referenced_subgraphs()) {
+            let keys = Object.keys(rfs._nodes);
+            for(let key of keys) {
+                let node = rfs._nodes[key];
 
+                // normally 1 source, 1 with, multiple sources
+                let evidence = { source: "", url : "", with: "", evidences : [] }
+                for(let ann of node.annotations()) {
+                    if(ann._properties.key == "source") {
+                        evidence.source = ann._properties.value;
+                        evidence.url = this.dbxrefs.getURL(evidence.source.split(":")[0], undefined, evidence.source.split(":")[1]);
+                    } else if(ann._properties.key == "with") {
+                        evidence.with = ann._properties.value;
+                    }
+                }
+
+                let evkeys = Object.keys(node._id2type);
+                for(let evkey of evkeys) {
+                    let ev = node._id2type[evkey];
+                    if(ev.class_id() != this.EVIDENCE_PARENT) {
+                        evidence.evidences.push( { id : ev.class_id() , label : ev.class_label() });
+                    }
+                }
+                evidences.push(evidence);
+            }
+        }
+        return evidences;
+    }
 
     nodeIDs(n){
         var retlist = [];
@@ -408,7 +449,13 @@ export class GraphHandler {
                 var tt = atype.class_label();
                 cell_cache.push(tt);
             }
-            retlist.push(cell_cache.join("\n"));
+            let val = cell_cache.join("\n");
+            if(val.includes(" ")) {
+                let splits = val.split(" ");
+                splits.pop();  // remove the species
+                val = splits.join("\n");
+            }
+            retlist.push(val);
         };
         return retlist;
     }

@@ -864,7 +864,7 @@ export class GoCamViz {
                 let scrollList = document.getElementById("genes-panel__list");
                 let elt2 = document.getElementById("gp_item_" + evt.target.id());
                 if(scrollList && elt2) {
-                    scrollList.scroll(0, elt2.offsetTop-150)        
+                    scrollList.scroll(0, elt2.offsetTop-190)        
                 }
                         
                 // this.genesPanel.scrollToActivity(evt.target.id());
@@ -995,9 +995,8 @@ export class GoCamViz {
                 <wc-genes-panel ghandler={this.ghandler} ref={el => this.genesPanel = el}></wc-genes-panel>
             </div>,
 
+            <img src="./legend.png"></img>
 
-            // <wc-light-modal ref={(el) => this.modal = el as HTMLWcLightModalElement}
-            // modal-title="Title" modal-content="CONTENT"></wc-light-modal>
         ];
 
     }

@@ -12,6 +12,7 @@
   
   <body>
 
+    <!-- ACTUAL INTEGRATION OF THE GOCAM-VIZ COMPONENT -->
     <wc-gocam-viz 
       id="gocam-1"
       gocam-id="568b0f9600000284"
@@ -23,57 +24,9 @@
       style="position: fixed; top: 50%; left: 10%; transform: translate(0%, -50%);"
     ></wc-gocam-viz>
 
-    <wc-light-modal modal-anchor="@" modal-content="<button>toto</button>" x=0 y=0 id="modal-1">
-    </wc-light-modal>
 
+    <!-- SPECIAL HANDLING OF EVENTS -->
     <script>
-
-        function lineStyle() {
-          return "line-height: 1.2rem; padding: 0.2rem;"
-        }
-
-        function leftStyle() {
-          return "margin-left: 0.5rem; margin-right: 0.5rem; width: 5rem; display: inline-block;"
-        }
-        function leftStyle2() {
-          return "margin-right: 0.5rem; width: 5rem; display: inline-block;"
-        }
-
-        function rightStyle() {
-          return ""
-        }
-
-        function articleStyle() {
-          return " box-sizing: border-box; text-decoration: none; color: black; margin-left: 0.5rem; -webkit-box-shadow: 4px 6px 42px 0px rgb(194 194 194); -moz-box-shadow: 4px 6px 42px 0px rgba(194,194,194,1); box-shadow: 4px 6px 42px 0px rgb(194 194 194); border: 1px solid green; display: inline-block; width: 20px; border-radius: 5px; background-color: greenyellow; text-align: center;"
-        }
-
-        function listReferences(context) {
-          // console.log("context: ", context);
-          // return "<i class=\"far fa-newspaper\"></i>"
-          
-          let html = "";
-          for(let i = 0; i < context.evidences.pmid.length; i++) {
-            html += "<a href='" + context.evidences.url[i] + "' style='" + articleStyle() + "' target='_blank' title='Source: " + context.evidences.pmid[i] + "\nEvidence: " + context.evidences.label[i] + "'>R</a>";
-          }
-          return html;
-        }
-
-        function createContent(payload) {
-          let content = "";
-          content += "<div class='pop-line' style='" + lineStyle() + "'><span class='span-left' style='" + leftStyle() + "'>Gene</span><a href='" + payload.meta.url + "' class='span-right' target='blank' style='" + rightStyle() + "'>" + ((payload && payload.meta && payload.meta.label && payload.meta.label.length > 0) ? payload.meta.label[0] : "N/A") + "</a></div>";
-          content += "<div class='pop-line' style='" + lineStyle() + "'><span class='span-left' style='" + leftStyle() + "'>Taxon</span><a href='" + payload.meta.taxon_url + "' class='span-right' target='blank' style='" + rightStyle() + "'>" + payload.meta.taxon_label + "</a></div>";
-          if(payload.standardTypes && payload.standardTypes.length > 0) {
-            content += "<div class='pop-line' style='" + lineStyle() + "'><span class='span-left' style='" + leftStyle() + "'>Activity</span><a href='http://amigo.geneontology.org/amigo/term/" + payload.standardTypes[0].class_id() + "' class='span-right' target='blank' style='" + rightStyle() + "'>" + payload.standardTypes[0].class_label() + "</a></div>";
-          }
-          for(let contexts of Object.keys(payload.biocontext)) {
-            if(contexts == "RO:0002333") continue;  // discard enabled_by info
-            for(let context of payload.biocontext[contexts]) {
-              content += "<div class='pop-line' style='" + lineStyle() + "'><span class='span-left' style='" + leftStyle2() + "'></span><span class='span-left' style='" + leftStyle() + "'>" + context.relationLabel + "</span><a href=" + context.termURL + " class='span-right' target='blank' style='" + rightStyle() + "'>" + context.termLabel + "</a>" + listReferences(context) + "</div>";
-              
-            }
-          }
-          return content;
-        }
 
         document.addEventListener('keydown', (key) => {
           // console.log(key , key.code == 'Space');
@@ -87,19 +40,11 @@
         document.addEventListener('nodeOver', function hideMenu(e, v) {
           let payload = e.detail;
           // console.log('Node over' , payload);
-          let modal = document.getElementById("modal-1");
-          modal.x = payload.x;
-          modal.y = payload.y;
-          modal.modalTitle = payload.label;
-          modal.modalContent = createContent(payload);
-          
-          // modal.open();
         });
 
         document.addEventListener('nodeOut', function hideMenu(e, v) {
           // console.log('Node out' , e.detail);
-          let modal = document.getElementById("modal-1");
-          // modal.close();
+
         });
         
     </script>

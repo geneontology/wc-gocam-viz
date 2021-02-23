@@ -99,3 +99,7 @@ button:hover {
     right: 0px;
     margin-right: 1rem;    
 }
+
+img {
+    height: 150px;
+}

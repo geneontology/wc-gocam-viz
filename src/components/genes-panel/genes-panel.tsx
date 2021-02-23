@@ -60,6 +60,7 @@ export class GenesPanel {
             this.ghandler.enrichActivities(activities)
             .then((data) => {
                 this.enrichedActivities = data;
+                console.log("Activities: ", this.enrichedActivities);
             })            
         }
     }
@@ -100,6 +101,27 @@ export class GenesPanel {
     }
 
 
+
+    /**
+     * Render the references of a GP but does not display "with" field for the moment
+     * @param gp a gene product object (see graphHandler)
+     */
+    renderGeneReferences(gp) {
+        return (
+            <span class='reference-list'>
+                {
+                    gp.evidences.map(evidence => {
+                        return <a class='reference-article far fa-newspaper' href={evidence.url} target='_blank' title={"Source: " + evidence.source + "\nEvidence: " + evidence.evidences.map(ev => ev.label).join(",") }></a>
+                    })
+                }
+            </span>            
+        )
+    }    
+    
+    /**
+     * Render the references for a biological context
+     * @param context a biological context (see graphHandler)
+     */
     renderReferences(context) {
         let pos = Array.from(Array(context.evidences.pmid.length).keys())
         return(
@@ -137,7 +159,7 @@ export class GenesPanel {
                                 </div> 
 
                                 <div class='genes-panel__item__gene__block'>
-                                    <div><span class='block-left not-clickable'>Gene</span>{activity.geneProducts.length == 0 ? <span class='block-right'>N/A</span> : activity.geneProducts.map(gp => { return <a class='genes-panel__item__title__gp block-right' href={gp.url} target='_blank'>{gp.label}</a> })}</div>
+                                    <div><span class='block-left not-clickable'>Gene</span>{activity.geneProducts.length == 0 ? <span class='block-right'>N/A</span> : activity.geneProducts.map(gp => { return [<a class='genes-panel__item__title__gp block-right' href={gp.url} target='_blank'>{gp.label}</a>, this.renderGeneReferences(gp) ] })} </div>
                                     <div><span class='block-left not-clickable'>Taxon</span>{activity.geneProducts.length == 0 ? <span class='block-right'>N/A</span> : activity.geneProducts.map(gp => { return <a class='genes-panel__item__title__gp block-right' href={gp.taxonURL} target='_blank'>{gp.taxonLabel}</a> })}</div>
                                 </div>
                                 

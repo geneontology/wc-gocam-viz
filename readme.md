@@ -30,9 +30,8 @@ In any HTML page:
       show-has-output=false
       show-gene-product=true
       show-activity=false
-      style="position: fixed; top: 50%; left: 10%; transform: translate(0%, -50%);"
     ></wc-gocam-viz>
-    >
+    
   </body>
 </html>
 

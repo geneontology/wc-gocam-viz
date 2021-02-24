@@ -125,6 +125,16 @@ export class GenesPanel {
         )
     }
 
+    renderTaxon(gp) {
+        let label = gp.taxonLabel;
+        if(label.includes(" ")) {
+            let split = label.split(" ");
+            label = split[0].substring(0, 1) + "." + split[1];
+        }
+        console.log(label);
+        return <a class='genes-panel__item__title__gp__taxon' href={gp.taxonURL} target='_blank'>{label}</a>;
+    }
+
     render() {
 
         if(!this.ghandler || !this.enrichedActivities) {
@@ -146,7 +156,7 @@ export class GenesPanel {
                                                             
                                 <div class='genes-panel__item__title'>
                                     {activity.geneProducts.length == 0 ? <a class='genes-panel__item__title__gp' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> : activity.geneProducts.map(gp => { return <a class='genes-panel__item__title__gp' href={gp.url} target='_blank'>{gp.label}</a> })}
-                                    {activity.geneProducts.length == 0 ? <span class='genes-panel__item__title__gp__taxon'>N/A</span> : activity.geneProducts.map(gp => { return <a class='genes-panel__item__title__gp__taxon' href={gp.taxonURL} target='_blank'>{gp.taxonLabel}</a> })}
+                                    {activity.geneProducts.length == 0 ? <span class='genes-panel__item__title__gp__taxon'>N/A</span> : activity.geneProducts.map(gp => { return this.renderTaxon(gp) })}
                                 </div> 
 
                                 

@@ -2,19 +2,6 @@ import { Component, Prop, Element, Event, EventEmitter, Watch, h, Method } from 
 import { State } from '@stencil/core';
 import { GraphHandler } from '../../globals/graphHandler';
 
-// import { graph as noctua_graph } from 'bbop-graph-noctua';
-// import minerva_manager from 'bbop-manager-minerva';
-// import barista_response from 'bbop-response-barista';
-// import { jquery as jquery_engine } from 'bbop-rest-manager';
-
-
-// import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globals/utils';
-
-// import * as dbxrefs from "@geneontology/dbxrefs";
-
-// import '@geneontology/wc-light-modal';
-
-
 
 @Component({
     tag: 'wc-genes-panel',
@@ -164,7 +151,7 @@ export class GenesPanel {
 
                                 
                                 <div class='genes-panel__item__activity__block'>
-                                    <span class='block-left not-clickable'>Activity</span><a class='genes-panel__item__activity block-right' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> <span class="activity__references">{ activity.geneProducts.map(gp => { return this.renderGeneReferences(gp) }) }</span>
+                                    <a class='genes-panel__item__activity block-right' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> <span class="activity__references">{ activity.geneProducts.map(gp => { return this.renderGeneReferences(gp) }) }</span>
                                     {contexts.map(context => {
                                         if(context == "RO:0002333") { return ;}
                                         return (
@@ -174,7 +161,6 @@ export class GenesPanel {
 //                                                        console.log(context , ctx);
                                                         return (
                                                             <div>
-                                                                <span class='block-left'></span>
                                                                 <a class='block-left' target='_blank' href={ctx.relationURL}><i>{ctx.relationLabel}</i></a>
                                                                 <a class='block-right' target='_blank' href={ctx.termURL}>{ctx.termLabel}</a>
                                                                 { this.renderReferences(ctx) }

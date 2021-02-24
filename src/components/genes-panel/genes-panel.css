@@ -1,6 +1,10 @@
 
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css");
 
+:root {
+    --gocam-panel-width: 450px;
+}
+
 * {
     font-family: "Lato", sans-serif;    
 }
@@ -24,12 +28,13 @@ a:hover {
 h1 {
     color: #002379;
     text-align:right; 
+    font-size: 1.5rem;
     margin: 0rem 0.5rem 0rem 0rem;
 }
 
 .genes-panel__container {
-    width: 650px;
-    height: 800px;
+    width: var(--gocam-panel-width);
+    height: var(--gocam-height);
     line-height: 1.5;
     /* overflow: scroll; */
     display: inline-block;
@@ -87,14 +92,14 @@ h1 {
 
 .genes-panel__item__activity {
     text-overflow: ellipsis;
-    max-width: 320px;
+    max-width: 280px;
     vertical-align: top;
     display: inline-block;
     color: #002379;
 }
 
 .block-left {
-    margin-left: 0.5rem;
+    margin-left: 2.5rem;
     margin-right: 0.5rem;
     width: 5rem;
     display: inline-block;

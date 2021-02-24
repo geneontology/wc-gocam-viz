@@ -105,7 +105,7 @@ export class GoCamViz {
         'background-color': 'white',
         'border-width': 1,
         'border-color': 'black',
-        'font-size': 16,
+        'font-size': 20,
         'min-zoomed-font-size': 1, //10,
         'text-valign': 'center',
         'color': 'black',

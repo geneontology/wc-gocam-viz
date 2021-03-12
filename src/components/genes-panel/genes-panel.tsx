@@ -27,6 +27,8 @@ export class GenesPanel {
     @Prop() parentCy;
 
     @State() enrichedActivities;
+    
+    @State() groupedActivities;
 
     componentWillLoad() {
     }
@@ -50,6 +52,8 @@ export class GenesPanel {
                 data.sort((a, b) => (a.partOf.length == 0) ? 1 : (b.partOf.length == 0) ? -1 : (a.partOf[0].label < b.partOf[0].label) ? -1 : 1)
                 this.enrichedActivities = data;
                 console.log("Activities: ", this.enrichedActivities);
+                this.groupedActivities = this.ghandler.groupActivitiesByProcess(this.enrichedActivities);
+                console.log("Grouped activities: ", this.groupedActivities);
             })            
         }
     }
@@ -91,6 +95,11 @@ export class GenesPanel {
     }
 
 
+    highlightSelf(activityNode) {
+        if(!activityNode.classList.contains("genes-panel__item:hover")) {
+            activityNode.classList.add("genes-panel__item:hover");
+        }
+    }
 
     /**
      * Render the references of a GP but does not display "with" field for the moment
@@ -139,9 +148,94 @@ export class GenesPanel {
         return <a class='genes-panel__item__title__gp__taxon' href={gp.taxonURL} target='_blank'>{label}</a>;
     }
 
+    renderProcess(process) {
+        return(
+            <div class="genes-panel__item__process">
+                <div class="genes-panel__item__process__list">
+                    { 
+                        process.label.map(elt => {
+                            return <a href={process.url} class="genes-panel__item__process__list-name" target="_blank">{process.label}</a>
+                        }) 
+                    }
+                </div>
+
+                <div class="genes-panel__item__process__activities">
+                    {
+                        process.activities.map(activity => {
+                            return this.renderActivity(activity);
+                        })
+                    }
+                </div>
+            </div>
+        )
+    }
+
+    renderActivity(activity) {
+        let contexts = Object.keys(activity.biocontexts);
+        return (
+            <div class="genes-panel__item" id={"gp_item_" + activity.nodeId} onClick={() => this.select(activity) } onMouseOver={() => this.highlight(activity.nodeId)}  onMouseOut={() => this.clearHighlight()} >
+                                            
+                <div class='genes-panel__item__title'>
+                    {activity.geneProducts.length == 0 ? <a class='genes-panel__item__title__gp' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> : activity.geneProducts.map(gp => { return <a class='genes-panel__item__title__gp' href={gp.url} target='_blank'>{gp.label}</a> })}
+                    {activity.geneProducts.length == 0 ? <span class='genes-panel__item__title__gp__taxon'>N/A</span> : activity.geneProducts.map(gp => { return this.renderTaxon(gp) })}
+                </div> 
+
+                
+                <div class='genes-panel__item__activity__block'>
+                    <a class='genes-panel__item__activity block-right' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> <span class="activity__references">{ activity.geneProducts.map(gp => { return this.renderGeneReferences(gp) }) }</span>
+                    {contexts.map(context => {
+                        if(context == "RO:0002333") { return ;}
+                        return (
+                            <div>
+                                {
+                                    activity.biocontexts[context].map(ctx => {
+//                                                        console.log(context , ctx);
+                                        return (
+                                            <div>
+                                                <a class='block-left' target='_blank' href={ctx.relationURL}><i>{ctx.relationLabel}</i></a>
+                                                <a class='block-right' target='_blank' href={ctx.termURL}>{ctx.termLabel}</a>
+                                                { this.renderReferences(ctx) }
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                            )
+                    })}
+                </div>
+            </div>
+        )
+    }
+
+    // render() {
+
+    //     if(!this.ghandler || !this.enrichedActivities) {
+    //         return "";
+    //     }
+      
+    //     return(
+    //         <div class="genes-panel__container" id={"gpc_" + this.ghandler.getBBOPGraph().id()}>
+    //             <div class="genes-panel__container__title">
+    //                 <h1>Gene Products and Activities</h1>
+    //                 <hr/>
+    //             </div>
+    //             <div class="genes-panel__list" id="genes-panel__list">
+    //             {
+    //                 this.enrichedActivities.map((activity) => {
+    //                     return this.renderActivity(activity);
+    //                 })
+    //             }
+    //             </div>
+    //         </div>
+    //     )
+
+    // }
+
+
+
     render() {
 
-        if(!this.ghandler || !this.enrichedActivities) {
+        if(!this.ghandler || !this.groupedActivities) {
             return "";
         }
       
@@ -153,41 +247,8 @@ export class GenesPanel {
                 </div>
                 <div class="genes-panel__list" id="genes-panel__list">
                 {
-                    this.enrichedActivities.map((activity) => {
-                        let contexts = Object.keys(activity.biocontexts);
-                        return (
-                            <div class="genes-panel__item" id={"gp_item_" + activity.nodeId} onClick={() => this.select(activity) } onMouseOver={() => this.highlight(activity.nodeId)}  onMouseOut={() => this.clearHighlight()} >
-                                                            
-                                <div class='genes-panel__item__title'>
-                                    {activity.geneProducts.length == 0 ? <a class='genes-panel__item__title__gp' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> : activity.geneProducts.map(gp => { return <a class='genes-panel__item__title__gp' href={gp.url} target='_blank'>{gp.label}</a> })}
-                                    {activity.geneProducts.length == 0 ? <span class='genes-panel__item__title__gp__taxon'>N/A</span> : activity.geneProducts.map(gp => { return this.renderTaxon(gp) })}
-                                </div> 
-
-                                
-                                <div class='genes-panel__item__activity__block'>
-                                    <a class='genes-panel__item__activity block-right' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> <span class="activity__references">{ activity.geneProducts.map(gp => { return this.renderGeneReferences(gp) }) }</span>
-                                    {contexts.map(context => {
-                                        if(context == "RO:0002333") { return ;}
-                                        return (
-                                            <div>
-                                                {
-                                                    activity.biocontexts[context].map(ctx => {
-//                                                        console.log(context , ctx);
-                                                        return (
-                                                            <div>
-                                                                <a class='block-left' target='_blank' href={ctx.relationURL}><i>{ctx.relationLabel}</i></a>
-                                                                <a class='block-right' target='_blank' href={ctx.termURL}>{ctx.termLabel}</a>
-                                                                { this.renderReferences(ctx) }
-                                                            </div>
-                                                        )
-                                                    })
-                                                }
-                                            </div>
-                                            )
-                                    })}
-                                </div>
-                            </div>
-                        )
+                    this.groupedActivities.map((process) => {
+                        return this.renderProcess(process);
                     })
                 }
                 </div>

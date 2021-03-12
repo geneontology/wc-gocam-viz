@@ -851,7 +851,14 @@ export class GoCamViz {
 
     previousPanelElt = undefined;
     onMouseOver(evt) {
-        this.timerPopup = setTimeout(() => this.showPopup(evt), this.delayPopup);
+        // we don't need that timeout anymore since it's not showing pop up but just highlighting
+        // this.timerPopup = setTimeout(() => this.showPopup(evt), this.delayPopup);
+
+        if(evt && evt.target && evt.target.id) {
+            this.highlight(evt.target.id());
+            this.selectedNode = evt.target;
+            this.selectedEvent = evt;
+        }
 
         if(evt.target && evt.target.length) {
 
@@ -866,7 +873,8 @@ export class GoCamViz {
                 let scrollList = document.getElementById("genes-panel__list");
                 let elt2 = document.getElementById("gp_item_" + evt.target.id());
                 if(scrollList && elt2) {
-                    scrollList.scroll(0, elt2.offsetTop-170)        
+                    scrollList.scroll(0, elt2.offsetTop-160);
+                    elt2.style["box-shadow"] = "4px 6px 42px 1px rgb(194 194 255)";
                 }
                         
                 // this.genesPanel.scrollToActivity(evt.target.id());
@@ -882,6 +890,8 @@ export class GoCamViz {
         if(this.previousPanelElt && this.previousPanelElt.classList) {
             if(this.previousPanelElt.classList.contains("gp_item_selected")) {
                 this.previousPanelElt.classList.remove("gp_item_selected");
+                this.previousPanelElt.style["box-shadow"] = "";
+
             }
             this.previousPanelElt = undefined;
         }

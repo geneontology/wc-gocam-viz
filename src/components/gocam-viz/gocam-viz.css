@@ -17,9 +17,9 @@
     border: 2px solid rgba(214,214,214,0.94);
     border-radius: var(--gocam-border-radius);
     padding: 1rem;
-    -webkit-box-shadow: 0px 0px 20px 0px rgb(194 194 194);
-    -moz-box-shadow: 0px 0px 20px 0px rgba(194,194,194,1);
-    box-shadow: 0px 0px 20px 0px rgb(194 194 194);
+    -webkit-box-shadow: 0px 0px 10px 0px rgb(194 194 194);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(194,194,194,1);
+    box-shadow: 0px 0px 10px 0px rgb(194 194 194);
 }
 
 .gocam-viz-loader {
@@ -77,9 +77,9 @@ button {
     padding: 1rem;
     margin-bottom: 1rem;
     border-radius: var(--gocam-border-radius);
-    -webkit-box-shadow: 0px 0px 20px 0px rgb(194 194 194);
-    -moz-box-shadow: 0px 0px 20px 0px rgba(194,194,194,1);
-    box-shadow: 0px 0px 20px 0px rgb(194 194 194);
+    -webkit-box-shadow: 0px 0px 10px 0px rgb(194 194 194);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(194,194,194,1);
+    box-shadow: 0px 0px 10px 0px rgb(194 194 194);
 }
 
 button, select {

@@ -333,6 +333,38 @@ export class GraphHandler {
         return Promise.all(enriched);
     }
 
+    processesKey(array) {
+        let key = array.map(elt => elt.id).join(",");
+        if(key == "") { key = "Others" }
+        return key
+    }
+
+    groupActivitiesByProcess(enrichedActivities) {
+        let map = new Map();
+        for(let enr of enrichedActivities) {
+            let key = this.processesKey(enr.partOf);
+            let acts = [];
+            if(map.has(key)) {
+                acts = map.get(key);
+            } else {
+                map.set(key, acts);
+            }
+            acts.push(enr);
+        }
+
+        let groupedActivities = [];
+        for(let process of map.keys()) {
+            groupedActivities.push({
+                id : process.split(","),
+                url: (process.split(",") != "" && this.dbxrefs) ? process.split(",").map(elt => { let db = elt.split(":")[0]; let id = elt.split(":")[1]; return this.dbxrefs.getURL(db, undefined, id) } ) : "#",
+                label : map.get(process)[0].partOf.map(elt => elt.label) == "" ? ["Others"] : map.get(process)[0].partOf.map(elt => elt.label),
+                activities : map.get(process)
+            })
+        }
+        return groupedActivities;
+    }
+    
+
     /**
      * This will return an activity enriched with additional meta data, such as gene taxon and URLs
      * Note: require dbxrefs to be set

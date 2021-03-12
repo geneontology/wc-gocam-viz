@@ -395,10 +395,13 @@ export class GraphHandler {
             .then(async function(data) { return data.json()})
             .then(data => {
                 let doc = data.docs[0];
-                let db = doc.id.split(":")[0];
-                let dbid = doc.id.split(":")[1];
-                doc["url"] = this.dbxrefs.getURL(db, undefined, dbid);
-                // doc["taxon_url"] = ncbiTaxonUrl + doc.taxon.replace("NCBITaxon:", "")
+                try {
+                    let db = doc.id.split(":")[0];
+                    let dbid = doc.id.split(":")[1];
+                    doc["url"] = this.dbxrefs.getURL(db, undefined, dbid);
+                } catch(error) {
+                    console.error("asked to annotate ", id , " but doc ", doc , " does not have an id, can not resolve URL - data is: ", data);
+                }
                 return doc
             })
         }

@@ -127,11 +127,15 @@ export class GenesPanel {
 
     renderTaxon(gp) {
         let label = gp.taxonLabel;
+        // no label present for taxon
+        if(!label) {
+            return <a class='genes-panel__item__title__gp__taxon' href={gp.taxonURL} target='_blank'>N/A</a>;
+        }
+        // otherwise parse and show it
         if(label.includes(" ")) {
             let split = label.split(" ");
             label = split[0].substring(0, 1) + "." + split[1];
         }
-        console.log(label);
         return <a class='genes-panel__item__title__gp__taxon' href={gp.taxonURL} target='_blank'>{label}</a>;
     }
 

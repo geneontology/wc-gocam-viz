@@ -242,7 +242,7 @@ export class GenesPanel {
         return(
             <div class="genes-panel__container" id={"gpc_" + this.ghandler.getBBOPGraph().id()}>
                 <div class="genes-panel__container__title">
-                    <h1>Gene Products and Activities</h1>
+                    <h1>Processes and Activities</h1>
                     <hr/>
                 </div>
                 <div class="genes-panel__list" id="genes-panel__list">

@@ -63,6 +63,22 @@ export class GoCamViz {
 
     @Prop() graphFold: string = "editor";
 
+
+    /**
+     * Barista current URLs - can be updated to change URL or add new instances
+     */
+    barista = {
+        prod : "http://barista.berkeleybop.org/",
+        dev : "http://barista-dev.berkeleybop.org/" 
+    };
+
+    /**
+     * Used to connect to a barista instance. By default, always access production (prod) server
+     * prod = http://barista.berkeleybop.org/
+     * dev  = http://barista-dev.berkeleybop.org/
+     */
+    @Prop() repository: string = "prod";
+
     /**
      * Deprecated for the moment
      */
@@ -184,7 +200,7 @@ export class GoCamViz {
      * Init general communication to barista -> minerva
     */
     initManager() {
-        let global_barista_location = "http://barista.berkeleybop.org/";
+        let global_barista_location = this.barista[this.repository] = "http://barista.berkeleybop.org/";
         let global_minerva_definition_name = "minerva_public";
         let user_token = "";
 

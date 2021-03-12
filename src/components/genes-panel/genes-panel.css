@@ -191,7 +191,7 @@ h1 {
     display: block;
     /* margin: 1rem 1rem 0rem 0.5rem; */
     /* padding: 1rem 1.2rem; */
-    margin: 1rem 0rem;
+    margin: 0.5rem 0rem;
     padding: 0rem;
     background: #ffffff;
     border-radius: 15px;
@@ -219,6 +219,11 @@ h1 {
     font-weight: 800;
     font-size: 1.1rem;   
     color: white;
+}
+
+.genes-panel__item__process__list-name:hover {
+    color: #dedede;;
+
 }
 
 /* part of the process card that contains all related activities */

@@ -68,14 +68,28 @@ export class GoCamViz {
      * Barista current URLs - can be updated to change URL or add new instances
      */
     barista = {
-        prod : "http://barista.berkeleybop.org/",
-        dev : "http://barista-dev.berkeleybop.org/" 
+        prod : "http://barista.berkeleybop.org",
+        dev : "http://barista-dev.berkeleybop.org" 
     };
 
     /**
+     * prod & dev environments use different minerva definitions
+     */
+    minervaDefinitions = {
+        prod : "minerva_public",
+        dev : "minerva_public_dev"
+    };
+
+    noctuaGraphURL = {
+        prod: "http://noctua.geneontology.org/editor/graph/",
+        dev: "http://noctua-dev.berkeleybop.org/editor/graph/"
+    };
+    
+
+    /**
      * Used to connect to a barista instance. By default, always access production (prod) server
-     * prod = http://barista.berkeleybop.org/
-     * dev  = http://barista-dev.berkeleybop.org/
+     * prod = http://barista.berkeleybop.org
+     * dev  = http://barista-dev.berkeleybop.org
      */
     @Prop() repository: string = "prod";
 
@@ -200,16 +214,20 @@ export class GoCamViz {
      * Init general communication to barista -> minerva
     */
     initManager() {
-        let global_barista_location = this.barista[this.repository] = "http://barista.berkeleybop.org/";
-        let global_minerva_definition_name = "minerva_public";
+        let global_barista_location = this.barista[this.repository];
+        let global_minerva_definition_name = this.minervaDefinitions[this.repository];
         let user_token = "";
+
+        console.log("using barista: ", global_barista_location);
+        console.log("using definition: " , global_minerva_definition_name);
 
         this.manager = new minerva_manager(global_barista_location, global_minerva_definition_name, user_token, this.engine, "async");
         
-        this.manager.register('rebuild', (resp) => {
-            // console.log("rebuild: ", resp , man);
+        this.manager.register('rebuild', (resp, man) => {
+            console.log("rebuild: ", resp , man);
             let graph = new noctua_graph();
             graph.load_data_basic(resp.data());
+            console.log("graph: ", graph);
             this.renderGoCam(resp._data.id, graph);
         });
         this.manager.register('meta', function(resp, man){
@@ -354,7 +372,8 @@ export class GoCamViz {
                 }
             }
             if( rdfs_label ){
-                table_row.push('<<' + rdfs_label + '>>');
+                // table_row.push('<<' + rdfs_label + '>>');
+                // table_row.push(rdfs_label);
             }
 
 
@@ -995,7 +1014,7 @@ export class GoCamViz {
      * Method to open the current gocam model into noctua
     */
     openInNoctua() {
-        window.open("http://noctua.geneontology.org/editor/graph/" + this.currentGraph.id(), "_blank");
+        window.open(this.noctuaGraphURL[this.repository] + this.currentGraph.id(), "_blank");
     }
 
     /** 

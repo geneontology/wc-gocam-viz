@@ -28,7 +28,7 @@ export namespace Components {
         "gocamId": string;
         "graphFold": string;
         /**
-          * Used to connect to a barista instance. By default, always access production (prod) server prod = http://barista.berkeleybop.org/ dev  = http://barista-dev.berkeleybop.org/
+          * Used to connect to a barista instance. By default, always access production (prod) server prod = http://barista.berkeleybop.org dev  = http://barista-dev.berkeleybop.org
          */
         "repository": string;
         /**
@@ -109,7 +109,7 @@ declare namespace LocalJSX {
         "onNodeOut"?: (event: CustomEvent<any>) => void;
         "onNodeOver"?: (event: CustomEvent<any>) => void;
         /**
-          * Used to connect to a barista instance. By default, always access production (prod) server prod = http://barista.berkeleybop.org/ dev  = http://barista-dev.berkeleybop.org/
+          * Used to connect to a barista instance. By default, always access production (prod) server prod = http://barista.berkeleybop.org dev  = http://barista-dev.berkeleybop.org
          */
         "repository"?: string;
         /**

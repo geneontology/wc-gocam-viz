@@ -55,6 +55,10 @@ export namespace Components {
           * Show/hide the output of an activity
          */
         "showHasOutput": boolean;
+        /**
+          * Show/hide isolated activity (not connected through causals)
+         */
+        "showIsolatedActivity": boolean;
     }
 }
 declare global {
@@ -132,6 +136,10 @@ declare namespace LocalJSX {
           * Show/hide the output of an activity
          */
         "showHasOutput"?: boolean;
+        /**
+          * Show/hide isolated activity (not connected through causals)
+         */
+        "showIsolatedActivity"?: boolean;
     }
     interface IntrinsicElements {
         "wc-genes-panel": WcGenesPanel;

@@ -1,7 +1,7 @@
 import { Component, Prop, Element, Event, EventEmitter, Watch, getAssetPath, h } from '@stencil/core';
 import { Listen, Method, State } from '@stencil/core';
 
-import { graph as noctua_graph } from 'bbop-graph-noctua';
+import { graph as noctua_graph } from 'bbop-graph-noctua';
 import minerva_manager from 'bbop-manager-minerva';
 import barista_response from 'bbop-response-barista';
 import { jquery as jquery_engine } from 'bbop-rest-manager';
@@ -19,7 +19,7 @@ import { GenesPanel } from '../genes-panel/genes-panel';
 
 
 
-cytoscape.use( coseBilkent );
+cytoscape.use(coseBilkent);
 
 
 @Component({
@@ -31,7 +31,7 @@ cytoscape.use( coseBilkent );
 export class GoCamViz {
 
     @Element() gocamviz;
-    genesPanel : HTMLWcGenesPanelElement;
+    genesPanel: HTMLWcGenesPanelElement;
 
     @Prop() gocamId: string;
 
@@ -53,13 +53,20 @@ export class GoCamViz {
 
     /**
      * Show/hide the gene product in the activity node
-     */    
+     */
     @Prop() showGeneProduct: boolean = false;
-    
+
     /**
      * Show/hide the activity in the activity node
-     */    
+     */
     @Prop() showActivity: boolean = false;
+
+
+    /**
+     * Show/hide isolated activity (not connected through causals)
+     */
+    @Prop() showIsolatedActivity: boolean = false;    
+
 
     @Prop() graphFold: string = "editor";
 
@@ -68,23 +75,23 @@ export class GoCamViz {
      * Barista current URLs - can be updated to change URL or add new instances
      */
     barista = {
-        prod : "http://barista.berkeleybop.org",
-        dev : "http://barista-dev.berkeleybop.org" 
+        prod: "http://barista.berkeleybop.org",
+        dev: "http://barista-dev.berkeleybop.org"
     };
 
     /**
      * prod & dev environments use different minerva definitions
      */
     minervaDefinitions = {
-        prod : "minerva_public",
-        dev : "minerva_public_dev"
+        prod: "minerva_public",
+        dev: "minerva_public_dev"
     };
 
     noctuaGraphURL = {
         prod: "http://noctua.geneontology.org/editor/graph/",
         dev: "http://noctua-dev.berkeleybop.org/editor/graph/"
     };
-    
+
 
     /**
      * Used to connect to a barista instance. By default, always access production (prod) server
@@ -97,7 +104,7 @@ export class GoCamViz {
      * Deprecated for the moment
      */
     @Prop() autoHideModal: boolean = false;
-    
+
     /**
      * Indicates if the component is loading some data
      */
@@ -106,7 +113,7 @@ export class GoCamViz {
 
     // variables for bbop manager & graph
     engine;
-    manager;    
+    manager;
     currentGraph = undefined;
 
     // modal: HTMLWcLightModalElement;
@@ -118,16 +125,17 @@ export class GoCamViz {
     /**
      * This state is updated whenever loading a new graph, in order to trigger a new rendering of genes-panel
      */
-    @State() ghandler : GraphHandler;
+    @State() ghandler: GraphHandler;
 
 
     // Variables for handling click and mouse over
     selectedNode = undefined;
     selectedEvent = undefined;
     timerPopup = undefined;
-    delayPopup = 400;    
+    delayPopup = 400;
 
 
+    // Default cytoscape node styling
     defaultNodeStyle = {
         'content': 'data(label)',
         'width': 'data(width)',
@@ -145,19 +153,97 @@ export class GoCamViz {
         'text-max-width': 'data(textwidth)'
     }
 
+    // Default cytoscape edge styling
+    defaultEdgeStyle = {
+        // 'content': 'data(label)',
+        'line-color': 'data(color)',
+        'line-style': 'data(lineStyle)',
+        'target-arrow-color': 'data(color)',
+        'target-arrow-shape': 'data(glyph)',
+        'curve-style': 'bezier',
+        'text-rotation': 'autorotate',
+        'text-margin-y': '-6px',
+        'text-margin-x': '-3px',
+        'target-arrow-fill': 'filled',
+        'font-size': 6,
+        'min-zoomed-font-size': 1, //10,
+        'color': 'white',
+        'text-outline-width': 1,
+        'text-outline-color': '#222222',
+        'width': 9
+    }
+
+
+    // Cytoscape layouts
+    layout_opts = {
+        'cose': {
+            name: 'cose',
+            padding: 10,
+            animate: true,
+            'directed': true,
+            'fit': true
+        },
+        'cose-bilkent': {
+            name: 'cose-bilkent',
+            padding: 10,
+            quality: "proof", // default, draft
+            nodeDimensionsIncludeLabels: true,
+            randomize: true,
+            spacingFactor: 0.8,
+            idealEdgeLength: 90,
+            edgeElasticity: 0.45,
+            // gravity: 0.25,
+            // gravityRange: 3.8,
+            gravityCompound: 1.0,
+            gravityRangeCompound: 1.5,
+            numIter: 2500,
+            nodeRepulsion: 45000,
+            // coolingFactor: 0.9,
+            // minTemp: 1.0            
+            tile: true, // tile disconnected nodes
+            fit: true
+        },
+        'random': {
+            name: 'random',
+            fit: true
+        },
+        'grid': {
+            name: 'grid',
+            fit: true,
+            padding: 30,
+            rows: undefined,
+            columns: undefined
+        },
+        'circle': {
+            name: 'circle',
+            fit: true,
+            sort: function (a, b) {
+                return a.data('degree') - b.data('degree');
+            }
+        },
+        'breadthfirst': {
+            name: 'breadthfirst',
+            directed: true,
+            fit: true,
+            spacingFactor: 1.0,// 1.75,
+            padding: 30,// 30,
+            circle: false//,
+        }
+    };
+
 
     // Events triggered by this component
-    @Event({eventName: 'nodeOver', cancelable: true, bubbles: true}) nodeOver: EventEmitter;
-    @Event({eventName: 'nodeOut', cancelable: true, bubbles: true}) nodeOut: EventEmitter;
-    @Event({eventName: 'nodeClick', cancelable: true, bubbles: true}) nodeClick: EventEmitter;
-    @Event({eventName: 'layoutChange', cancelable: true, bubbles: true}) layoutChange: EventEmitter;
-    
+    @Event({ eventName: 'nodeOver', cancelable: true, bubbles: true }) nodeOver: EventEmitter;
+    @Event({ eventName: 'nodeOut', cancelable: true, bubbles: true }) nodeOut: EventEmitter;
+    @Event({ eventName: 'nodeClick', cancelable: true, bubbles: true }) nodeClick: EventEmitter;
+    @Event({ eventName: 'layoutChange', cancelable: true, bubbles: true }) layoutChange: EventEmitter;
+
 
 
     /**
      * Called whenever an activity has been selected from the genes-panel
      */
-    @Listen('selectChanged',{target: "body"})
+    @Listen('selectChanged', { target: "body" })
     newSelection(event: CustomEvent) {
         if (event.detail) {
             let data = event.detail;
@@ -170,14 +256,14 @@ export class GoCamViz {
      * Called whenever there is a selection of a new GO-CAM
      * @param event 
      */
-    @Listen('selectGOCAM',{target: "body"})
+    @Listen('selectGOCAM', { target: "body" })
     selectGOCAM(event: CustomEvent) {
         if (event.detail) {
             let data = event.detail;
             this.loadGoCam(data.id);
         }
     }
-    
+
     // If the gocam id is changed, update the current graph to the new gocam
     @Watch('gocamId')
     gocamIdChanged(newValue, oldValue) {
@@ -190,18 +276,18 @@ export class GoCamViz {
     relations_enabled_by = ['http://purl.obolibrary.org/obo/RO_0002333', 'RO_0002333', 'RO:0002333'];
     relations_collapsible = ["RO:0002333", "BFO:0000066", "RO:0002233", "RO:0002488", "RO:0002234"]; // 2233 : has input ; 2234 : has output
     // relations_collapsible = ["RO:0002333", "BFO:0000066", "RO:0002233", "RO:0002488", "RO:0002234"]; // 2233 : has input ; 2234 : has output
-    relations_nestable = { };
+    relations_nestable = {};
     relations_strippable = {
         "BFO:0000050": true,    // part of
         "BFO:0000051": true,    // has part
         "RO:0002220": true,     // adjacent to
         "BFO:0000066": true,    // occurs in
-        "RO:0012005" : true     // is small molecule activator
+        "RO:0012005": true     // is small molecule activator
     };
 
 
     initCytoscape() {
-        cytoscape.use( coseBilkent );
+        cytoscape.use(coseBilkent);
     }
 
     initEngine() {
@@ -219,27 +305,27 @@ export class GoCamViz {
         let user_token = "";
 
         console.log("using barista: ", global_barista_location);
-        console.log("using definition: " , global_minerva_definition_name);
+        console.log("using definition: ", global_minerva_definition_name);
 
         this.manager = new minerva_manager(global_barista_location, global_minerva_definition_name, user_token, this.engine, "async");
-        
+
         this.manager.register('rebuild', (resp, man) => {
-            console.log("rebuild: ", resp , man);
+            console.log("rebuild: ", resp, man);
             let graph = new noctua_graph();
             graph.load_data_basic(resp.data());
             console.log("graph: ", graph);
-            this.renderGoCam(resp._data.id, graph);
+            this.renderGoCam2(resp._data.id, graph);
         });
-        this.manager.register('meta', function(resp, man){
+        this.manager.register('meta', function (resp, man) {
             console.log(resp, man);
         });
-        this.manager.register('manager_error', function(resp, man){
+        this.manager.register('manager_error', function (resp, man) {
             console.error(resp, man);
         });
-        this.manager.register('error', function(resp, man){
+        this.manager.register('error', function (resp, man) {
             console.error(resp, man);
         });
-        this.manager.register('warning', function(resp, man){
+        this.manager.register('warning', function (resp, man) {
             console.log(resp, man);
         });
     }
@@ -250,7 +336,7 @@ export class GoCamViz {
     initDBXrefs() {
         dbxrefs.init(() => {
             console.log("dbxrefs ready");
-            this.dbXrefsReady = true;    
+            this.dbXrefsReady = true;
         })
     }
 
@@ -264,7 +350,7 @@ export class GoCamViz {
 
         let viz = this.gocamviz.querySelector("#gocam-viz");
         viz.innerHTML = ""
-        if(!gocamId.startsWith("gomodel:")) {
+        if (!gocamId.startsWith("gomodel:")) {
             gocamId = "gomodel:" + gocamId;
         }
         this.loading = true;
@@ -283,9 +369,9 @@ export class GoCamViz {
 
         // Prepare graph
         graph.unfold();
-        if(this.graphFold == "evidence") {
+        if (this.graphFold == "evidence") {
             graph.fold_evidence();
-        } else if(this.graphFold == "editor") {
+        } else if (this.graphFold == "editor") {
             graph.fold_go_noctua(this.relations_collapsible)
         }
 
@@ -294,7 +380,7 @@ export class GoCamViz {
         // Get a list of all the singletons we start with.
         var all_starting_singletons_by_id = {};
         var sings = g.get_singleton_nodes();
-        for(let sing of sings) {
+        for (let sing of sings) {
             all_starting_singletons_by_id[sing.id()] = true;
         }
 
@@ -302,24 +388,24 @@ export class GoCamViz {
         // Remove all of the undesireable rels.
         var parent_trap = {};
         var note_sink = {}; // keep the reverse lookup info of parent_trap
-        if( nest && nest === 'yes' ){
+        if (nest && nest === 'yes') {
             // console.log('adding nestable rels');
             this.relations_nestable["BFO:0000050"] = true; // part of
         }
 
-        for(let e of g.all_edges()) {
-            if(this.relations_nestable.hasOwnProperty(e.predicate_id())) {
-                if(!parent_trap.hasOwnProperty(e.subject_id())) {
+        for (let e of g.all_edges()) {
+            if (this.relations_nestable.hasOwnProperty(e.predicate_id())) {
+                if (!parent_trap.hasOwnProperty(e.subject_id())) {
                     parent_trap[e.subject_id()] = [];
                 }
                 parent_trap[e.subject_id()].push(e.object_id());
                 // Note the object for later checking.
                 note_sink[e.object_id()] = true;
             }
-            if(this.relations_strippable.hasOwnProperty(e.predicate_id())) {
+            if (this.relations_strippable.hasOwnProperty(e.predicate_id())) {
                 g.remove_edge(e.subject_id(),
-                        e.object_id(),
-                        e.predicate_id());
+                    e.object_id(),
+                    e.predicate_id());
             }
         }
 
@@ -328,11 +414,11 @@ export class GoCamViz {
         // remove it. In "nest" mode, only remove ones that are not
         // going to be nested.
         var eings = g.get_singleton_nodes();
-        for(let eing of eings) {
-            if(!all_starting_singletons_by_id.hasOwnProperty(eing.id())) {
-                if( nest && nest === 'yes' && note_sink[eing.id()] ){
+        for (let eing of eings) {
+            if (!all_starting_singletons_by_id.hasOwnProperty(eing.id())) {
+                if (nest && nest === 'yes' && note_sink[eing.id()]) {
                     // pass
-                }else{
+                } else {
                     g.remove_node(eing.id());
                 }
             }
@@ -340,8 +426,8 @@ export class GoCamViz {
 
 
         let cat_set = new Set();
-        for(let enode of g.all_nodes()) {
-            for(let in_type of enode.types()) {
+        for (let enode of g.all_nodes()) {
+            for (let in_type of enode.types()) {
                 cat_set.add(in_type.category());
             }
         }
@@ -349,29 +435,29 @@ export class GoCamViz {
 
 
         let elements = [];
-        for(let node of g.all_nodes()) {
+        for (let node of g.all_nodes()) {
 
             let nid = node.id();
 
             let nlink = null;
 
             // Where we'll assemble the label.
-    	    var table_row = [];
-            
+            var table_row = [];
+
             // Collect rdfs:label if extant.
             var anns = node.annotations();
             var rdfs_label = null;
-            if( anns.length !== 0 ) {
-                for(let ann of anns) {
+            if (anns.length !== 0) {
+                for (let ann of anns) {
                     // Capture rdfs:label annotation for visual override
                     // if extant. Allow clobber of last.
-                    if( ann.key() === 'rdfs:label' ){
+                    if (ann.key() === 'rdfs:label') {
                         // console.log(node , " rdfs:label: ", ann.value());
                         rdfs_label = ann.value();
                     }
                 }
             }
-            if( rdfs_label ){
+            if (rdfs_label) {
                 // table_row.push('<<' + rdfs_label + '>>');
                 // table_row.push(rdfs_label);
             }
@@ -383,40 +469,40 @@ export class GoCamViz {
             let gp_identified_p = false;
             let has_input_collection = [];
             let sub = node.subgraph();
-            if(sub) {
-                for(let snode of sub.all_nodes()) {
+            if (sub) {
+                for (let snode of sub.all_nodes()) {
                     let snid = snode.id();
 
-                    if(nid != snid) {
+                    if (nid != snid) {
                         let edges = sub.get_edges(nid, snid);
 
-                        for(let edge of edges) {
+                        for (let edge of edges) {
 
                             // If enabled by relation is present, use primary that node label
-                            if(this.relations_enabled_by.includes(edge.predicate_id())) {
+                            if (this.relations_enabled_by.includes(edge.predicate_id())) {
 
                                 let gpn = sub.get_node(snid);
 
                                 let gp_labels = _node_labels(gpn, cat_list);
-                                for(let gpl of gp_labels) {
+                                for (let gpl of gp_labels) {
                                     let last = gpl.lastIndexOf(" ");
-                                    if(last > 0) { gpl = gpl.substring(0, last); }
+                                    if (last > 0) { gpl = gpl.substring(0, last); }
                                     // console.log("GP: ", gpl, gpn);
-                                    if(this.showGeneProduct) {
+                                    if (this.showGeneProduct) {
                                         table_row.push(gpl);
                                         nlink = gpn.types()[0]
                                     }
-                                    gp_identified_p = true;                                    
+                                    gp_identified_p = true;
                                 }
 
-                            // If we consider has input relationship, look for node label here too
-                            } else if(this.showHasInput && edge.predicate_id() == "RO:0002233") {
+                                // If we consider has input relationship, look for node label here too
+                            } else if (this.showHasInput && edge.predicate_id() == "RO:0002233") {
                                 let hin = sub.get_node(snid);
 
                                 let hi_labels = _node_labels(hin, cat_list);
-                                for(let hil of hi_labels) {
+                                for (let hil of hi_labels) {
                                     let last = hil.lastIndexOf(" ");
-                                    if(last > 0) { hil = hil.substring(0, last); }
+                                    if (last > 0) { hil = hil.substring(0, last); }
                                     has_input_collection.push(hil);
                                 }
                             }
@@ -428,9 +514,9 @@ export class GoCamViz {
 
             let bgc = "white";
             // If no GP has been identified, then add any label from that node
-            if(!gp_identified_p) {
-                for(let nl of _node_labels(node, cat_list)) {
-                    if(this.showActivity) {
+            if (!gp_identified_p) {
+                for (let nl of _node_labels(node, cat_list)) {
+                    if (this.showActivity) {
                         table_row.push(nl);
                         // console.log("activity: ", nl);
                         // table_row.push("[" + nl + "]");
@@ -439,8 +525,8 @@ export class GoCamViz {
                     }
                 }
 
-            } else if(this.showActivity) {
-                for(let nl of _node_labels(node, cat_list)) {
+            } else if (this.showActivity) {
+                for (let nl of _node_labels(node, cat_list)) {
                     table_row.push(nl);
                     // console.log("activity: ", nl);
                     // table_row.push("[" + nl + "]");
@@ -452,7 +538,7 @@ export class GoCamViz {
             }
 
             // Add the has_inputs last.
-            for(let itm of has_input_collection) {
+            for (let itm of has_input_collection) {
                 table_row.push("(" + itm + "➔)");
             }
 
@@ -464,9 +550,9 @@ export class GoCamViz {
             var parent = null;
             var text_v_align = null;
             var text_h_align = null;
-            if( parent_trap.hasOwnProperty(nid) ){
+            if (parent_trap.hasOwnProperty(nid)) {
                 var parents = parent_trap[nid];
-                if( parents.length === 1 ){
+                if (parents.length === 1) {
                     parent = parents[0];
                     text_v_align = 'top';
                     text_h_align = 'left';
@@ -487,7 +573,7 @@ export class GoCamViz {
                         'text-halign': text_h_align,
                         'background-color': bgc,
                         degree: (g.get_child_nodes(nid).length * 10) +
-                        g.get_parent_nodes(nid).length
+                            g.get_parent_nodes(nid).length
                     }
                 }
             );
@@ -495,7 +581,7 @@ export class GoCamViz {
         }
 
 
-        for(let e of g.all_edges()) {
+        for (let e of g.all_edges()) {
             // Detect endpoint type as best as possible.
             var rn = e.relation() || 'n/a';
             var rglyph = glyph(rn);
@@ -513,135 +599,147 @@ export class GoCamViz {
                     glyph: rglyph.glyph ? rglyph.glyph : "circle",
                     lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid"
                 }
-            });            
+            });
         }
-
-
-
-
-
-
 
 
 
         // Get roots for algorithms that need it.
         let roots = g.get_root_nodes();
         let root_ids = [];
-        for(let root of roots) {
+        for (let root of roots) {
             root_ids.push(root.id());
         }
 
-        // Setup possible layouts.
-        let layout_opts = {
-            'cose': {
-                name: 'cose',
-                padding: 10,
-                animate: true,
-                'directed': true,
-                'fit': true
-            },
-            'cose-bilkent': {
-                name: 'cose-bilkent',
-                randomize: true,
-                // idealEdgeLength: 30,
-                // padding: 100,
-                spacingFactor: 1.1,
-                nodeRepulsion: 450000
-            },
-            'noctuadef': {
-                'name': 'preset',
-                'padding': 30,
-                'fit': true,
-                'positions': function(a){
-
-                var nid = a.data('id');
-                var node = g.get_node(nid);
-
-                // Somewhat vary the intitial placement.
-                function _vari(){
-                    var min = -25;
-                    var max = 25;
-                    var rand = Math.random();
-                    var seed = Math.floor(rand * (max-min+1) +min);
-                    return seed + 100;
-                }
-                function _extract_node_position(node, x_or_y){
-                    var ret = null;
-
-                    var hint_str = null;
-                    if( x_or_y === 'x' || x_or_y === 'y' ){
-                        hint_str = 'hint-layout-' + x_or_y;
-                    }
-
-                    var hint_anns = node.get_annotations_by_key(hint_str);
-                    console.log("hint anns: ", hint_anns);
-                    if( hint_anns.length === 1 ){
-                        ret = parseInt(hint_anns[0].value());
-                        //ll('extracted coord ' + x_or_y + ': ' + ret);
-                    }else if( hint_anns.length === 0 ){
-                        //ll('no coord');
-                    }else{
-                        //ll('too many coord');
-                    }
-
-                    return ret;
-                }
-
-                var old_x = _extract_node_position(node, 'x') || _vari();
-                var old_y = _extract_node_position(node, 'y') || _vari();
-                console.log('nid', nid, 'old_x', old_x, 'old_y', old_y);
-
-                return {'x': old_x, 'y': old_y };
-            }
-            },
-            'random': {
-                name: 'random',
-                fit: true
-            },
-            'grid': {
-                name: 'grid',
-                fit: true,
-                padding: 30,
-                rows: undefined,
-                columns: undefined
-            },
-            'circle': {
-                name: 'circle',
-                fit: true,
-                sort: function(a, b){
-                    return a.data('degree') - b.data('degree');
-                }
-            },
-            'breadthfirst': {
-                name: 'breadthfirst',
-                directed: true,
-                fit: true,
-                spacingFactor: 1.0,// 1.75,
-                padding: 30,// 30,
-                circle: false//,
-            }
-        };
 
 
         this.currentGraph = g;
         this.ghandler = new GraphHandler(graph.clone());
         this.ghandler.setDBXrefs(dbxrefs);
-            
+
 
         // Showing loading message
         let viz = this.gocamviz.querySelector("#gocam-viz");
         // viz.innerHTML = "";
-        console.log("Displaying GO-CAM ", gocamId , graph);
+        console.log("Displaying GO-CAM ", gocamId, graph);
 
 
         let layout = 'cose-bilkent';
         // let layout = "noctuadef";
 
+        this.renderCytoscape(gocamId, graph, elements, layout);
+
+    }
+
+
+
+
+
+    /**
+     * Actual method to render the GO-CAM graph
+     * @param gocamId valid gocam id (e.g. gomodel:xxx)
+     * @param graph bbop graph
+     * @param nest nesting strategy (default = "no")
+     */
+    renderGoCam2(gocamId, graph, nest = "no", layout = 'cose-bilkent') {
+
+        // Prepare graph
+        graph.unfold();
+        if (this.graphFold == "evidence") {
+            graph.fold_evidence();
+        } else if (this.graphFold == "editor") {
+            graph.fold_go_noctua(this.relations_collapsible)
+        }
+
+        let g = graph.clone();
+
+
+        this.currentGraph = g;
+        this.ghandler = new GraphHandler(graph.clone());
+        this.ghandler.setDBXrefs(dbxrefs);
+
+
+        let activities = this.ghandler.getAllActivities();
+        this.ghandler.enrichActivities(activities)
+        .then((data) => {
+            
+            let elements = [];
+
+            // 1 - create the nodes
+            for(let enrichedActivity of data) {
+                console.log(enrichedActivity);
+
+                let label = "";
+                if(enrichedActivity.geneProducts.length > 0) {
+                    label = enrichedActivity.geneProducts.map(elt => elt.label).join(" | ");
+                } else {
+                    label = enrichedActivity.labels.join(" | ");
+                }
+
+                let eanode = {
+                    group: "nodes",
+                    data: {
+                        id : enrichedActivity.nodeId,
+                        label : label,
+                        width: Math.max(115, label.length * 8),
+                        textwidth: Math.max(115, label.length * 7),
+                        // link: ??
+                        // parent: ??
+                        "text-valign": "top",
+                        "text-halign": "left",
+                        "background-color": this.defaultNodeStyle["background-color"],
+                        // degree: (child * 10 + parent)
+                    }
+                }
+                elements.push(eanode);
+            }
+
+            // 2 - create the edges
+            for(let enrichedActivity of data) {
+                let connected = this.ghandler.getCausalActivities(enrichedActivity, data);
+                console.log("activity ", enrichedActivity, " is connected to ", connected);
+                let relids = Object.keys(connected)
+                for(let relid of relids) {
+                    let targets = connected[relid];
+                    let rglyph = glyph(relid);
+
+                    for(let target of targets) {
+                        console.log("target: ", target);
+                        let ed = {
+                            group: "edges",
+                            data: {
+                                id: target.relationId,
+                                source: enrichedActivity.nodeId,
+                                target: target.activity.nodeId,
+                                label: rglyph.label ? rglyph.label : target.relationLabel,
+                                color: rglyph.color ? rglyph.color : "black",
+                                glyph: rglyph.glyph ? rglyph.glyph : "circle",
+                                lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid"
+                            }
+                        };
+                        console.log("ED: ", ed);
+                        elements.push(ed);
+                    }
+                }
+            }
+
+            this.renderCytoscape(gocamId, graph, elements, layout);
+        });
+
+    }
+
+    renderCytoscape(gocamId, graph, elements, layout) {
+
+        // Showing loading message
+        let viz = this.gocamviz.querySelector("#gocam-viz");
+        // viz.innerHTML = "";
+        console.log("Displaying GO-CAM ", gocamId, graph);
+
 
         this.cy = cytoscape({
             container: viz,
             elements: elements,
-            layout: layout_opts[layout],
+            layout: this.layout_opts[layout],
 
             style: [
                 {
@@ -650,27 +748,10 @@ export class GoCamViz {
                 },
                 {
                     selector: 'edge',
-                    style: {
-                        // 'content': 'data(label)',
-                        'line-color': 'data(color)',
-                        'line-style': 'data(lineStyle)',
-                        'target-arrow-color': 'data(color)',
-                        'target-arrow-shape': 'data(glyph)',
-                        'curve-style': 'bezier',
-                        'text-rotation': 'autorotate',
-                        'text-margin-y': '-6px',
-                        'text-margin-x': '-3px',                    
-                        'target-arrow-fill': 'filled',
-                        'font-size': 6,
-                        'min-zoomed-font-size': 1, //10,
-                        'color': 'white',
-                        'text-outline-width': 1,
-                        'text-outline-color': '#222222',
-                        'width': 12
-                    }
+                    style: this.defaultEdgeStyle
                 }
-            ],            
-                
+            ],
+
             minZoom: 0.1,
             maxZoom: 3.0,
             zoomingEnabled: true,
@@ -685,7 +766,7 @@ export class GoCamViz {
             autolock: false,
             autoungrabify: false,
             autounselectify: false,
-            ready: this.finishRendering          
+            ready: this.finishRendering
         });
 
 
@@ -695,7 +776,7 @@ export class GoCamViz {
 
         this.loading = false;
 
-        
+
         this.cy.on("mouseover", evt => this.onMouseOver(evt));
         this.cy.on("mouseout", evt => this.onMouseOut(evt));
         this.cy.on("click", evt => this.onMouseClick(evt));
@@ -706,11 +787,11 @@ export class GoCamViz {
         this.cy.on("viewport", evt => this.onLayoutChange(evt));
         this.cy.on("resize", evt => this.onLayoutChange(evt));
 
-        if(this.genesPanel) {
+        if (this.genesPanel) {
             this.genesPanel.parentCy = this.cy;
-        }
-        
+        }        
     }
+
 
 
     /** 
@@ -724,16 +805,16 @@ export class GoCamViz {
 
     highlight(nodeId) {
         let sel = this.cy.elements('[id="' + nodeId + '"]')
-        if(sel.size() > 0) {
+        if (sel.size() > 0) {
             sel.style("border-width", "2px")
             sel.style("border-color", "blue")
             sel.style("background-color", "#eef2ff")
             this.selectedNode = sel;
-        }    
+        }
     }
 
     clearHighlight(cyNode) {
-        if(cyNode) {
+        if (cyNode) {
             cyNode.style("border-width", "1px");
             cyNode.style("border-color", "black");
             cyNode.style("background-color", "white");
@@ -743,9 +824,9 @@ export class GoCamViz {
 
     center(nodeId) {
         let sel = this.cy.elements('[id="' + nodeId + '"]')
-        if(sel.size() > 0) {
+        if (sel.size() > 0) {
             this.cy.center(sel);
-        }    
+        }
     }
 
     /**
@@ -753,7 +834,7 @@ export class GoCamViz {
      * @param evt 
      */
     showPopup(evt) {
-        if(evt && evt.target && evt.target.id) {
+        if (evt && evt.target && evt.target.id) {
             this.highlight(evt.target.id());
             // evt.target.style("background-color", "#ebebeb")
             // evt.target.style("border-width", "2px")
@@ -767,12 +848,12 @@ export class GoCamViz {
 
             this.ghandler.enrichActivity(activity);
 
-            if(entity_id.substr(0, 8) == "gomodel:") {
+            if (entity_id.substr(0, 8) == "gomodel:") {
                 let data = evt.target.data();
                 let node = this.currentGraph.get_node(entity_id);
                 let labels = [];
-                for(let ann of node.annotations()) {
-                    if(ann.key() == "rdfs:label") {
+                for (let ann of node.annotations()) {
+                    if (ann.key() == "rdfs:label") {
                         labels.push(ann.value());
                     }
                 }
@@ -783,18 +864,18 @@ export class GoCamViz {
 
                 // this will detect the associated biological context
                 let subgraph = node.subgraph();
-                let biocontext = { };
+                let biocontext = {};
                 let hook_list = []
-                if(subgraph) {
+                if (subgraph) {
                     // Do it both ways--upstream and downstream.
                     _folded_stack_gather(node, this.currentGraph, subgraph, 'standard', hook_list, biocontext, dbxrefs);
                     _folded_stack_gather(node, this.currentGraph, subgraph, 'reverse', hook_list, biocontext, dbxrefs);
                     // convert to array
-                    for(let key of Object.keys(biocontext)) {
+                    for (let key of Object.keys(biocontext)) {
                         biocontext[key] = Array.from(biocontext[key]);
                     }
                 }
-                
+
                 // console.log("BIOCONTEXT: ", biocontext);
                 // console.log("std types: ", standardTypes);
                 // console.log("inf types: ", inferredTypes);
@@ -808,35 +889,35 @@ export class GoCamViz {
                 // }
 
                 let annotations = node.annotations();
-                let annotationMap = { };
-                for(let ann of annotations) {
-                    if(ann.key() == "evidence") {
+                let annotationMap = {};
+                for (let ann of annotations) {
+                    if (ann.key() == "evidence") {
                         let cs = new Set();
-                        if(ann.key() in annotationMap) {
+                        if (ann.key() in annotationMap) {
                             cs = annotationMap[ann.key()]
                         } else {
                             annotationMap[ann.key()] = cs;
                         }
                         cs.add(ann.value());
-                    } else if(ann.key() == "rdfs:label") {
+                    } else if (ann.key() == "rdfs:label") {
                         let cs = new Set();
-                        if(ann.key() in annotationMap) {
+                        if (ann.key() in annotationMap) {
                             cs = annotationMap[ann.key()]
                         } else {
                             annotationMap[ann.key()] = cs;
                         }
                         cs.add(ann.value());
-                    } else if(ann.key() == "contributor") {
+                    } else if (ann.key() == "contributor") {
                         let cs = new Set();
-                        if(ann.key() in annotationMap) {
+                        if (ann.key() in annotationMap) {
                             cs = annotationMap[ann.key()]
                         } else {
                             annotationMap[ann.key()] = cs;
                         }
                         cs.add(ann.value());
-                    } else if(ann.key() == "providedBy") {
+                    } else if (ann.key() == "providedBy") {
                         let cs = new Set();
-                        if(ann.key() in annotationMap) {
+                        if (ann.key() in annotationMap) {
                             cs = annotationMap[ann.key()]
                         } else {
                             annotationMap[ann.key()] = cs;
@@ -845,7 +926,7 @@ export class GoCamViz {
                     }
                 }
                 // convert to array
-                for(let key of Object.keys(annotationMap)) {
+                for (let key of Object.keys(annotationMap)) {
                     annotationMap[key] = Array.from(annotationMap[key]);
                 }
                 // console.log("node annotations: ", annotationMap);
@@ -854,18 +935,18 @@ export class GoCamViz {
                 let meta = annotate(id, dbxrefs);
                 meta.then(metaData => {
                     let payload = {
-                        entityId : entity_id,
-                        id : id,
-                        uri : id ? "https://www.alliancegenome.org/gene/" + id : undefined,
-                        annotation : annotationMap,
-                        biocontext : biocontext,
-                        meta : metaData,
-                        label : data.label,
-                        data : data.link,
-                        standardTypes : standardTypes,
-                        inferredTypes : inferredTypes,
-                        x : evt.renderedPosition.x,
-                        y : evt.renderedPosition.y
+                        entityId: entity_id,
+                        id: id,
+                        uri: id ? "https://www.alliancegenome.org/gene/" + id : undefined,
+                        annotation: annotationMap,
+                        biocontext: biocontext,
+                        meta: metaData,
+                        label: data.label,
+                        data: data.link,
+                        standardTypes: standardTypes,
+                        inferredTypes: inferredTypes,
+                        x: evt.renderedPosition.x,
+                        y: evt.renderedPosition.y
                     }
                     this.nodeOver.emit(payload);
                 })
@@ -889,29 +970,29 @@ export class GoCamViz {
         // we don't need that timeout anymore since it's not showing pop up but just highlighting
         // this.timerPopup = setTimeout(() => this.showPopup(evt), this.delayPopup);
 
-        if(evt && evt.target && evt.target.id) {
+        if (evt && evt.target && evt.target.id) {
             this.highlight(evt.target.id());
             this.selectedNode = evt.target;
             this.selectedEvent = evt;
         }
 
-        if(evt.target && evt.target.length) {
+        if (evt.target && evt.target.length) {
 
             let elt = document.getElementById("gp_item_" + evt.target.id());
-            if(elt && !elt.classList.contains("gp_item_selected")) {
+            if (elt && !elt.classList.contains("gp_item_selected")) {
                 elt.classList.add("gp_item_selected");
                 this.previousPanelElt = elt;
             }
 
-            if(this.genesPanel) {
+            if (this.genesPanel) {
 
                 let scrollList = document.getElementById("genes-panel__list");
                 let elt2 = document.getElementById("gp_item_" + evt.target.id());
-                if(scrollList && elt2) {
-                    scrollList.scroll(0, elt2.offsetTop-160);
+                if (scrollList && elt2) {
+                    scrollList.scroll(0, elt2.offsetTop - 160);
                     elt2.style["box-shadow"] = "4px 6px 42px 1px rgb(194 194 255)";
                 }
-                        
+
                 // this.genesPanel.scrollToActivity(evt.target.id());
             }
 
@@ -919,26 +1000,26 @@ export class GoCamViz {
     }
 
     onMouseOut(evt) {
-        if(this.timerPopup) {
+        if (this.timerPopup) {
             clearTimeout(this.timerPopup);
         }
-        if(this.previousPanelElt && this.previousPanelElt.classList) {
-            if(this.previousPanelElt.classList.contains("gp_item_selected")) {
+        if (this.previousPanelElt && this.previousPanelElt.classList) {
+            if (this.previousPanelElt.classList.contains("gp_item_selected")) {
                 this.previousPanelElt.classList.remove("gp_item_selected");
                 this.previousPanelElt.style["box-shadow"] = "";
 
             }
             this.previousPanelElt = undefined;
         }
-        if(this.selectedNode) {
+        if (this.selectedNode) {
             this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
             this.selectedNode.style("border-width", "1px")
             this.selectedNode.style("border-color", "black")
             this.selectedNode = undefined;
         }
-        if(this.autoHideModal && evt && evt.target && evt.target.id) {
+        if (this.autoHideModal && evt && evt.target && evt.target.id) {
             let entity_id = evt.target.id();
-            if(entity_id.substr(0, 8) == "gomodel:") {
+            if (entity_id.substr(0, 8) == "gomodel:") {
                 this.nodeOut.emit(evt);
             }
         }
@@ -946,14 +1027,14 @@ export class GoCamViz {
     }
 
     onMouseClick(evt) {
-        if(this.selectedEvent) {
+        if (this.selectedEvent) {
             let entity_id = this.selectedEvent.target.id();
-            if(entity_id.substr(0, 8) == "gomodel:") {
+            if (entity_id.substr(0, 8) == "gomodel:") {
                 this.nodeOut.emit(this.selectedEvent);
             }
             this.selectedEvent = undefined;
         }
-        if(this.selectedNode) {
+        if (this.selectedNode) {
             this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
             this.selectedNode = undefined;
         }
@@ -968,19 +1049,19 @@ export class GoCamViz {
         //     this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
         //     this.selectedNode = undefined;
         // }
-        
+
         this.nodeClick.emit(evt);
     }
 
     onLayoutChange(evt) {
-        if(this.selectedEvent) {
+        if (this.selectedEvent) {
             let entity_id = this.selectedEvent.target.id();
-            if(entity_id.substr(0, 8) == "gomodel:") {
+            if (entity_id.substr(0, 8) == "gomodel:") {
                 this.nodeOut.emit(this.selectedEvent);
             }
             this.selectedEvent = undefined;
         }
-        if(this.selectedNode) {
+        if (this.selectedNode) {
             this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
             this.selectedNode = undefined;
         }
@@ -1023,14 +1104,14 @@ export class GoCamViz {
     render() {
         let classes = this.loading ? "" : "gocam-viz";
 
-        if(this.genesPanel && !this.genesPanel.parentCy) {
+        if (this.genesPanel && !this.genesPanel.parentCy) {
             this.genesPanel.parentCy = this.cy;
         }
 
         return [
 
             <div class="control__panel">
-                {this.showGoCamSelector ? <wc-gocam-selector></wc-gocam-selector> : ""}                
+                {this.showGoCamSelector ? <wc-gocam-selector></wc-gocam-selector> : ""}
                 <button class='open__in_noctua__label' onClick={() => this.openInNoctua()}>Open in Noctua</button>
                 <button class='reset__view' onClick={() => this.resetView()}>Reset View</button>
             </div>,
@@ -1047,5 +1128,5 @@ export class GoCamViz {
         ];
 
     }
-    
+
 }

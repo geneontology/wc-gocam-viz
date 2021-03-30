@@ -402,7 +402,64 @@ export class GraphHandler {
         return activity;
     }
 
+    getCausalRelationshipIn(activity) {
 
+    }
+
+    getCausalRelationshipOut(activity) {
+
+    }
+
+    getCausalActivities(activity, enrichedActivities) {
+        let connected = { };
+        let edges = this.bbopGraph.get_edges_by_subject(activity.nodeId);
+        for(let edge of edges) {
+
+            console.log("edge: ", edge);
+            let object = this.bbopGraph.get_node(edge.object_id());
+            console.log("object: ", object);
+
+            let keys = Object.keys(object._id2type)
+            let isActivity = false;
+            for(let key of keys) {
+                let node = object._id2type[key];
+
+                if(node.class_id() == "GO:0003674") { 
+                    isActivity = true;
+                    break;
+                 }
+                            
+            }
+
+            if(isActivity) {
+                let relid = edge.predicate_id();
+                let activities = [];
+                if(connected.hasOwnProperty(relid)) {
+                    activities = connected[relid];
+                } else {
+                    connected[relid] = activities;
+                }
+
+                activities.push({
+                    relationId : edge.id(),
+                    relationLabel : edge._predicate_label,
+                    relationURL : this.dbxrefs.getURL(relid.split(":")[0], undefined, relid.split(":")[1]),
+                    activity : this.getActivityById(enrichedActivities, object.id())
+                });
+            }
+        }
+        
+        return connected;
+    }
+
+    getActivityById(enrichedActivities, nodeId) {
+        for(let ea of enrichedActivities) {
+            if(ea.nodeId == nodeId) {
+                return ea;
+            }
+        }
+        return null;
+    }
 
 
 

@@ -376,3 +376,20 @@ export function uuid(){
     var target_str = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
     return target_str.replace(/[xy]/g, replacer);
 }
+
+
+const slim = {
+    "GO:0048018" : "Ligand - receptor ligand activity",
+    "GO:0004888" : "Receptor - transmembrane signaling receptor activity",
+    "GO:0016301" : "Kinase - kinase activity",
+    "GO:0016791" : "Phosphatase - phosphatase activity",
+    "GO:0061630" : "Ubiquitin Ligase - ubiquitin protein ligase activity",
+    "GO:0101005" : "Deubiquitinase - ubiquitinyl hydrolase activity",
+    "GO:0003700" : "Transcription Factor - DNA-binding transcription factor activity",
+    "GO:0060090" : "Adaptor - molecular adaptor activity"
+};
+
+
+export function activityType(mfTerm) {
+
+}

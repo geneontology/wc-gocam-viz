@@ -361,6 +361,7 @@ export class GoCamViz {
 
     /**
      * Actual method to render the GO-CAM graph
+     * TODO: deprecate and switch to renderGOCam2
      * @param gocamId valid gocam id (e.g. gomodel:xxx)
      * @param graph bbop graph
      * @param nest nesting strategy (default = "no")

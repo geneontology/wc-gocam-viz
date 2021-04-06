@@ -32,7 +32,6 @@
     "bbop-rest-manager": "0.0.17",
     "cytoscape": "^3.16.1",
     "cytoscape-cose-bilkent": "^4.1.0",
-    "go-dbxrefs": "^1.0.1",
     "sync-request": "^6.1.0"
   },
   "devDependencies": {

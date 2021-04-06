@@ -354,16 +354,21 @@ export class GraphHandler {
         }
 
         console.log("GraphHander:groupActivitiesByProcess(" , enrichedActivities , "): ", map);
+        console.log("GraphHander:groupActivitiesByProcess(" , enrichedActivities , "): CHECK DBXREFS: ", this.dbxrefs);
 
         let groupedActivities = [];
         for(let process of map.keys()) {
-            groupedActivities.push({
+            console.log("GraphHander:groupActivitiesByProcess(loop-" , process , "): " , map.get(process)[0]);
+            let item = {
                 id : process.split(","),
                 url: (process.split(",") != "" && this.dbxrefs) ? process.split(",").map(elt => { let db = elt.split(":")[0]; let id = elt.split(":")[1]; return this.dbxrefs.getURL(db, undefined, id) } ) : "#",
                 label : map.get(process)[0].partOf.map(elt => elt.label) == "" ? ["others processes"] : map.get(process)[0].partOf.map(elt => elt.label),
                 activities : map.get(process)
-            })
+            };
+            console.log("GraphHander:groupActivitiesByProcess(loop-" , process , "): item = " , item);
+            groupedActivities.push(item);
         }
+        console.log("GraphHander:groupActivitiesByProcess(return): " , groupedActivities);
         return groupedActivities;
     }
     

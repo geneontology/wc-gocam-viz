@@ -353,6 +353,8 @@ export class GraphHandler {
             acts.push(enr);
         }
 
+        console.log("GraphHander:groupActivitiesByProcess(" , enrichedActivities , "): ", map);
+
         let groupedActivities = [];
         for(let process of map.keys()) {
             groupedActivities.push({

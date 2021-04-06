@@ -51,9 +51,9 @@ export class GenesPanel {
                 // we sort activities by BP, as much as we can; ordered alphabetically and when no partOf = end of list
                 data.sort((a, b) => (a.partOf.length == 0) ? 1 : (b.partOf.length == 0) ? -1 : (a.partOf[0].label < b.partOf[0].label) ? -1 : 1)
                 this.enrichedActivities = data;
-                console.log("Activities: ", this.enrichedActivities);
+                console.log("GenesPanel:EnrichedActivities: ", this.enrichedActivities);
                 this.groupedActivities = this.ghandler.groupActivitiesByProcess(this.enrichedActivities);
-                console.log("Grouped activities: ", this.groupedActivities);
+                console.log("GenesPanel:GroupedActivities: ", this.groupedActivities);
             })            
         }
     }
@@ -235,12 +235,13 @@ export class GenesPanel {
 
 
     render() {
-
         if(!this.ghandler || !this.groupedActivities) {
             return "";
         }
 
-        console.log("genes-panel: ", this.groupedActivities);
+        console.log("GenesPanel:EnrichedActivities (render): ", this.enrichedActivities);
+        console.log("GenesPanel:GraphHandler (render): ", this.ghandler);
+        console.log("GenesPanel:GroupedActivities (render): ", this.groupedActivities);
       
         return(
             <div class="genes-panel__container" id={"gpc_" + this.ghandler.getBBOPGraph().id()}>

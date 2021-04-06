@@ -354,7 +354,31 @@ export class GraphHandler {
         }
 
         console.log("GraphHander:groupActivitiesByProcess(" , enrichedActivities , "): ", map);
-        console.log("GraphHander:groupActivitiesByProcess(" , enrichedActivities , "): CHECK DBXREFS: ", this.dbxrefs.isReady());
+
+        console.log("ITERATE 1");
+        for(let [process, val] of map) {
+            console.log("- ", process , val);
+        }
+
+        console.log("ITERATE 2");
+        for(let process of map.keys()) {
+            console.log("- " , process);
+        }
+
+        console.log("ITERATE 3");
+        for(var process in map) {
+            console.log("- " , process);
+        }
+
+        console.log("ITERATE 4");
+        for(var process in Object.keys(map)) {
+            console.log("- " , process);
+        }
+
+        console.log("ITERATE 5");
+        for(let [process, val] of map.entries()) {
+            console.log("- ", process , val);
+        }
 
         let groupedActivities = [];
         for(let [process, val] of map) {

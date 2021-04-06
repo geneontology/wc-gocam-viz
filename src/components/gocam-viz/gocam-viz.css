@@ -66,7 +66,7 @@
     color: white;
 }
 
-button {
+.button-gcv {
     background-color: rgb(74, 74, 211);
     color: white;    
 }
@@ -82,12 +82,12 @@ button {
     box-shadow: 0px 0px 10px 0px rgb(194 194 194);
 }
 
-button, select {
+.button-gcv, .select-gcv {
     padding: 0.2rem 0.4rem;
     border-radius: 10px;        
 }
 
-button:hover {
+.button-gcv:hover {
     -webkit-box-shadow: 0px 0px 20px 0px rgb(194 194 194);
     -moz-box-shadow: 0px 0px 20px 0px rgba(194,194,194,1);
     box-shadow: 0px 0px 20px 0px rgb(194 194 194);    
@@ -100,6 +100,6 @@ button:hover {
     margin-right: 1rem;    
 }
 
-img {
+.img-gcv {
     height: 150px;
 }

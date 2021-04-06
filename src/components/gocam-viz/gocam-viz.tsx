@@ -1113,8 +1113,8 @@ export class GoCamViz {
 
             <div class="control__panel">
                 {this.showGoCamSelector ? <wc-gocam-selector></wc-gocam-selector> : ""}
-                <button class='open__in_noctua__label' onClick={() => this.openInNoctua()}>Open in Noctua</button>
-                <button class='reset__view' onClick={() => this.resetView()}>Reset View</button>
+                <button class='open__in_noctua__label button-gcv' onClick={() => this.openInNoctua()}>Open in Noctua</button>
+                <button class='reset__view button-gcv' onClick={() => this.resetView()}>Reset View</button>
             </div>,
 
             this.loading ? <div class="gocam-viz-loader">Loading GO-CAM {this.gocamId} ...</div> : "",
@@ -1124,7 +1124,7 @@ export class GoCamViz {
                 <wc-genes-panel ghandler={this.ghandler} ref={el => this.genesPanel = el}></wc-genes-panel>
             </div>,
 
-            <img src={getAssetPath("./assets/legend.png")}></img>
+            <img class="img-gcv" src={getAssetPath("./assets/legend.png")}></img>
 
         ];
 

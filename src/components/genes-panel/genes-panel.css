@@ -5,15 +5,12 @@
     --gocam-panel-width: 450px;
 }
 
-* {
-    font-family: "Lato", sans-serif;    
-}
 
-a {
+.a-gcv {
     text-decoration: none;
 }
 
-a:hover {
+.a-gcv:hover {
     color: blue;
 }
 
@@ -25,7 +22,7 @@ a:hover {
     font-weight: 800;    
 }
 
-h1 {
+.h1-gcv {
     color: rgb(74, 74, 211);
     text-align:right; 
     font-size: 1.5rem;

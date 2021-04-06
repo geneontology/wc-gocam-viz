@@ -110,7 +110,7 @@ export class GenesPanel {
             <span class='reference-list'>
                 {
                     gp.evidences.map(evidence => {
-                        return <a class='reference-article far fa-newspaper' href={evidence.url} target='_blank' title={"Source: " + evidence.source + "\nEvidence: " + evidence.evidences.map(ev => ev.label).join(",") }></a>
+                        return <a class='a-gcv reference-article far fa-newspaper' href={evidence.url} target='_blank' title={"Source: " + evidence.source + "\nEvidence: " + evidence.evidences.map(ev => ev.label).join(",") }></a>
                     })
                 }
             </span>            
@@ -127,7 +127,7 @@ export class GenesPanel {
             <span class='reference-list'>
                 {
                     pos.map(i => {
-                        return <a class='reference-article far fa-newspaper' href={context.evidences.url[i]} target='_blank' title={"Source: " + context.evidences.pmid[i] + "\nEvidence: " + context.evidences.label[i]}></a>
+                        return <a class='a-gcv reference-article far fa-newspaper' href={context.evidences.url[i]} target='_blank' title={"Source: " + context.evidences.pmid[i] + "\nEvidence: " + context.evidences.label[i]}></a>
                     })
                 }
             </span>
@@ -138,23 +138,24 @@ export class GenesPanel {
         let label = gp.taxonLabel;
         // no label present for taxon
         if(!label) {
-            return <a class='genes-panel__item__title__gp__taxon' href={gp.taxonURL} target='_blank'>N/A</a>;
+            return <a class='a-gcv genes-panel__item__title__gp__taxon' href={gp.taxonURL} target='_blank'>N/A</a>;
         }
         // otherwise parse and show it
         if(label.includes(" ")) {
             let split = label.split(" ");
             label = split[0].substring(0, 1) + "." + split[1];
         }
-        return <a class='genes-panel__item__title__gp__taxon' href={gp.taxonURL} target='_blank'>{label}</a>;
+        return <a class='a-gcv genes-panel__item__title__gp__taxon' href={gp.taxonURL} target='_blank'>{label}</a>;
     }
 
     renderProcess(process) {
+        console.log("- rendering process: ", process);
         return(
             <div class="genes-panel__item__process">
                 <div class="genes-panel__item__process__list">
                     { 
                         process.label.map(elt => {
-                            return <a href={process.url} class="genes-panel__item__process__list-name" target="_blank">{process.label}</a>
+                            return <a href={process.url} class="a-gcv genes-panel__item__process__list-name" target="_blank">{process.label}</a>
                         }) 
                     }
                 </div>
@@ -176,13 +177,13 @@ export class GenesPanel {
             <div class="genes-panel__item" id={"gp_item_" + activity.nodeId} onClick={() => this.select(activity) } onMouseOver={() => this.highlight(activity.nodeId)}  onMouseOut={() => this.clearHighlight()} >
                                             
                 <div class='genes-panel__item__title'>
-                    {activity.geneProducts.length == 0 ? <a class='genes-panel__item__title__gp' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> : activity.geneProducts.map(gp => { return <a class='genes-panel__item__title__gp' href={gp.url} target='_blank'>{gp.label}</a> })}
+                    {activity.geneProducts.length == 0 ? <a class='a-gcv genes-panel__item__title__gp' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> : activity.geneProducts.map(gp => { return <a class='a-gcv genes-panel__item__title__gp' href={gp.url} target='_blank'>{gp.label}</a> })}
                     {activity.geneProducts.length == 0 ? <span class='genes-panel__item__title__gp__taxon'>N/A</span> : activity.geneProducts.map(gp => { return this.renderTaxon(gp) })}
                 </div> 
 
                 
                 <div class='genes-panel__item__activity__block'>
-                    <a class='genes-panel__item__activity block-right' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> <span class="activity__references">{ activity.geneProducts.map(gp => { return this.renderGeneReferences(gp) }) }</span>
+                    <a class='a-gcv genes-panel__item__activity block-right' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> <span class="activity__references">{ activity.geneProducts.map(gp => { return this.renderGeneReferences(gp) }) }</span>
                     {contexts.map(context => {
                         if(context == "RO:0002333") { return ;}
                         return (
@@ -192,8 +193,8 @@ export class GenesPanel {
 //                                                        console.log(context , ctx);
                                         return (
                                             <div>
-                                                <a class='block-left' target='_blank' href={ctx.relationURL}><i>{ctx.relationLabel}</i></a>
-                                                <a class='block-right' target='_blank' href={ctx.termURL}>{ctx.termLabel}</a>
+                                                <a class='a-gcv block-left' target='_blank' href={ctx.relationURL}><i>{ctx.relationLabel}</i></a>
+                                                <a class='a-gcv block-right' target='_blank' href={ctx.termURL}>{ctx.termLabel}</a>
                                                 { this.renderReferences(ctx) }
                                             </div>
                                         )
@@ -238,11 +239,13 @@ export class GenesPanel {
         if(!this.ghandler || !this.groupedActivities) {
             return "";
         }
+
+        console.log("genes-panel: ", this.groupedActivities);
       
         return(
             <div class="genes-panel__container" id={"gpc_" + this.ghandler.getBBOPGraph().id()}>
                 <div class="genes-panel__container__title">
-                    <h1>Processes and Activities</h1>
+                    <h1 class="h1-gcv">Processes and Activities</h1>
                     <hr/>
                 </div>
                 <div class="genes-panel__list" id="genes-panel__list">

@@ -1111,10 +1111,14 @@ export class GoCamViz {
 
         return [
 
-            <div class="control__panel">
-                {this.showGoCamSelector ? <wc-gocam-selector></wc-gocam-selector> : ""}
-                <button class='open__in_noctua__label button-gcv' onClick={() => this.openInNoctua()}>Open in Noctua</button>
-                <button class='reset__view button-gcv' onClick={() => this.resetView()}>Reset View</button>
+            <div>
+                {this.showGoCamSelector ? 
+                <div class="control__panel">
+                    {this.showGoCamSelector ? <wc-gocam-selector></wc-gocam-selector> : ""}
+                    <button class='open__in_noctua__label button-gcv' onClick={() => this.openInNoctua()}>Open in Noctua</button>
+                    <button class='reset__view button-gcv' onClick={() => this.resetView()}>Reset View</button>
+                </div>
+                : ""}
             </div>,
 
             this.loading ? <div class="gocam-viz-loader">Loading GO-CAM {this.gocamId} ...</div> : "",

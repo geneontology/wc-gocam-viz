@@ -354,16 +354,16 @@ export class GraphHandler {
         }
 
         console.log("GraphHander:groupActivitiesByProcess(" , enrichedActivities , "): ", map);
-        console.log("GraphHander:groupActivitiesByProcess(" , enrichedActivities , "): CHECK DBXREFS: ", this.dbxrefs);
+        console.log("GraphHander:groupActivitiesByProcess(" , enrichedActivities , "): CHECK DBXREFS: ", this.dbxrefs.isReady());
 
         let groupedActivities = [];
-        for(let process of map.keys()) {
-            console.log("GraphHander:groupActivitiesByProcess(loop-" , process , "): " , map.get(process)[0]);
+        for(let [process, val] of map) {
+            console.log("GraphHander:groupActivitiesByProcess(loop-" , process , "): " , val);
             let item = {
                 id : process.split(","),
                 url: (process.split(",") != "" && this.dbxrefs) ? process.split(",").map(elt => { let db = elt.split(":")[0]; let id = elt.split(":")[1]; return this.dbxrefs.getURL(db, undefined, id) } ) : "#",
-                label : map.get(process)[0].partOf.map(elt => elt.label) == "" ? ["others processes"] : map.get(process)[0].partOf.map(elt => elt.label),
-                activities : map.get(process)
+                label : val[0].partOf.map(elt => elt.label) == "" ? ["others processes"] : val[0].partOf.map(elt => elt.label),
+                activities : val
             };
             console.log("GraphHander:groupActivitiesByProcess(loop-" , process , "): item = " , item);
             groupedActivities.push(item);

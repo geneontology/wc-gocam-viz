@@ -366,19 +366,29 @@ export class GraphHandler {
         }
 
         console.log("ITERATE 3");
-        for(var process in map) {
+        for(let process of map) {
             console.log("- " , process);
         }
 
         console.log("ITERATE 4");
-        for(var process in Object.keys(map)) {
+        for(let process in Object.keys(map)) {
             console.log("- " , process);
         }
 
         console.log("ITERATE 5");
+        for(let [process, val] of map) {
+            console.log("- ", process , val);
+        }
+
+        console.log("ITERATE 6");
         for(let [process, val] of map.entries()) {
             console.log("- ", process , val);
         }
+
+        console.log("ITERATE 7");
+        map.forEach((value, key) => {
+            console.log("- ", key, value);
+        })
 
         let groupedActivities = [];
         for(let [process, val] of map) {

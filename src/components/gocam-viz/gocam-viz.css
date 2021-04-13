@@ -3,6 +3,7 @@
     --gocam-width: 1050px;
     --gocam-height: 800px;
     --gocam-border-radius: 15px;
+    --gocam-border-size: 2px;
 }
   
 
@@ -14,7 +15,7 @@
     margin: auto;
     width: var(--gocam-width);
     height: var(--gocam-height);
-    border: 2px solid rgba(214,214,214,0.94);
+    border: var(--gocam-border-size) solid rgba(214,214,214,0.94);
     border-radius: var(--gocam-border-radius);
     padding: 1rem;
     -webkit-box-shadow: 0px 0px 10px 0px rgb(194 194 194);

@@ -67,6 +67,10 @@ export class GoCamViz {
      */
     @Prop() showIsolatedActivity: boolean = false;    
 
+    /**
+     * Show/hide default legend
+     */
+    @Prop() showLegend: boolean = true;
 
     @Prop() graphFold: string = "editor";
 
@@ -990,7 +994,7 @@ export class GoCamViz {
                 let scrollList = document.getElementById("genes-panel__list");
                 let elt2 = document.getElementById("gp_item_" + evt.target.id());
                 if (scrollList && elt2) {
-                    scrollList.scroll(0, elt2.offsetTop - 160);
+                    scrollList.scroll(0, elt2.offsetTop - 220);
                     elt2.style["box-shadow"] = "4px 6px 42px 1px rgb(194 194 255)";
                 }
 
@@ -1128,7 +1132,7 @@ export class GoCamViz {
                 <wc-genes-panel ghandler={this.ghandler} ref={el => this.genesPanel = el}></wc-genes-panel>
             </div>,
 
-            <img class="img-gcv" src={getAssetPath("./assets/legend.png")}></img>
+            this.showLegend ? <img class="img-gcv" src={getAssetPath("./assets/legend.png")}></img> : ""
 
         ];
 

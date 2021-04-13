@@ -353,56 +353,16 @@ export class GraphHandler {
             acts.push(enr);
         }
 
-        console.log("GraphHander:groupActivitiesByProcess(" , enrichedActivities , "): ", map);
-
-        console.log("ITERATE 1");
-        for(let [process, val] of map) {
-            console.log("- ", process , val);
-        }
-
-        console.log("ITERATE 2");
-        for(let process of map.keys()) {
-            console.log("- " , process);
-        }
-
-        console.log("ITERATE 3");
-        for(let process of map) {
-            console.log("- " , process);
-        }
-
-        console.log("ITERATE 4");
-        for(let process in Object.keys(map)) {
-            console.log("- " , process);
-        }
-
-        console.log("ITERATE 5");
-        for(let [process, val] of map) {
-            console.log("- ", process , val);
-        }
-
-        console.log("ITERATE 6");
-        for(let [process, val] of map.entries()) {
-            console.log("- ", process , val);
-        }
-
-        console.log("ITERATE 7");
-        map.forEach((value, key) => {
-            console.log("- ", key, value);
-        })
-
         let groupedActivities = [];
-        for(let [process, val] of map) {
-            console.log("GraphHander:groupActivitiesByProcess(loop-" , process , "): " , val);
+        map.forEach((val, process) => {
             let item = {
                 id : process.split(","),
                 url: (process.split(",") != "" && this.dbxrefs) ? process.split(",").map(elt => { let db = elt.split(":")[0]; let id = elt.split(":")[1]; return this.dbxrefs.getURL(db, undefined, id) } ) : "#",
                 label : val[0].partOf.map(elt => elt.label) == "" ? ["others processes"] : val[0].partOf.map(elt => elt.label),
                 activities : val
             };
-            console.log("GraphHander:groupActivitiesByProcess(loop-" , process , "): item = " , item);
             groupedActivities.push(item);
-        }
-        console.log("GraphHander:groupActivitiesByProcess(return): " , groupedActivities);
+        })
         return groupedActivities;
     }
     

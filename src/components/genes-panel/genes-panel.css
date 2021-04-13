@@ -8,6 +8,9 @@
     --gocam-panel-h1-color: rgb(74, 74, 211);
     --gocam-panel-a-color: inherit;
     --gocam-panel-a-hover-color: blue;
+    --gocam-panel-process-font-color: white;
+    --gocam-panel-process-hover-font-color: #dedede;
+    --gocam-panel-process-font-weight: 800;
 }
 
 
@@ -86,7 +89,7 @@
 
 .genes-panel__list {
     overflow: scroll;    
-    height: 740px;
+    height: 715px;
 }
 
 .genes-panel__item__activity__block {
@@ -219,14 +222,13 @@
 /* Link to a specific process */
 .genes-panel__item__process__list-name {
     cursor: pointer;
-    font-weight: 800;
+    font-weight: var(--gocam-panel-process-font-weight);
     font-size: 1.1rem;   
-    color: white;
+    color: var(--gocam-panel-process-font-color);
 }
 
 .genes-panel__item__process__list-name:hover {
-    color: #dedede;;
-
+    color: var(--gocam-panel-process-hover-font-color);
 }
 
 /* part of the process card that contains all related activities */

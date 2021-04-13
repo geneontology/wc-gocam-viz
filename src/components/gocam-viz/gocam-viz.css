@@ -4,6 +4,7 @@
     --gocam-height: 800px;
     --gocam-border-radius: 15px;
     --gocam-border-size: 2px;
+    --gocam-box-shadow: 0px 0px 10px 0px rgb(194 194 194);
 }
   
 
@@ -18,9 +19,9 @@
     border: var(--gocam-border-size) solid rgba(214,214,214,0.94);
     border-radius: var(--gocam-border-radius);
     padding: 1rem;
-    -webkit-box-shadow: 0px 0px 10px 0px rgb(194 194 194);
-    -moz-box-shadow: 0px 0px 10px 0px rgba(194,194,194,1);
-    box-shadow: 0px 0px 10px 0px rgb(194 194 194);
+    -webkit-box-shadow: var(--gocam-box-shadow);
+    -moz-box-shadow: var(--gocam-box-shadow);
+    box-shadow: var(--gocam-box-shadow);
 }
 
 .gocam-viz-loader {
@@ -78,9 +79,9 @@
     padding: 1rem;
     margin-bottom: 1rem;
     border-radius: var(--gocam-border-radius);
-    -webkit-box-shadow: 0px 0px 10px 0px rgb(194 194 194);
-    -moz-box-shadow: 0px 0px 10px 0px rgba(194,194,194,1);
-    box-shadow: 0px 0px 10px 0px rgb(194 194 194);
+    -webkit-box-shadow: var(--gocam-box-shadow);
+    -moz-box-shadow: var(--gocam-box-shadow);
+    box-shadow: var(--gocam-box-shadow);
 }
 
 .button-gcv, .select-gcv {

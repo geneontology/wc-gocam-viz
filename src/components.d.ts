@@ -59,6 +59,10 @@ export namespace Components {
           * Show/hide isolated activity (not connected through causals)
          */
         "showIsolatedActivity": boolean;
+        /**
+          * Show/hide default legend
+         */
+        "showLegend": boolean;
     }
 }
 declare global {
@@ -140,6 +144,10 @@ declare namespace LocalJSX {
           * Show/hide isolated activity (not connected through causals)
          */
         "showIsolatedActivity"?: boolean;
+        /**
+          * Show/hide default legend
+         */
+        "showLegend"?: boolean;
     }
     interface IntrinsicElements {
         "wc-genes-panel": WcGenesPanel;

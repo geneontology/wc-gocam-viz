@@ -19,6 +19,7 @@
 | `showHasInput`         | `show-has-input`         | Show/hide the input of an activity                                                                                                                                        | `boolean` | `false`     |
 | `showHasOutput`        | `show-has-output`        | Show/hide the output of an activity                                                                                                                                       | `boolean` | `false`     |
 | `showIsolatedActivity` | `show-isolated-activity` | Show/hide isolated activity (not connected through causals)                                                                                                               | `boolean` | `false`     |
+| `showLegend`           | `show-legend`            | Show/hide default legend                                                                                                                                                  | `boolean` | `true`      |
 
 
 ## Events

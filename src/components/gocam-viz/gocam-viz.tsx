@@ -308,13 +308,13 @@ export class GoCamViz {
         let global_minerva_definition_name = this.minervaDefinitions[this.repository];
         let user_token = "";
 
-        console.log("using barista: ", global_barista_location);
-        console.log("using definition: ", global_minerva_definition_name);
+        // console.log("using barista: ", global_barista_location);
+        // console.log("using definition: ", global_minerva_definition_name);
 
         this.manager = new minerva_manager(global_barista_location, global_minerva_definition_name, user_token, this.engine, "async");
 
         this.manager.register('rebuild', (resp, man) => {
-            console.log("rebuild: ", resp, man);
+            // console.log("rebuild: ", resp, man);
             let graph = new noctua_graph();
             graph.load_data_basic(resp.data());
             console.log("graph: ", graph);
@@ -339,7 +339,7 @@ export class GoCamViz {
     */
     initDBXrefs() {
         dbxrefs.init(() => {
-            console.log("dbxrefs ready");
+            // console.log("dbxrefs ready");
             this.dbXrefsReady = true;
         })
     }
@@ -364,6 +364,7 @@ export class GoCamViz {
 
 
     /**
+     * @deprecated
      * Actual method to render the GO-CAM graph
      * TODO: deprecate and switch to renderGOCam2
      * @param gocamId valid gocam id (e.g. gomodel:xxx)
@@ -709,7 +710,7 @@ export class GoCamViz {
                     let rglyph = glyph(relid);
 
                     for(let target of targets) {
-                        console.log("target: ", target);
+                        // console.log("target: ", target);
                         let ed = {
                             group: "edges",
                             data: {
@@ -722,7 +723,7 @@ export class GoCamViz {
                                 lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid"
                             }
                         };
-                        console.log("ED: ", ed);
+                        // console.log("ED: ", ed);
                         elements.push(ed);
                     }
                 }
@@ -995,7 +996,7 @@ export class GoCamViz {
                 let elt2 = document.getElementById("gp_item_" + evt.target.id());
                 if (scrollList && elt2) {
                     scrollList.scroll(0, elt2.offsetTop - 220);
-                    elt2.style["box-shadow"] = "4px 6px 42px 1px rgb(194 194 255)";
+                    elt2.style["box-shadow"] = "2px 2px 5px 6px rgb(194 194 255)";
                 }
 
                 // this.genesPanel.scrollToActivity(evt.target.id());

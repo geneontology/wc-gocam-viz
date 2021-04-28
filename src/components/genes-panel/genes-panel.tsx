@@ -51,9 +51,9 @@ export class GenesPanel {
                 // we sort activities by BP, as much as we can; ordered alphabetically and when no partOf = end of list
                 data.sort((a, b) => (a.partOf.length == 0) ? 1 : (b.partOf.length == 0) ? -1 : (a.partOf[0].label < b.partOf[0].label) ? -1 : 1)
                 this.enrichedActivities = data;
-                console.log("GenesPanel:EnrichedActivities: ", this.enrichedActivities);
+                // console.log("GenesPanel:EnrichedActivities: ", this.enrichedActivities);
                 this.groupedActivities = this.ghandler.groupActivitiesByProcess(this.enrichedActivities);
-                console.log("GenesPanel:GroupedActivities: ", this.groupedActivities);
+                // console.log("GenesPanel:GroupedActivities: ", this.groupedActivities);
             })            
         }
     }
@@ -149,14 +149,29 @@ export class GenesPanel {
     }
 
     renderProcess(process) {
-        console.log("- rendering process: ", process);
+        // console.log("- rendering process: ", process);
+
+        let item = process.id.length > 1 ? "¤ " : "";
+
+        let tmp = [];
+        for(let p = 0; p < process.id.length; p++) {
+            tmp.push({
+                id : process.id[p],
+                url : process.url[p],
+                label : process.label[p]
+            })
+        }
+
         return(
             <div class="genes-panel__item__process">
                 <div class="genes-panel__item__process__list">
                     { 
-                        process.label.map(elt => {
-                            return <a href={process.url} class="a-gcv genes-panel__item__process__list-name" target="_blank">{process.label}</a>
-                        }) 
+                        tmp.map(process => {
+                            return <a href={process.url} class="a-gcv genes-panel__item__process__list-name" target="_blank">{item + process.label}</a>
+                        })
+                        // process.label.map(elt => {
+                        //     return <a href={process.url} class="a-gcv genes-panel__item__process__list-name" target="_blank">{process.label}</a>
+                        // }) 
                     }
                 </div>
 

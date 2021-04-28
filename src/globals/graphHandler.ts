@@ -344,6 +344,7 @@ export class GraphHandler {
         let map = new Map();
         for(let enr of enrichedActivities) {
             let key = this.processesKey(enr.partOf);
+            // console.log("activity: ", enr , ": process: ", key);
             let acts = [];
             if(map.has(key)) {
                 acts = map.get(key);
@@ -489,6 +490,12 @@ export class GraphHandler {
                 try {
                     let db = doc.id.split(":")[0];
                     let dbid = doc.id.split(":")[1];
+
+                    // Temporary fix for a long standing issue of MGI:MGI: curie
+                    if(doc.id.includes("MGI:") && !doc.id.includes("MGI:MGI:")) {
+                        dbid = "MGI:" + dbid;
+                    }
+
                     doc["url"] = this.dbxrefs.getURL(db, undefined, dbid);
                 } catch(error) {
                     console.error("asked to annotate ", id , " but doc ", doc , " does not have an id, can not resolve URL - data is: ", data);

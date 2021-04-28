@@ -10,8 +10,8 @@
     --gocam-panel-a-color: inherit;
     --gocam-panel-a-hover-color: blue;
     --gocam-panel-process-font-color: white;
-    --gocam-panel-process-hover-font-color: #dedede;
-    --gocam-panel-process-font-weight: 800;
+    --gocam-panel-process-hover-font-color: #c4ceff;
+    --gocam-panel-process-font-weight: 400;
 }
 
 
@@ -74,7 +74,7 @@
 }
 
 .genes-panel__item:hover {
-    box-shadow: 4px 6px 42px 1px rgb(194 194 255);    
+    box-shadow: 2px 2px 5px 6px rgb(194 194 255); 
 }
 
 .genes-panel__item__title {
@@ -170,7 +170,7 @@
 
 
 .gp_item_selected {
-    box-shadow: 4px 6px 42px 2px rgb(124 124 124);    
+    box-shadow: 2px 2px 5px 6px rgb(194 194 255);  
 }
 
 
@@ -215,7 +215,7 @@
     word-wrap: normal;
     /* background: white; */
     background: var(--gocam-panel-process-color);
-    padding: 0.5rem;
+    padding: 0.5rem 0.8rem;
     border-radius: 15px 15px 0px 0px;
     border: 1px solid rgb(34, 34, 34);
     text-align: center;    
@@ -227,7 +227,13 @@
     font-weight: var(--gocam-panel-process-font-weight);
     font-size: 1.1rem;   
     color: var(--gocam-panel-process-font-color);
+    display: block;
+    text-align: left;
+    padding: 0rem 0.3rem;
 }
+/* .genes-panel__item__process__list-name::first-letter {
+    text-transform: uppercase;
+} */
 
 .genes-panel__item__process__list-name:hover {
     color: var(--gocam-panel-process-hover-font-color);

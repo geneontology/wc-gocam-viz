@@ -46,8 +46,8 @@
          * General Key listener, here to recenter the graph visualization
          */
         document.addEventListener('keydown', (key) => {
-          key.preventDefault();
           if(key.code == 'Space') {
+            key.preventDefault();
             let viz = document.getElementById("gocam-1");
             if(viz) { viz.resetView(); }
           }

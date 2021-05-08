@@ -83,6 +83,13 @@ export class GoCamSelector {
         "http://model.geneontology.org/5e72450500004019"
     ]
 
+    userInputID = null;
+
+    handleUserInputID(event) {
+        this.userInputID = event.target.value;
+    }
+
+
     componentWillLoad() {
         // fetch(this.url)
         //     .then(data => data.json())
@@ -96,11 +103,25 @@ export class GoCamSelector {
         this.selectGOCAM.emit({ id: id });
     }
 
+    loadModel() {
+        let id = this.userInputID.trim();
+        if(!id.startsWith("gomodel:")) {
+            id = "gomodel:" + id;
+        }
+        this.selectGOCAM.emit({ id: id });
+    }
+
     render() {
         return (
             <div class="gocam-selector">
+                <span class='select__gocam__label'>Enter a GO-CAM model ID: </span>
+                <input type="text" class="input-id" value={this.userInputID} onInput={(event) => this.handleUserInputID(event)}></input>
+                <button class='button-gcv' onClick={() => this.loadModel()} disabled={this.userInputID != null && this.userInputID.length > 0}>Load</button>
+
+                <span class='or-label'> OR </span>
+
                 <span class='select__gocam__label'>Select GO-CAM: </span>
-                <select id="gocam" onChange={(evt) => this.select(evt)} >
+                <select id="gocam" class="select-id" onChange={(evt) => this.select(evt)} >
                     {
                         this.list.map(gocam => {
                             return <option value={gocam}>{gocam.split(".org/")[1]}</option>

@@ -63,7 +63,7 @@
 }
 
 .open__in_noctua__label {
-    margin-left: 2rem;
+    margin-left: 3rem;
     background-color: rgb(74, 74, 211);
     color: white;
 }
@@ -71,6 +71,7 @@
 .button-gcv {
     background-color: rgb(74, 74, 211);
     color: white;    
+    padding: 0.2rem 0.6rem;
 }
 
 .control__panel {
@@ -85,8 +86,8 @@
 }
 
 .button-gcv, .select-gcv {
-    padding: 0.2rem 0.4rem;
-    border-radius: 10px;        
+    /* padding: 0.2rem 0.4rem; */
+    /* border-radius: 10px;         */
 }
 
 .button-gcv:hover {

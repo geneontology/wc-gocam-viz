@@ -5,3 +5,20 @@
 .select__gocam__label {
     margin-right: 0.5rem;
 }
+
+
+.input-id {
+    padding: 0.2rem 0.6rem;
+    width: 10.5rem;
+}
+
+.select-id {
+    padding: 0.2rem 0.6rem;
+}
+
+.or-label {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    color: red;
+    font-weight: 800;
+}

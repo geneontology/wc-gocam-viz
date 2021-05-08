@@ -114,6 +114,10 @@ export class GoCamViz {
      */
     @State() loading: boolean = false;
 
+    /**
+     * Indicates if the component has encountered an error while loading some data
+     */
+    @State() error: boolean = false;
 
     // variables for bbop manager & graph
     engine;
@@ -312,7 +316,7 @@ export class GoCamViz {
         // console.log("using definition: ", global_minerva_definition_name);
 
         this.manager = new minerva_manager(global_barista_location, global_minerva_definition_name, user_token, this.engine, "async");
-
+        
         this.manager.register('rebuild', (resp, man) => {
             // console.log("rebuild: ", resp, man);
             let graph = new noctua_graph();
@@ -326,8 +330,12 @@ export class GoCamViz {
         this.manager.register('manager_error', function (resp, man) {
             console.error(resp, man);
         });
-        this.manager.register('error', function (resp, man) {
+        this.manager.register('error',  (resp, man) => {
             console.error(resp, man);
+            this.loading = false;
+            this.error = true;            
+            alert("An error occured, your model couldn't be loaded. Check you entered a valid model ID, check your internet connexion and if the problem persists, please contact helpdesk@geneontology.org.");
+
         });
         this.manager.register('warning', function (resp, man) {
             console.log(resp, man);
@@ -358,6 +366,7 @@ export class GoCamViz {
             gocamId = "gomodel:" + gocamId;
         }
         this.loading = true;
+        this.error = false;
         this.ghandler = undefined;
         this.manager.get_model(gocamId);
     }
@@ -1126,7 +1135,7 @@ export class GoCamViz {
                 : ""}
             </div>,
 
-            this.loading ? <div class="gocam-viz-loader">Loading GO-CAM {this.gocamId} ...</div> : "",
+            this.loading ? this.error ? "" : <div class="gocam-viz-loader">Loading GO-CAM {this.gocamId} ...</div> : "",
 
             <div>
                 <div id="gocam-viz" class={classes}></div>

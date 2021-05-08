@@ -75,7 +75,12 @@ export class GoCamSelector {
         "http://model.geneontology.org/5d29221b00002807",
         "http://model.geneontology.org/5d29221b00001607",
         "http://model.geneontology.org/580e952200000046",
-        "http://model.geneontology.org/59bee34700000179"
+        "http://model.geneontology.org/59bee34700000179",
+        "http://model.geneontology.org/584b49fa00000326",
+        "http://model.geneontology.org/5e72450500004237",
+        "http://model.geneontology.org/6086f4f200000298",
+        "http://model.geneontology.org/60418ffa00002515",
+        "http://model.geneontology.org/5e72450500004019"
     ]
 
     componentWillLoad() {

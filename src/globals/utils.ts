@@ -50,7 +50,7 @@ export function glyph(relation) {
 
     let defaultSize = 9;
     let smallSize = 4;
-    let undirectSize = 5;
+    let indirectSize = 6;
     let directSize = 9;
 
     switch (relation) {
@@ -61,13 +61,13 @@ export function glyph(relation) {
         case "BFO:0000066":
             return { lineStyle: "solid", glyph: null, label: "occurs in", color: '#66CDAA', width: defaultSize };
         case "RO:0002211":
-            return { lineStyle: "dashed", glyph: null, label: "regulates", color: '#2F4F4F', width: undirectSize };
+            return { lineStyle: "dashed", glyph: null, label: "regulates", color: '#2F4F4F', width: indirectSize };
         case "RO:0002212":
-            return { lineStyle: "dashed", glyph: "tee", label: "negatively regulates", color: '#FF0000', width: undirectSize };
+            return { lineStyle: "dashed", glyph: "tee", label: "negatively regulates", color: '#FF0000', width: indirectSize };
         case "RO:0002630":
             return { lineStyle: "solid", glyph: "tee", label: "directly negatively regulates", color: '#FF0000', width: directSize };
         case "RO:0002213":
-            return { lineStyle: "dashed", glyph: "triangle", label: "positively regulates", color: '#008000', width: undirectSize };
+            return { lineStyle: "dashed", glyph: "triangle", label: "positively regulates", color: '#008000', width: indirectSize };
         case "RO:0002629":
             return { lineStyle: "solid", glyph: "triangle", label: "directly positively regulates", color: '#008000', width: directSize };
         case "RO:0002233":
@@ -79,9 +79,9 @@ export function glyph(relation) {
         case "RO:0002333":
             return { lineStyle: "solid", glyph: null, label: "enabled by", color: '#B8860B', width: defaultSize };
         case "RO:0002411":
-            return { lineStyle: "dashed", glyph: null, label: "causally upstream of", color: '#483D8B', width: undirectSize };
+            return { lineStyle: "dashed", glyph: null, label: "causally upstream of", color: '#483D8B', width: indirectSize };
         case "RO:0002418":
-            return { lineStyle: "dashed", glyph: null, label: "causally upstream of or within", color: '#483D8B', width: undirectSize };
+            return { lineStyle: "dashed", glyph: null, label: "causally upstream of or within", color: '#483D8B', width: indirectSize };
 
         case "RO:0002408":
             return { lineStyle: "solid", glyph: "tee", label: "directly inhibits", color: '#FF0000', width: directSize };
@@ -89,14 +89,14 @@ export function glyph(relation) {
             return { lineStyle: "solid", glyph: "triangle", label: "directly activates", color: '#008000', width: directSize };
 
         case "RO:0002305":
-            return { lineStyle: "dashed", glyph: null, label: "causally upstream of, negative effect", color: '#FF0000', width: undirectSize };
+            return { lineStyle: "dashed", glyph: null, label: "causally upstream of, negative effect", color: '#FF0000', width: indirectSize };
         case "RO:0004046":
-            return { lineStyle: "dashed", glyph: null, label: "causally upstream of or within, negative effect", color: '#FF0000', width: undirectSize };
+            return { lineStyle: "dashed", glyph: null, label: "causally upstream of or within, negative effect", color: '#FF0000', width: indirectSize };
 
         case "RO:0002304":
-            return { lineStyle: "dashed", glyph: null, label: "causally upstream of, positive effect", color: '#008000', width: undirectSize };
+            return { lineStyle: "dashed", glyph: null, label: "causally upstream of, positive effect", color: '#008000', width: indirectSize };
         case "RO:0004047":
-            return { lineStyle: "dashed", glyph: null, label: "causally upstream of or within, positive effect", color: '#008000', width: undirectSize };
+            return { lineStyle: "dashed", glyph: null, label: "causally upstream of or within, positive effect", color: '#008000', width: indirectSize };
 
         case "annotation":
             return { lineStyle: "solid", glyph: "diamond", label: "annotation", color: '#483D8B', width: defaultSize };

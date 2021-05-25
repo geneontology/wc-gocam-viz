@@ -1143,7 +1143,7 @@ export class GoCamViz {
                 <wc-genes-panel ghandler={this.ghandler} ref={el => this.genesPanel = el}></wc-genes-panel>
             </div>,
 
-            this.showLegend ? <img class="img-gcv" src={getAssetPath("./assets/legend.png")}></img> : ""
+            this.showLegend ? <img class="img-gcv" src={getAssetPath("./assets/legendv2.png")}></img> : ""
 
         ];
 

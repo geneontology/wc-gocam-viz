@@ -178,7 +178,7 @@ export class GoCamViz {
         'color': 'white',
         'text-outline-width': 1,
         'text-outline-color': '#222222',
-        'width': 9
+        'width': 'data(width)'
     }
 
 
@@ -729,7 +729,8 @@ export class GoCamViz {
                                 label: rglyph.label ? rglyph.label : target.relationLabel,
                                 color: rglyph.color ? rglyph.color : "black",
                                 glyph: rglyph.glyph ? rglyph.glyph : "circle",
-                                lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid"
+                                lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid",
+                                width: rglyph.width ? rglyph.width : this.defaultEdgeStyle.width
                             }
                         };
                         // console.log("ED: ", ed);

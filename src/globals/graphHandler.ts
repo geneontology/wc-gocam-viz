@@ -418,6 +418,11 @@ export class GraphHandler {
         for(let edge of edges) {
 
             console.log("edge: ", edge);
+            if(!this.RO_CAUSAL.hasOwnProperty(edge.predicate_id())) {
+                console.log("is not a causal");
+                continue;
+            }
+
             let object = this.bbopGraph.get_node(edge.object_id());
             console.log("object: ", object);
 

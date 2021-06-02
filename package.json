@@ -25,14 +25,9 @@
     "@geneontology/dbxrefs": "^1.0.15",
     "@geneontology/wc-light-modal": "0.0.7",
     "@stencil/core": "^1.8.8",
-    "bbop-core": "0.0.5",
     "bbop-graph-noctua": "0.0.35",
-    "bbop-manager-minerva": "0.0.20",
-    "bbop-response-barista": "0.0.11",
-    "bbop-rest-manager": "0.0.17",
     "cytoscape": "^3.16.1",
-    "cytoscape-cose-bilkent": "^4.1.0",
-    "sync-request": "^6.1.0"
+    "cytoscape-cose-bilkent": "^4.1.0"
   },
   "devDependencies": {
     "rollup-plugin-node-polyfills": "^0.2.1"

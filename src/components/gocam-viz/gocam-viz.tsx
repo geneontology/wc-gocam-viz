@@ -2,9 +2,6 @@ import { Component, Prop, Element, Event, EventEmitter, Watch, getAssetPath, h }
 import { Listen, Method, State } from '@stencil/core';
 
 import { graph as noctua_graph } from 'bbop-graph-noctua';
-import minerva_manager from 'bbop-manager-minerva';
-import barista_response from 'bbop-response-barista';
-import { jquery as jquery_engine } from 'bbop-rest-manager';
 
 import cytoscape from 'cytoscape';
 import coseBilkent from 'cytoscape-cose-bilkent';
@@ -76,35 +73,6 @@ export class GoCamViz {
 
 
     /**
-     * Barista current URLs - can be updated to change URL or add new instances
-     */
-    barista = {
-        prod: "http://barista.berkeleybop.org",
-        dev: "http://barista-dev.berkeleybop.org"
-    };
-
-    /**
-     * prod & dev environments use different minerva definitions
-     */
-    minervaDefinitions = {
-        prod: "minerva_public",
-        dev: "minerva_public_dev"
-    };
-
-    noctuaGraphURL = {
-        prod: "http://noctua.geneontology.org/editor/graph/",
-        dev: "http://noctua-dev.berkeleybop.org/editor/graph/"
-    };
-
-
-    /**
-     * Used to connect to a barista instance. By default, always access production (prod) server
-     * prod = http://barista.berkeleybop.org
-     * dev  = http://barista-dev.berkeleybop.org
-     */
-    @Prop() repository: string = "prod";
-
-    /**
      * Deprecated for the moment
      */
     @Prop() autoHideModal: boolean = false;
@@ -119,9 +87,7 @@ export class GoCamViz {
      */
     @State() error: boolean = false;
 
-    // variables for bbop manager & graph
-    engine;
-    manager;
+    // variables for bbop graph
     currentGraph = undefined;
 
     // modal: HTMLWcLightModalElement;
@@ -129,6 +95,24 @@ export class GoCamViz {
     cy = undefined;             // container of the cytoscape.js graph
 
     dbXrefsReady = false;       // check if dbxrefs is initialized
+
+    /**
+     * Base URL used to fetch gocam as bbop graph
+     */
+    apiUrl = "https://api.geneontology.xyz/gocam/";
+
+    noctuaGraphURL = {
+        prod: "http://noctua.geneontology.org/editor/graph/",
+        dev: "http://noctua-dev.berkeleybop.org/editor/graph/"
+    };
+
+    /**
+     * Used to connect to a barista instance. By default, always access production (prod) server
+     * prod = http://barista.berkeleybop.org
+     * dev  = http://barista-dev.berkeleybop.org
+     */
+    @Prop() repository: string = "prod";
+
 
     /**
      * This state is updated whenever loading a new graph, in order to trigger a new rendering of genes-panel
@@ -298,49 +282,6 @@ export class GoCamViz {
         cytoscape.use(coseBilkent);
     }
 
-    initEngine() {
-        this.engine = new jquery_engine(barista_response);
-        this.engine.method('POST');
-        // console.log("engine: " , this.engine);
-    }
-
-    /** 
-     * Init general communication to barista -> minerva
-    */
-    initManager() {
-        let global_barista_location = this.barista[this.repository];
-        let global_minerva_definition_name = this.minervaDefinitions[this.repository];
-        let user_token = "";
-
-        // console.log("using barista: ", global_barista_location);
-        // console.log("using definition: ", global_minerva_definition_name);
-
-        this.manager = new minerva_manager(global_barista_location, global_minerva_definition_name, user_token, this.engine, "async");
-        
-        this.manager.register('rebuild', (resp, man) => {
-            let graph = new noctua_graph();
-            graph.load_data_basic(resp.data());
-            console.log("graph: ", graph);
-            this.renderGoCam2(resp._data.id, graph);
-        });
-        this.manager.register('meta', function (resp, man) {
-            console.log(resp, man);
-        });
-        this.manager.register('manager_error', function (resp, man) {
-            console.error(resp, man);
-        });
-        this.manager.register('error',  (resp, man) => {
-            console.error(resp, man);
-            this.loading = false;
-            this.error = true;            
-            alert("An error occured, your model couldn't be loaded. Check you entered a valid model ID, check your internet connexion and if the problem persists, please contact helpdesk@geneontology.org.");
-
-        });
-        this.manager.register('warning', function (resp, man) {
-            console.log(resp, man);
-        });
-    }
-
     /** 
      * Init the GO dbxrefs.yaml, in order to build URL meta
     */
@@ -367,7 +308,22 @@ export class GoCamViz {
         this.loading = true;
         this.error = false;
         this.ghandler = undefined;
-        this.manager.get_model(gocamId);
+
+
+        let url = this.apiUrl + gocamId + "/raw";
+        fetch(url)
+        .then(data => {
+            return data.json();
+        })
+        .catch(err => {
+            console.error("Error while fetching gocam ", url);
+        })
+        .then(graph => {
+            let ngraph = new noctua_graph();
+            ngraph.load_data_basic(graph);
+            this.renderGoCam2(gocamId, ngraph);        
+        })
+
     }
 
 
@@ -657,19 +613,19 @@ export class GoCamViz {
      */
     renderGoCam2(gocamId, graph, nest = "no", layout = 'cose-bilkent') {
 
-        // Prepare graph
-        graph.unfold();
-        if (this.graphFold == "evidence") {
-            graph.fold_evidence();
-        } else if (this.graphFold == "editor") {
-            graph.fold_go_noctua(this.relations_collapsible)
-        }
+        // // Prepare graph
+        // graph.unfold();
+        // if (this.graphFold == "evidence") {
+        //     graph.fold_evidence();
+        // } else if (this.graphFold == "editor") {
+        //     graph.fold_go_noctua(this.relations_collapsible)
+        // }
 
-        let g = graph.clone();
+        // let g = graph.clone();
 
 
-        this.currentGraph = g;
-        this.ghandler = new GraphHandler(graph.clone());
+        this.currentGraph = graph;
+        this.ghandler = new GraphHandler(this.currentGraph);
         this.ghandler.setDBXrefs(dbxrefs);
 
 
@@ -681,7 +637,6 @@ export class GoCamViz {
 
             // 1 - create the nodes
             for(let enrichedActivity of data) {
-                console.log(enrichedActivity);
 
                 let label = "";
                 if(enrichedActivity.geneProducts.length > 0) {
@@ -711,7 +666,7 @@ export class GoCamViz {
             // 2 - create the edges
             for(let enrichedActivity of data) {
                 let connected = this.ghandler.getCausalActivities(enrichedActivity, data);
-                console.log("activity ", enrichedActivity, " is connected to ", connected);
+                // console.log("activity ", enrichedActivity, " is connected to ", connected);
                 let relids = Object.keys(connected)
                 for(let relid of relids) {
                     let targets = connected[relid];
@@ -1094,8 +1049,6 @@ export class GoCamViz {
     componentWillLoad() {
         this.initDBXrefs();
         this.initCytoscape();
-        this.initEngine();
-        this.initManager();
     }
 
     /** 

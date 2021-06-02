@@ -417,14 +417,14 @@ export class GraphHandler {
         let edges = this.bbopGraph.get_edges_by_subject(activity.nodeId);
         for(let edge of edges) {
 
-            console.log("edge: ", edge);
+            // console.log("edge: ", edge);
             if(!this.RO_CAUSAL.hasOwnProperty(edge.predicate_id())) {
                 console.log("is not a causal");
                 continue;
             }
 
             let object = this.bbopGraph.get_node(edge.object_id());
-            console.log("object: ", object);
+            // console.log("object: ", object);
 
             let keys = Object.keys(object._id2type)
             let isActivity = false;

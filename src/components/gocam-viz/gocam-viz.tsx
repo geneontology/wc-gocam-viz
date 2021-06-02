@@ -318,7 +318,6 @@ export class GoCamViz {
         this.manager = new minerva_manager(global_barista_location, global_minerva_definition_name, user_token, this.engine, "async");
         
         this.manager.register('rebuild', (resp, man) => {
-            // console.log("rebuild: ", resp, man);
             let graph = new noctua_graph();
             graph.load_data_basic(resp.data());
             console.log("graph: ", graph);

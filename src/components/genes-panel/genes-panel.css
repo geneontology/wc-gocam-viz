@@ -144,7 +144,7 @@
 }
 
 .reference-article {
-    color: #1a9e1a;;
+    color: #1a9e1a !important;
     margin-left: 0.3rem;    
 }
 

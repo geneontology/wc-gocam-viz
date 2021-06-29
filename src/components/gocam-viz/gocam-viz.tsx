@@ -1090,9 +1090,9 @@ export class GoCamViz {
 
             this.loading ? this.error ? "" : <div class="gocam-viz-loader">Loading GO-CAM {this.gocamId} ...</div> : "",
 
-            <div>
+            <div id="gocam-viz-container">
                 <div id="gocam-viz" class={classes}></div>
-                <wc-genes-panel ghandler={this.ghandler} ref={el => this.genesPanel = el}></wc-genes-panel>
+                <wc-genes-panel id="gocam-viz-panel" ghandler={this.ghandler} ref={el => this.genesPanel = el}></wc-genes-panel>
             </div>,
 
             this.showLegend ? <img class="img-gcv" src={getAssetPath("./assets/legendv2.png")}></img> : ""

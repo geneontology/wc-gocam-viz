@@ -44,6 +44,16 @@ Type: `Promise<void>`
 
 
 
+### `setAutoFocus(shouldAF: any) => Promise<void>`
+
+Define if the GO-CAM viz should capture the mouse scroll
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 
 ## Dependencies
 

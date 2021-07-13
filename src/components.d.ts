@@ -36,6 +36,11 @@ export namespace Components {
          */
         "resetView": () => Promise<void>;
         /**
+          * Define if the GO-CAM viz should capture the mouse scroll
+          * @param shouldAF set to true if you want a mouse scroll to be captured by the component
+         */
+        "setAutoFocus": (shouldAF: any) => Promise<void>;
+        /**
           * Show/hide the activity in the activity node
          */
         "showActivity": boolean;

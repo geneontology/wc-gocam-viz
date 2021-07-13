@@ -321,6 +321,7 @@ export class GoCamViz {
         .then(graph => {
             let ngraph = new noctua_graph();
             ngraph.load_data_basic(graph);
+            console.log("BBOP graph: ", ngraph);
             this.renderGoCam2(gocamId, ngraph);        
         })
 
@@ -932,6 +933,15 @@ export class GoCamViz {
     async resetView() {
         this.cy.fit();
         this.cy.center();
+    }
+
+    /**
+     * Define if the GO-CAM viz should capture the mouse scroll
+     * @param shouldAF set to true if you want a mouse scroll to be captured by the component
+     */
+    @Method()
+    async setAutoFocus(shouldAF) {
+        this.cy.userZoomingEnabled(shouldAF);
     }
 
 

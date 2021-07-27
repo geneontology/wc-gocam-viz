@@ -25,6 +25,9 @@ export namespace Components {
           * Deprecated for the moment
          */
         "autoHideModal": boolean;
+        /**
+          * ID of the gocam to be shown in this widget. Look for the watcher below that will load the GO-CAM upon a change of this variable
+         */
         "gocamId": string;
         "graphFold": string;
         /**
@@ -115,6 +118,9 @@ declare namespace LocalJSX {
           * Deprecated for the moment
          */
         "autoHideModal"?: boolean;
+        /**
+          * ID of the gocam to be shown in this widget. Look for the watcher below that will load the GO-CAM upon a change of this variable
+         */
         "gocamId"?: string;
         "graphFold"?: string;
         "onLayoutChange"?: (event: CustomEvent<any>) => void;

@@ -30,6 +30,10 @@ export class GoCamViz {
     @Element() gocamviz;
     genesPanel: HTMLWcGenesPanelElement;
 
+    /**
+     * ID of the gocam to be shown in this widget. Look for the watcher below that will load
+     * the GO-CAM upon a change of this variable
+     */
     @Prop() gocamId: string;
 
     /**
@@ -58,7 +62,6 @@ export class GoCamViz {
      */
     @Prop() showActivity: boolean = false;
 
-
     /**
      * Show/hide isolated activity (not connected through causals)
      */
@@ -70,7 +73,6 @@ export class GoCamViz {
     @Prop() showLegend: boolean = true;
 
     @Prop() graphFold: string = "editor";
-
 
     /**
      * Deprecated for the moment
@@ -89,8 +91,6 @@ export class GoCamViz {
 
     // variables for bbop graph
     currentGraph = undefined;
-
-    // modal: HTMLWcLightModalElement;
 
     cy = undefined;             // container of the cytoscape.js graph
 
@@ -112,7 +112,6 @@ export class GoCamViz {
      * dev  = http://barista-dev.berkeleybop.org
      */
     @Prop() repository: string = "prod";
-
 
     /**
      * This state is updated whenever loading a new graph, in order to trigger a new rendering of genes-panel
@@ -246,13 +245,14 @@ export class GoCamViz {
 
     /**
      * Called whenever there is a selection of a new GO-CAM
-     * @param event 
+     * See for instance gocam-selector.selectGOCAM()
+     * @param event must contain a detail { id: xxx } where xxx is the new GO-CAM id
      */
     @Listen('selectGOCAM', { target: "body" })
     selectGOCAM(event: CustomEvent) {
         if (event.detail) {
             let data = event.detail;
-            this.loadGoCam(data.id);
+            this.gocamId = data.id; // this trigger the gocamIdChanged below
         }
     }
 
@@ -309,7 +309,6 @@ export class GoCamViz {
         this.error = false;
         this.ghandler = undefined;
 
-
         let url = this.apiUrl + gocamId + "/raw";
         fetch(url)
         .then(data => {
@@ -319,12 +318,12 @@ export class GoCamViz {
             console.error("Error while fetching gocam ", url);
         })
         .then(graph => {
+            // console.log("RAW data: ", graph);
             let ngraph = new noctua_graph();
             ngraph.load_data_basic(graph);
-            console.log("BBOP graph: ", ngraph);
+            // console.log("BBOP graph: ", ngraph);
             this.renderGoCam2(gocamId, ngraph);        
         })
-
     }
 
 
@@ -614,17 +613,6 @@ export class GoCamViz {
      */
     renderGoCam2(gocamId, graph, nest = "no", layout = 'cose-bilkent') {
 
-        // // Prepare graph
-        // graph.unfold();
-        // if (this.graphFold == "evidence") {
-        //     graph.fold_evidence();
-        // } else if (this.graphFold == "editor") {
-        //     graph.fold_go_noctua(this.relations_collapsible)
-        // }
-
-        // let g = graph.clone();
-
-
         this.currentGraph = graph;
         this.ghandler = new GraphHandler(this.currentGraph);
         this.ghandler.setDBXrefs(dbxrefs);
@@ -651,8 +639,8 @@ export class GoCamViz {
                     data: {
                         id : enrichedActivity.nodeId,
                         label : label,
-                        width: Math.max(115, label.length * 8),
-                        textwidth: Math.max(115, label.length * 7),
+                        width: Math.max(115, label.length * 11),
+                        textwidth: Math.max(115, label.length * 9),
                         // link: ??
                         // parent: ??
                         "text-valign": "top",
@@ -706,7 +694,7 @@ export class GoCamViz {
         // viz.innerHTML = "";
         console.log("Displaying GO-CAM ", gocamId, graph);
 
-
+        // Creating the cytoscape component
         this.cy = cytoscape({
             container: viz,
             elements: elements,
@@ -748,6 +736,7 @@ export class GoCamViz {
         this.loading = false;
 
 
+        // Binding mouse events
         this.cy.on("mouseover", evt => this.onMouseOver(evt));
         this.cy.on("mouseout", evt => this.onMouseOut(evt));
         this.cy.on("click", evt => this.onMouseClick(evt));
@@ -942,6 +931,10 @@ export class GoCamViz {
     @Method()
     async setAutoFocus(shouldAF) {
         this.cy.userZoomingEnabled(shouldAF);
+    }
+
+    isAutoFocusing() {
+        return this.cy.userZoomingEnabled;
     }
 
 

@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { GraphHandler } from "./globals/graphHandler";
+import { GraphHandler } from "./globals/graph-handler";
 export namespace Components {
     interface WcGenesPanel {
         /**

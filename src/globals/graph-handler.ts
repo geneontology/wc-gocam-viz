@@ -13,42 +13,42 @@ export class GraphHandler {
     // Reference 2: http://purl.obolibrary.org/obo/ro.obo
     // Note: should dynamically load RO OBO/OWL to get those relations
     RO_CAUSAL = {
-        "RO:0002418" : "causally upstream of or within",
-        "RO:0002411" : "causally upstream of",
-        "RO:0004046" : "causally upstream of or within, negative effect",
-        "RO:0004047" : "causally upstream of or within, positive effect",
-        "RO:0002012" : "occurent part of",
-        "RO:0002010" : "regulates in other organism",
-        "RO:0002305" : "causally upstream of, negative effect",
-        "RO:0002304" : "causally upstream of, positive effect",
-        "RO:0002412" : "immediately causally upstream of",
-        "RO:0002211" : "regulates",
-        "RO:0002414" : "transitively provides input for",
-        "RO:0002212" : "negatively regulates",
-        "RO:0002630" : "directly negatively regulates",
-        "RO:0002408" : "directly inhibits",
-        "RO:0002409" : "indirectly inhibits",
-        "RO:0002213" : "positively regulates",
-        "RO:0002629" : "directly positively regulates",
-        "RO:0002406" : "directly activates",
-        "RO:0002407" : "indirectly activates",
-        "RO:0002413" : "directly provides input for",
-        "RO:0002578" : "directly regulates",
+        "RO:0002418": "causally upstream of or within",
+        "RO:0002411": "causally upstream of",
+        "RO:0004046": "causally upstream of or within, negative effect",
+        "RO:0004047": "causally upstream of or within, positive effect",
+        "RO:0002012": "occurent part of",
+        "RO:0002010": "regulates in other organism",
+        "RO:0002305": "causally upstream of, negative effect",
+        "RO:0002304": "causally upstream of, positive effect",
+        "RO:0002412": "immediately causally upstream of",
+        "RO:0002211": "regulates",
+        "RO:0002414": "transitively provides input for",
+        "RO:0002212": "negatively regulates",
+        "RO:0002630": "directly negatively regulates",
+        "RO:0002408": "directly inhibits",
+        "RO:0002409": "indirectly inhibits",
+        "RO:0002213": "positively regulates",
+        "RO:0002629": "directly positively regulates",
+        "RO:0002406": "directly activates",
+        "RO:0002407": "indirectly activates",
+        "RO:0002413": "directly provides input for",
+        "RO:0002578": "directly regulates",
     }
 
 
     dbxrefs;
     goApiUrl = "https://api.geneontology.org/api/search/entity/autocomplete/";
-    
+
     relations_enabled_by = ['http://purl.obolibrary.org/obo/RO_0002333', 'RO_0002333', 'RO:0002333'];
     relations_collapsible = ["RO:0002333", "BFO:0000066", "RO:0002233", "RO:0002488", "RO:0002234"]; // 2233 : has input ; 2234 : has output
-    relations_nestable = { };
+    relations_nestable = {};
     relations_strippable = {
         "BFO:0000050": true,    // part of
         "BFO:0000051": true,    // has part
         "RO:0002220": true,     // adjacent to
         "BFO:0000066": true,    // occurs in
-        "RO:0012005" : true     // is small molecule activator
+        "RO:0012005": true     // is small molecule activator
     };
 
     bbopGraph = undefined;
@@ -72,7 +72,7 @@ export class GraphHandler {
         this.bbopGraphBackup = graph.clone();
         this.preprocess(graph);
     }
-    
+
     /** 
      * Return the current BBOP graph (low level data)
     */
@@ -84,7 +84,7 @@ export class GraphHandler {
      * Used to restore the BBO graph (low level data) to its original value before manipulation
      */
     resetBBOPGraph() {
-        this.setBBOPGraph(this.bbopGraphBackup);        
+        this.setBBOPGraph(this.bbopGraphBackup);
     }
 
     /** 
@@ -113,9 +113,9 @@ export class GraphHandler {
 
         // Prepare graph
         graph.unfold();
-        if(graphFold == "evidence") {
+        if (graphFold == "evidence") {
             graph.fold_evidence();
-        } else if(graphFold == "editor") {
+        } else if (graphFold == "editor") {
             graph.fold_go_noctua(this.relations_collapsible)
         }
 
@@ -123,7 +123,7 @@ export class GraphHandler {
         // Get a list of all the singletons we start with.
         var all_starting_singletons_by_id = {};
         var sings = graph.get_singleton_nodes();
-        for(let sing of sings) {
+        for (let sing of sings) {
             all_starting_singletons_by_id[sing.id()] = true;
         }
 
@@ -131,14 +131,14 @@ export class GraphHandler {
         // Remove all of the undesireable rels.
         var parent_trap = {};
         var note_sink = {}; // keep the reverse lookup info of parent_trap
-        if( nest && nest === 'yes' ){
+        if (nest && nest === 'yes') {
             // console.log('adding nestable rels');
             this.relations_nestable["BFO:0000050"] = true; // part of
         }
 
-        for(let e of graph.all_edges()) {
-            if(this.relations_nestable.hasOwnProperty(e.predicate_id())) {
-                if(!parent_trap.hasOwnProperty(e.subject_id())) {
+        for (let e of graph.all_edges()) {
+            if (this.relations_nestable.hasOwnProperty(e.predicate_id())) {
+                if (!parent_trap.hasOwnProperty(e.subject_id())) {
                     parent_trap[e.subject_id()] = [];
                 }
                 parent_trap[e.subject_id()].push(e.object_id());
@@ -157,23 +157,23 @@ export class GraphHandler {
         // remove it. In "nest" mode, only remove ones that are not
         // going to be nested.
         var eings = graph.get_singleton_nodes();
-        for(let eing of eings) {
-            if(!all_starting_singletons_by_id.hasOwnProperty(eing.id())) {
-                if( nest && nest === 'yes' && note_sink[eing.id()] ){
+        for (let eing of eings) {
+            if (!all_starting_singletons_by_id.hasOwnProperty(eing.id())) {
+                if (nest && nest === 'yes' && note_sink[eing.id()]) {
                     // pass
-                }else{
+                } else {
                     graph.remove_node(eing.id());
                 }
             }
         };
 
         let cat_set = new Set();
-        for(let enode of this.bbopGraph.all_nodes()) {
-            for(let in_type of enode.types()) {
+        for (let enode of this.bbopGraph.all_nodes()) {
+            for (let in_type of enode.types()) {
                 cat_set.add(in_type.category());
             }
         }
-        this.categories = Array.from(cat_set);    
+        this.categories = Array.from(cat_set);
     }
 
 
@@ -185,12 +185,12 @@ export class GraphHandler {
         let nodes = this.bbopGraph.all_nodes();
         let activities = nodes.filter(node => node.root_types().some(type => type.class_id() == "GO:0003674"))
         let betterActivities = [];
-        for(let activity of activities) {
+        for (let activity of activities) {
             betterActivities.push(this.getActivity(activity.id()));
         }
         return betterActivities;
     }
-    
+
     /**
      * Return a GO-CAM activity object
      * @param nodeId gocam node id e.g. gomodel:568b0f9600000284/57ec3a7e00000119
@@ -198,14 +198,14 @@ export class GraphHandler {
     getActivity(nodeId) {
 
         // If no id provided, no activity returned
-        if(!nodeId) { console.error("no id provided"); return undefined; }
-    
+        if (!nodeId) { console.error("no id provided"); return undefined; }
+
         // If id is not from gomodel space (hardcoded bad), no activity returned
-        if(nodeId.substring(0, 8) != "gomodel:") { console.error("wrong id provided"); return undefined; }
-    
+        if (nodeId.substring(0, 8) != "gomodel:") { console.error("wrong id provided"); return undefined; }
+
         // if not couldn't be retrieved, no activity returned
         let node = this.bbopGraph.get_node(nodeId);
-        if(!node) { console.error("could not get bbop graph node ", nodeId); return undefined; }
+        if (!node) { console.error("could not get bbop graph node ", nodeId); return undefined; }
 
 
         // nodes connected to this activity
@@ -217,62 +217,62 @@ export class GraphHandler {
         let standardTypes = node.types();
         let inferredTypes = node.get_unique_inferred_types();
         let geneProducts = []
-        let biocontext = { };
+        let biocontext = {};
         let hook_list = []
-        if(subgraph) {
+        if (subgraph) {
             let connectedNodes = subgraph.all_nodes();
-            for(let connected of connectedNodes) {
+            for (let connected of connectedNodes) {
                 // don't treat if same node
-                if(node.id() == connected.id()) { continue; }
-    
+                if (node.id() == connected.id()) { continue; }
+
                 let edges = subgraph.get_edges(node.id(), connected.id());
-                for(let edge of edges) {
+                for (let edge of edges) {
 
                     // we are only interested in edges with enabled_by relation
-                    if(!this.relations_enabled_by.includes(edge.predicate_id())) { continue }
-    
+                    if (!this.relations_enabled_by.includes(edge.predicate_id())) { continue }
+
                     geneProducts.push({
-                        id : this.nodeIDs(connected)[0],
+                        id: this.nodeIDs(connected)[0],
                         label: this.nodeLabels(connected)[0],
-                        evidences : this.nodeEvidences(edge)
+                        evidences: this.nodeEvidences(edge)
                     });
                 }
             }
-    
+
             // Do it both ways--upstream and downstream.
             this._folded_stack_gather(node, subgraph, 'standard', hook_list, biocontext);
             this._folded_stack_gather(node, subgraph, 'reverse', hook_list, biocontext);
             // convert to array
-            for(let key of Object.keys(biocontext)) {
+            for (let key of Object.keys(biocontext)) {
                 biocontext[key] = Array.from(biocontext[key]);
             }
-        }    
-        
-        
+        }
+
+
         // the graph must NOT be processed to remove part of as it was before
         let partOf = [];
         let edges = this.bbopGraph.get_edges_by_subject(nodeId);
         // console.log("ARE YOU GONNA TEST THIS ? ", edges);
-        for(let edge of edges) {
-            if(edge.predicate_id() == this.BFO_PART_OF) {
+        for (let edge of edges) {
+            if (edge.predicate_id() == this.BFO_PART_OF) {
                 let object = this.bbopGraph.get_node(edge.object_id());
                 // if yes, we are locating a activity part of BP
-                if(object.root_types().some(elt => elt.class_id() == "GO:0008150")) {
+                if (object.root_types().some(elt => elt.class_id() == "GO:0008150")) {
 
                     let keys = Object.keys(object._id2type)
-                    for(let key of keys) {
+                    for (let key of keys) {
                         let node = object._id2type[key];
 
                         // console.log("id2type: ", node);
-                        if(node.class_id() == "GO:0008150") { continue; }
-                    
+                        if (node.class_id() == "GO:0008150") { continue; }
+
                         partOf.push({
-                            id : node.class_id(),
-                            label : node.class_label(),
+                            id: node.class_id(),
+                            label: node.class_label(),
                             evidences: this.nodeEvidences(edge)
                         })
-                        
-                    }                    
+
+                    }
                 }
             }
         }
@@ -285,10 +285,10 @@ export class GraphHandler {
         // }
 
         let annotations = node.annotations();
-        let annotationMap = { };
-        for(let ann of annotations) {
+        let annotationMap = {};
+        for (let ann of annotations) {
             let cs = new Set();
-            if(ann.key() in annotationMap) {
+            if (ann.key() in annotationMap) {
                 cs = annotationMap[ann.key()]
             } else {
                 annotationMap[ann.key()] = cs;
@@ -296,29 +296,29 @@ export class GraphHandler {
             cs.add(ann.value());
         }
         // convert to array
-        for(let key of Object.keys(annotationMap)) {
+        for (let key of Object.keys(annotationMap)) {
             annotationMap[key] = Array.from(annotationMap[key]);
         }
         // console.log("node annotations: ", annotationMap);        
-        
+
         return {
-            nodeId : nodeId,
-            ids : standardTypes.map(elt => elt.class_id()),
-            labels : standardTypes.map(elt => elt.class_label()),
-            partOf : partOf,
-            biocontexts : biocontext,
-            geneProducts : geneProducts,
-            contributors : "contributor" in annotationMap ? annotationMap["contributor"] : [],
-            providedBy : "providedBy" in annotationMap ? annotationMap["providedBy"] : [],
-            date : "date" in annotationMap ? annotationMap["date"][0] : "N/A",
-            raw : {
-                node : node,
-                stdTypes : standardTypes,
-                infTypes : inferredTypes,
-                annotations : annotationMap,
+            nodeId: nodeId,
+            ids: standardTypes.map(elt => elt.class_id()),
+            labels: standardTypes.map(elt => elt.class_label()),
+            partOf: partOf,
+            biocontexts: biocontext,
+            geneProducts: geneProducts,
+            contributors: "contributor" in annotationMap ? annotationMap["contributor"] : [],
+            providedBy: "providedBy" in annotationMap ? annotationMap["providedBy"] : [],
+            date: "date" in annotationMap ? annotationMap["date"][0] : "N/A",
+            raw: {
+                node: node,
+                stdTypes: standardTypes,
+                infTypes: inferredTypes,
+                annotations: annotationMap,
             }
         }
-    }    
+    }
 
     /**
      * This will return a list of activities enriched with additional meta data, such as gene taxon and URLs
@@ -327,7 +327,7 @@ export class GraphHandler {
      */
     async enrichActivities(activities) {
         let enriched = [];
-        for(let activity of activities) {
+        for (let activity of activities) {
             enriched.push(this.enrichActivity(activity));
         }
         return Promise.all(enriched);
@@ -336,17 +336,17 @@ export class GraphHandler {
     processesKey(array) {
         let key = array.map(elt => elt.id).join(",");
         // if not part of BP, state "Other processes"
-        if(key == "") { key = "Other processes" }
+        if (key == "") { key = "Other processes" }
         return key
     }
 
     groupActivitiesByProcess(enrichedActivities) {
         let map = new Map();
-        for(let enr of enrichedActivities) {
+        for (let enr of enrichedActivities) {
             let key = this.processesKey(enr.partOf);
             // console.log("activity: ", enr , ": process: ", key);
             let acts = [];
-            if(map.has(key)) {
+            if (map.has(key)) {
                 acts = map.get(key);
             } else {
                 map.set(key, acts);
@@ -357,16 +357,16 @@ export class GraphHandler {
         let groupedActivities = [];
         map.forEach((val, process) => {
             let item = {
-                id : process.split(","),
-                url: (process.split(",") != "" && this.dbxrefs) ? process.split(",").map(elt => { let db = elt.split(":")[0]; let id = elt.split(":")[1]; return this.dbxrefs.getURL(db, undefined, id) } ) : "#",
-                label : val[0].partOf.map(elt => elt.label) == "" ? ["others processes"] : val[0].partOf.map(elt => elt.label),
-                activities : val
+                id: process.split(","),
+                url: (process.split(",") != "" && this.dbxrefs) ? process.split(",").map(elt => { let db = elt.split(":")[0]; let id = elt.split(":")[1]; return this.dbxrefs.getURL(db, undefined, id) }) : "#",
+                label: val[0].partOf.map(elt => elt.label) == "" ? ["others processes"] : val[0].partOf.map(elt => elt.label),
+                activities: val
             };
             groupedActivities.push(item);
         })
         return groupedActivities;
     }
-    
+
 
     /**
      * This will return an activity enriched with additional meta data, such as gene taxon and URLs
@@ -375,16 +375,16 @@ export class GraphHandler {
      */
     async enrichActivity(activity) {
 
-        for(let gp of activity.geneProducts) {
-            let metas = await this.annotate(gp.id);
+        for (let gp of activity.geneProducts) {
+            let metas = null;//await this.annotate(gp.id);
 
             // if no meta retrieved, continue
-            if(!metas) { continue; }
+            if (!metas) { continue; }
 
             // add hyperlink to gene
             gp.url = metas.url;
-            
-            if(metas.taxon) {
+
+            if (metas.taxon) {
                 let db = metas.taxon.split(":")[0];
                 db = "taxon" // temp fix
                 let id = metas.taxon.split(":")[1];
@@ -395,7 +395,7 @@ export class GraphHandler {
         }
 
         activity.urls = []
-        for(let goid of activity.ids) {
+        for (let goid of activity.ids) {
             let db = goid.split(":")[0];
             let id = goid.split(":")[1];
             activity.urls.push(this.dbxrefs.getURL(db, undefined, id));
@@ -413,12 +413,12 @@ export class GraphHandler {
     }
 
     getCausalActivities(activity, enrichedActivities) {
-        let connected = { };
+        let connected = {};
         let edges = this.bbopGraph.get_edges_by_subject(activity.nodeId);
-        for(let edge of edges) {
+        for (let edge of edges) {
 
             // console.log("edge: ", edge);
-            if(!this.RO_CAUSAL.hasOwnProperty(edge.predicate_id())) {
+            if (!this.RO_CAUSAL.hasOwnProperty(edge.predicate_id())) {
                 console.log("is not a causal");
                 continue;
             }
@@ -428,40 +428,40 @@ export class GraphHandler {
 
             let keys = Object.keys(object._id2type)
             let isActivity = false;
-            for(let key of keys) {
+            for (let key of keys) {
                 let node = object._id2type[key];
 
-                if(node.class_id() == "GO:0003674") { 
+                if (node.class_id() == "GO:0003674") {
                     isActivity = true;
                     break;
-                 }
-                            
+                }
+
             }
 
-            if(isActivity) {
+            if (isActivity) {
                 let relid = edge.predicate_id();
                 let activities = [];
-                if(connected.hasOwnProperty(relid)) {
+                if (connected.hasOwnProperty(relid)) {
                     activities = connected[relid];
                 } else {
                     connected[relid] = activities;
                 }
 
                 activities.push({
-                    relationId : edge.id(),
-                    relationLabel : edge._predicate_label,
-                    relationURL : this.dbxrefs.getURL(relid.split(":")[0], undefined, relid.split(":")[1]),
-                    activity : this.getActivityById(enrichedActivities, object.id())
+                    relationId: edge.id(),
+                    relationLabel: edge._predicate_label,
+                    relationURL: this.dbxrefs.getURL(relid.split(":")[0], undefined, relid.split(":")[1]),
+                    activity: this.getActivityById(enrichedActivities, object.id())
                 });
             }
         }
-        
+
         return connected;
     }
 
     getActivityById(enrichedActivities, nodeId) {
-        for(let ea of enrichedActivities) {
-            if(ea.nodeId == nodeId) {
+        for (let ea of enrichedActivities) {
+            if (ea.nodeId == nodeId) {
                 return ea;
             }
         }
@@ -479,34 +479,34 @@ export class GraphHandler {
      * Return the URL, taxon and taxon URL for a gene CURIE
      */
     async annotate(id) {
-        if(!id) {
+        if (!id) {
             console.error("asked to annotated null id: ", id);
             return "";
         }
-        if(id.includes(":")) {
+        if (id.includes(":")) {
             let category = "category=gene&";
-            if(id.includes("GO:"))
+            if (id.includes("GO:"))
                 category = ""
             let url = this.goApiUrl + id + "?" + category + "rows=1";
             return await fetch(url)
-            .then(async function(data) { return data.json()})
-            .then(data => {
-                let doc = data.docs[0];
-                try {
-                    let db = doc.id.split(":")[0];
-                    let dbid = doc.id.split(":")[1];
+                .then(async function (data) { return data.json() })
+                .then(data => {
+                    let doc = data.docs[0];
+                    try {
+                        let db = doc.id.split(":")[0];
+                        let dbid = doc.id.split(":")[1];
 
-                    // Temporary fix for a long standing issue of MGI:MGI: curie
-                    if(doc.id.includes("MGI:") && !doc.id.includes("MGI:MGI:")) {
-                        dbid = "MGI:" + dbid;
+                        // Temporary fix for a long standing issue of MGI:MGI: curie
+                        if (doc.id.includes("MGI:") && !doc.id.includes("MGI:MGI:")) {
+                            dbid = "MGI:" + dbid;
+                        }
+
+                        doc["url"] = this.dbxrefs.getURL(db, undefined, dbid);
+                    } catch (error) {
+                        console.error("asked to annotate ", id, " but doc ", doc, " does not have an id, can not resolve URL - data is: ", data);
                     }
-
-                    doc["url"] = this.dbxrefs.getURL(db, undefined, dbid);
-                } catch(error) {
-                    console.error("asked to annotate ", id , " but doc ", doc , " does not have an id, can not resolve URL - data is: ", data);
-                }
-                return doc
-            })
+                    return doc
+                })
         }
     }
 
@@ -519,33 +519,33 @@ export class GraphHandler {
 
     nodeEvidences(edge) {
         // should always be there - should always have evidence, but just in case
-        if(!edge.referenced_subgraphs()) {
-            console.warn("edge ", edge , " does not have evidence !");
+        if (!edge.referenced_subgraphs()) {
+            console.warn("edge ", edge, " does not have evidence !");
             return [];
         }
-        
+
         let evidences = [];
-        for(let rfs of edge.referenced_subgraphs()) {
+        for (let rfs of edge.referenced_subgraphs()) {
             let keys = Object.keys(rfs._nodes);
-            for(let key of keys) {
+            for (let key of keys) {
                 let node = rfs._nodes[key];
 
                 // normally 1 source, 1 with, multiple sources
-                let evidence = { source: "", url : "", with: "", evidences : [] }
-                for(let ann of node.annotations()) {
-                    if(ann._properties.key == "source") {
+                let evidence = { source: "", url: "", with: "", evidences: [] }
+                for (let ann of node.annotations()) {
+                    if (ann._properties.key == "source") {
                         evidence.source = ann._properties.value;
                         evidence.url = this.dbxrefs.getURL(evidence.source.split(":")[0], undefined, evidence.source.split(":")[1]);
-                    } else if(ann._properties.key == "with") {
+                    } else if (ann._properties.key == "with") {
                         evidence.with = ann._properties.value;
                     }
                 }
 
                 let evkeys = Object.keys(node._id2type);
-                for(let evkey of evkeys) {
+                for (let evkey of evkeys) {
                     let ev = node._id2type[evkey];
-                    if(ev.class_id() != this.EVIDENCE_PARENT) {
-                        evidence.evidences.push( { id : ev.class_id() , label : ev.class_label() });
+                    if (ev.class_id() != this.EVIDENCE_PARENT) {
+                        evidence.evidences.push({ id: ev.class_id(), label: ev.class_label() });
                     }
                 }
                 evidences.push(evidence);
@@ -554,18 +554,18 @@ export class GraphHandler {
         return evidences;
     }
 
-    nodeIDs(n){
+    nodeIDs(n) {
         var retlist = [];
         var bin = {};
-        for(let in_type of n.types()) {
+        for (let in_type of n.types()) {
             var cat = in_type.category();
-            if( ! bin[cat] ) { bin[cat] = []; }
+            if (!bin[cat]) { bin[cat] = []; }
             bin[cat].push(in_type);
         }
-        for(let cat_id of this.categories) {
+        for (let cat_id of this.categories) {
             var accumulated_types = bin[cat_id];
             var cell_cache = [];
-            for(let atype of accumulated_types) {
+            for (let atype of accumulated_types) {
                 var tt = atype.class_id();
                 cell_cache.push(tt);
             }
@@ -574,23 +574,23 @@ export class GraphHandler {
         return retlist;
     }
 
-    nodeLabels(n){
+    nodeLabels(n) {
         var retlist = [];
         var bin = {};
-        for(let in_type of n.types()) {
+        for (let in_type of n.types()) {
             var cat = in_type.category();
-            if( ! bin[cat] ) { bin[cat] = []; }
+            if (!bin[cat]) { bin[cat] = []; }
             bin[cat].push(in_type);
         }
-        for(let cat_id of this.categories) {
+        for (let cat_id of this.categories) {
             var accumulated_types = bin[cat_id];
             var cell_cache = [];
-            for(let atype of accumulated_types) {
+            for (let atype of accumulated_types) {
                 var tt = atype.class_label();
                 cell_cache.push(tt);
             }
             let val = cell_cache.join("\n");
-            if(val.includes(" ")) {
+            if (val.includes(" ")) {
                 let splits = val.split(" ");
                 splits.pop();  // remove the species
                 val = splits.join("\n");
@@ -600,19 +600,19 @@ export class GraphHandler {
         return retlist;
     }
 
-    nodeIDLabels(n){
+    nodeIDLabels(n) {
         var retlist = [];
         var bin = {};
-        for(let in_type of n.types()) {
+        for (let in_type of n.types()) {
             var cat = in_type.category();
-            if( ! bin[cat] ) { bin[cat] = []; }
+            if (!bin[cat]) { bin[cat] = []; }
             bin[cat].push(in_type);
         }
-        for(let cat_id of this.categories) {
+        for (let cat_id of this.categories) {
             var accumulated_types = bin[cat_id];
             var ids = [];
             var labels = [];
-            for(let atype of accumulated_types) {
+            for (let atype of accumulated_types) {
                 ids.push(atype.class_id());
                 labels.push(atype.class_label());
             }
@@ -629,14 +629,14 @@ export class GraphHandler {
 
         // First, get the parent/child sub-nodes.
         var x_edges = [];
-        if( direction === 'standard' ) {
+        if (direction === 'standard') {
             x_edges = subgraph.get_parent_edges(enode.id());
-        }else{
+        } else {
             x_edges = subgraph.get_child_edges(enode.id());
         }
-        
+
         // for a specific aspect of the activity
-        for(let x_edge of x_edges) {
+        for (let x_edge of x_edges) {
             // Edge info.
             var rel = x_edge.relation() || 'n/a';
             // TODO var rel_color = aid.color(rel);
@@ -644,28 +644,28 @@ export class GraphHandler {
             var rel_color = "red";
             var rel_readable = "readable_var";
             // If context aid doesn't work, see if it comes with a label.
-            if( rel_readable === rel && typeof(x_edge.label) === 'function'){
+            if (rel_readable === rel && typeof (x_edge.label) === 'function') {
                 var label_rn = x_edge.label();
-                if( label_rn !== rel ){
-                rel = label_rn; // use label
+                if (label_rn !== rel) {
+                    rel = label_rn; // use label
                 }
-            }else{
+            } else {
                 rel = rel_readable; // use context
             }
 
             // collecting all the evidences for that aspect.... (seriously this business logic should be on the server side to avoid those kind of smelly/spaghetti code)
-            let gathered_evidences = { "pmid": [], "eco": [], "label": [], "url" : [] }
+            let gathered_evidences = { "pmid": [], "eco": [], "label": [], "url": [] }
             var refsubgraphs = x_edge.referenced_subgraphs();
-            for(var refsubgraph of refsubgraphs) {
+            for (var refsubgraph of refsubgraphs) {
                 var refevnodes = refsubgraph.get_nodes()
-                for(let nodeid of Object.keys(refevnodes)) {
+                for (let nodeid of Object.keys(refevnodes)) {
                     let node = refsubgraph.get_node(nodeid);
                     let anns = node.annotations();
-                    for(let ann of anns) {
-                        if(ann._properties["key"] == "source") {
+                    for (let ann of anns) {
+                        if (ann._properties["key"] == "source") {
                             let id = ann._properties["value"];
                             gathered_evidences["pmid"].push(id);
-                            if(id && id.includes(":")) {
+                            if (id && id.includes(":")) {
                                 gathered_evidences["url"].push(this.dbxrefs.getURL(id.split(":")[0], undefined, id.split(":")[1]))
                             } else {
                                 // could not resolve
@@ -674,7 +674,7 @@ export class GraphHandler {
                         }
                     }
                     let types = node.types();
-                    for(let type of types) {
+                    for (let type of types) {
                         gathered_evidences["eco"].push(type.class_id());
                         gathered_evidences["label"].push(type.class_label());
                     }
@@ -685,21 +685,21 @@ export class GraphHandler {
 
             // Get node.
             var x_ent_id = null;
-            if( direction === 'standard' ){
+            if (direction === 'standard') {
                 x_ent_id = x_edge.object_id();
-            }else{
+            } else {
                 x_ent_id = x_edge.subject_id();
             }
 
             var x_node = subgraph.get_node(x_ent_id);
             // console.log("CENTRAL NODE: ", x_ent_id, x_node);
             // Try and extract proof of evidence.
-            if( x_node ) {
+            if (x_node) {
                 var ev_node_anns = x_node.get_annotations_by_key('evidence');
                 // console.log("utils : node annotation: ", ev_node_anns);
 
                 // Add the edge/node combos to the table.
-                for(let x_type of x_node.types()) {
+                for (let x_type of x_node.types()) {
                     //
                     var elt_id = this.uuid();
                     var edge_id = x_edge.id();
@@ -709,21 +709,21 @@ export class GraphHandler {
                     let relid = x_edge.relation();
 
                     let cs = new Set();
-                    if(relid in biocontext) {
+                    if (relid in biocontext) {
                         cs = biocontext[relid];
                     } else {
                         biocontext[relid] = cs;
                     }
-                    
+
                     cs.add({
                         relationId: edge_id,
-                        relationLabel : edge_label,
-                        relationURL : this.dbxrefs.getURL(relid.split(":")[0], undefined, relid.split(":")[1]),
+                        relationLabel: edge_label,
+                        relationURL: this.dbxrefs.getURL(relid.split(":")[0], undefined, relid.split(":")[1]),
                         evidences: gathered_evidences,
-                        nodeId : elt_id,
-                        termId : x_type.class_id(),
-                        termLabel : x_type.class_label(),
-                        termURL : this.dbxrefs.getURL(x_type.class_id().split(":")[0], undefined, x_type.class_id().split(":")[1]),
+                        nodeId: elt_id,
+                        termId: x_type.class_id(),
+                        termLabel: x_type.class_label(),
+                        termURL: this.dbxrefs.getURL(x_type.class_id().split(":")[0], undefined, x_type.class_id().split(":")[1]),
                     });
 
                     // In this case (which should be the only possible
@@ -731,12 +731,12 @@ export class GraphHandler {
                     // ID.
                     // _add_table_row(x_type, rel_color, rel + '(',
                     //     ')<sup id="'+elt_id+'"><span class="bbop-noctua-embedded-evidence-symbol-with">E</button></sup>');
-                
+
                 }
             }
 
         }
-    }    
+    }
 
 
     /**
@@ -746,16 +746,16 @@ export class GraphHandler {
      *
      * @returns {string} string
      */
-    uuid(){
+    uuid() {
 
         // Replace x (and y) in string.
         function replacer(c) {
-            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         }
         var target_str = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
         return target_str.replace(/[xy]/g, replacer);
-    }    
+    }
 
     glyph(relation) {
         switch (relation) {
@@ -787,22 +787,22 @@ export class GraphHandler {
                 return { lineStyle: "dashed", glyph: null, label: "causally upstream of", color: '#483D8B' };
             case "RO:0002418":
                 return { lineStyle: "dashed", glyph: null, label: "causally upstream of or within", color: '#483D8B' };
-    
+
             case "RO:0002408":
                 return { lineStyle: "solid", glyph: "tee", label: "directly inhibits", color: '#FF0000' };
             case "RO:0002406":
                 return { lineStyle: "solid", glyph: "triangle", label: "directly activates", color: '#008000' };
-    
+
             case "RO:0002305":
                 return { lineStyle: "dashed", glyph: null, label: "causally upstream of, negative effect", color: '#FF0000' };
             case "RO:0004046":
                 return { lineStyle: "dashed", glyph: null, label: "causally upstream of or within, negative effect", color: '#FF0000' };
-    
+
             case "RO:0002304":
                 return { lineStyle: "dashed", glyph: null, label: "causally upstream of, positive effect", color: '#008000' };
             case "RO:0004047":
                 return { lineStyle: "dashed", glyph: null, label: "causally upstream of or within, positive effect", color: '#008000' };
-    
+
             case "annotation":
                 return { lineStyle: "solid", glyph: "diamond", label: "annotation", color: '#483D8B' };
             case "instance_of":

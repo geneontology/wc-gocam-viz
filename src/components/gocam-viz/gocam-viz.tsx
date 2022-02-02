@@ -101,11 +101,14 @@ export class GoCamViz {
      */
     apiUrl = "https://api.geneontology.xyz/gocam/";
 
-    devApiUrl = 'http://barista-dev.berkeleybop.org/search/stored?id=';
+    devBaristaUrl = 'http://barista-dev.berkeleybop.org/search/stored?id=';
+
+    productionBaristaUrl = 'http://barista.berkeleybop.org/search/stored?id=';
 
     noctuaGraphURL = {
         prod: "http://noctua.geneontology.org/editor/graph/",
-        dev: "http://noctua-dev.berkeleybop.org/editor/graph/"
+        dev: "http://noctua-dev.berkeleybop.org/editor/graph/",
+        release: "http://noctua.geneontology.org/editor/graph/",
     };
 
     /**
@@ -113,7 +116,7 @@ export class GoCamViz {
      * prod = http://barista.berkeleybop.org
      * dev  = http://barista-dev.berkeleybop.org
      */
-    @Prop() repository: string = "prod";
+    @Prop() repository: string = 'release';
 
     /**
      * This state is updated whenever loading a new graph, in order to trigger a new rendering of genes-panel
@@ -319,16 +322,22 @@ export class GoCamViz {
         this.loading = true;
         this.error = false;
         this.ghandler = undefined;
-        let url = (this.repository === 'prod')
-            ? this.apiUrl + gocamId + "/raw"
-            : this.devApiUrl + gocamId
+        let url = ''
+
+        if (this.repository === 'prod') {
+            url = this.productionBaristaUrl + gocamId;
+        } else if (this.repository === 'dev') {
+            url = this.devBaristaUrl + gocamId;
+        } else if (this.repository === 'release') {
+            url = this.apiUrl + gocamId + "/raw"
+        }
 
         fetch(url).then(data => {
             return data.json();
         }).catch(err => {
             console.error("Error while fetching gocam ", url);
         }).then(graph => {
-            let model = (this.repository === 'prod') ? graph : graph.activeModel;
+            let model = (this.repository === 'release') ? graph : graph.activeModel;
             if (model) {
                 let ngraph = new noctua_graph();
                 ngraph.load_data_basic(model);

@@ -11,7 +11,7 @@ import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globa
 import * as dbxrefs from "@geneontology/dbxrefs";
 
 import '@geneontology/wc-light-modal';
-import { GraphHandler } from '../../globals/graphHandler';
+import { GraphHandler } from '../../globals/graph-handler';
 import { GenesPanel } from '../genes-panel/genes-panel';
 
 
@@ -65,7 +65,7 @@ export class GoCamViz {
     /**
      * Show/hide isolated activity (not connected through causals)
      */
-    @Prop() showIsolatedActivity: boolean = false;    
+    @Prop() showIsolatedActivity: boolean = false;
 
     /**
      * Show/hide default legend
@@ -101,9 +101,14 @@ export class GoCamViz {
      */
     apiUrl = "https://api.geneontology.xyz/gocam/";
 
+    devBaristaUrl = 'http://barista-dev.berkeleybop.org/search/stored?id=';
+
+    productionBaristaUrl = 'http://barista.berkeleybop.org/search/stored?id=';
+
     noctuaGraphURL = {
         prod: "http://noctua.geneontology.org/editor/graph/",
-        dev: "http://noctua-dev.berkeleybop.org/editor/graph/"
+        dev: "http://noctua-dev.berkeleybop.org/editor/graph/",
+        release: "http://noctua.geneontology.org/editor/graph/",
     };
 
     /**
@@ -111,12 +116,21 @@ export class GoCamViz {
      * prod = http://barista.berkeleybop.org
      * dev  = http://barista-dev.berkeleybop.org
      */
-    @Prop() repository: string = "prod";
+    @Prop() repository: string = 'release';
 
     /**
      * This state is updated whenever loading a new graph, in order to trigger a new rendering of genes-panel
      */
     @State() ghandler: GraphHandler;
+
+    @Watch('repository')
+    changeRepository(newValue, oldValue) {
+        const isNotString = typeof newValue !== 'string';
+        if (isNotString) { throw new Error('repository: not string') };
+        if (newValue !== oldValue) {
+            this.repository = newValue
+        }
+    }
 
 
     // Variables for handling click and mouse over
@@ -308,301 +322,29 @@ export class GoCamViz {
         this.loading = true;
         this.error = false;
         this.ghandler = undefined;
+        let url = ''
 
-        let url = this.apiUrl + gocamId + "/raw";
-        fetch(url)
-        .then(data => {
+        if (this.repository === 'prod') {
+            url = this.productionBaristaUrl + gocamId;
+        } else if (this.repository === 'dev') {
+            url = this.devBaristaUrl + gocamId;
+        } else if (this.repository === 'release') {
+            url = this.apiUrl + gocamId + "/raw"
+        }
+
+        fetch(url).then(data => {
             return data.json();
-        })
-        .catch(err => {
+        }).catch(err => {
             console.error("Error while fetching gocam ", url);
-        })
-        .then(graph => {
-            // console.log("RAW data: ", graph);
-            let ngraph = new noctua_graph();
-            ngraph.load_data_basic(graph);
-            // console.log("BBOP graph: ", ngraph);
-            this.renderGoCam2(gocamId, ngraph);        
+        }).then(graph => {
+            let model = (this.repository === 'release') ? graph : graph.activeModel;
+            if (model) {
+                let ngraph = new noctua_graph();
+                ngraph.load_data_basic(model);
+                this.renderGoCam(gocamId, ngraph);
+            }
         })
     }
-
-
-    /**
-     * @deprecated
-     * Actual method to render the GO-CAM graph
-     * TODO: deprecate and switch to renderGOCam2
-     * @param gocamId valid gocam id (e.g. gomodel:xxx)
-     * @param graph bbop graph
-     * @param nest nesting strategy (default = "no")
-     */
-    renderGoCam(gocamId, graph, nest = "no") {
-
-        // Prepare graph
-        graph.unfold();
-        if (this.graphFold == "evidence") {
-            graph.fold_evidence();
-        } else if (this.graphFold == "editor") {
-            graph.fold_go_noctua(this.relations_collapsible)
-        }
-
-        let g = graph.clone();
-
-        // Get a list of all the singletons we start with.
-        var all_starting_singletons_by_id = {};
-        var sings = g.get_singleton_nodes();
-        for (let sing of sings) {
-            all_starting_singletons_by_id[sing.id()] = true;
-        }
-
-
-        // Remove all of the undesireable rels.
-        var parent_trap = {};
-        var note_sink = {}; // keep the reverse lookup info of parent_trap
-        if (nest && nest === 'yes') {
-            // console.log('adding nestable rels');
-            this.relations_nestable["BFO:0000050"] = true; // part of
-        }
-
-        for (let e of g.all_edges()) {
-            if (this.relations_nestable.hasOwnProperty(e.predicate_id())) {
-                if (!parent_trap.hasOwnProperty(e.subject_id())) {
-                    parent_trap[e.subject_id()] = [];
-                }
-                parent_trap[e.subject_id()].push(e.object_id());
-                // Note the object for later checking.
-                note_sink[e.object_id()] = true;
-            }
-            if (this.relations_strippable.hasOwnProperty(e.predicate_id())) {
-                g.remove_edge(e.subject_id(),
-                    e.object_id(),
-                    e.predicate_id());
-            }
-        }
-
-
-        // If it wasn't a singleton before we started, but is one now,
-        // remove it. In "nest" mode, only remove ones that are not
-        // going to be nested.
-        var eings = g.get_singleton_nodes();
-        for (let eing of eings) {
-            if (!all_starting_singletons_by_id.hasOwnProperty(eing.id())) {
-                if (nest && nest === 'yes' && note_sink[eing.id()]) {
-                    // pass
-                } else {
-                    g.remove_node(eing.id());
-                }
-            }
-        };
-
-
-        let cat_set = new Set();
-        for (let enode of g.all_nodes()) {
-            for (let in_type of enode.types()) {
-                cat_set.add(in_type.category());
-            }
-        }
-        let cat_list = Array.from(cat_set);
-
-
-        let elements = [];
-        for (let node of g.all_nodes()) {
-
-            let nid = node.id();
-
-            let nlink = null;
-
-            // Where we'll assemble the label.
-            var table_row = [];
-
-            // Collect rdfs:label if extant.
-            var anns = node.annotations();
-            var rdfs_label = null;
-            if (anns.length !== 0) {
-                for (let ann of anns) {
-                    // Capture rdfs:label annotation for visual override
-                    // if extant. Allow clobber of last.
-                    if (ann.key() === 'rdfs:label') {
-                        // console.log(node , " rdfs:label: ", ann.value());
-                        rdfs_label = ann.value();
-                    }
-                }
-            }
-            if (rdfs_label) {
-                // table_row.push('<<' + rdfs_label + '>>');
-                // table_row.push(rdfs_label);
-            }
-
-
-            // First, extract any GP info (or has_input, depending on
-            // rel), if it's there.  If it is, it is the exclusive
-            // displayed info.
-            let gp_identified_p = false;
-            let has_input_collection = [];
-            let sub = node.subgraph();
-            if (sub) {
-                for (let snode of sub.all_nodes()) {
-                    let snid = snode.id();
-
-                    if (nid != snid) {
-                        let edges = sub.get_edges(nid, snid);
-
-                        for (let edge of edges) {
-
-                            // If enabled by relation is present, use primary that node label
-                            if (this.relations_enabled_by.includes(edge.predicate_id())) {
-
-                                let gpn = sub.get_node(snid);
-
-                                let gp_labels = _node_labels(gpn, cat_list);
-                                for (let gpl of gp_labels) {
-                                    let last = gpl.lastIndexOf(" ");
-                                    if (last > 0) { gpl = gpl.substring(0, last); }
-                                    // console.log("GP: ", gpl, gpn);
-                                    if (this.showGeneProduct) {
-                                        table_row.push(gpl);
-                                        nlink = gpn.types()[0]
-                                    }
-                                    gp_identified_p = true;
-                                }
-
-                                // If we consider has input relationship, look for node label here too
-                            } else if (this.showHasInput && edge.predicate_id() == "RO:0002233") {
-                                let hin = sub.get_node(snid);
-
-                                let hi_labels = _node_labels(hin, cat_list);
-                                for (let hil of hi_labels) {
-                                    let last = hil.lastIndexOf(" ");
-                                    if (last > 0) { hil = hil.substring(0, last); }
-                                    has_input_collection.push(hil);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-
-            let bgc = "white";
-            // If no GP has been identified, then add any label from that node
-            if (!gp_identified_p) {
-                for (let nl of _node_labels(node, cat_list)) {
-                    if (this.showActivity) {
-                        table_row.push(nl);
-                        // console.log("activity: ", nl);
-                        // table_row.push("[" + nl + "]");
-                    } else {
-                        table_row.push(nl);
-                    }
-                }
-
-            } else if (this.showActivity) {
-                for (let nl of _node_labels(node, cat_list)) {
-                    table_row.push(nl);
-                    // console.log("activity: ", nl);
-                    // table_row.push("[" + nl + "]");
-                }
-
-            } else {
-                bgc = "yellow";
-
-            }
-
-            // Add the has_inputs last.
-            for (let itm of has_input_collection) {
-                table_row.push("(" + itm + "➔)");
-            }
-
-            let nlabel = table_row.join("\n");
-
-
-            // Add nesting where desired, if the nesting isn't
-            // breaking the single parent model.
-            var parent = null;
-            var text_v_align = null;
-            var text_h_align = null;
-            if (parent_trap.hasOwnProperty(nid)) {
-                var parents = parent_trap[nid];
-                if (parents.length === 1) {
-                    parent = parents[0];
-                    text_v_align = 'top';
-                    text_h_align = 'left';
-                }
-            }
-
-            elements.push(
-                {
-                    group: "nodes",
-                    data: {
-                        id: nid,
-                        label: nlabel,
-                        width: Math.max(115, nlabel.length * 8),
-                        textwidth: Math.max(115, nlabel.length * 7),
-                        link: nlink,
-                        parent: parent,
-                        'text-valign': text_v_align,
-                        'text-halign': text_h_align,
-                        'background-color': bgc,
-                        degree: (g.get_child_nodes(nid).length * 10) +
-                            g.get_parent_nodes(nid).length
-                    }
-                }
-            );
-
-        }
-
-
-        for (let e of g.all_edges()) {
-            // Detect endpoint type as best as possible.
-            var rn = e.relation() || 'n/a';
-            var rglyph = glyph(rn);
-
-            // Push final edge data.
-            elements.push({
-                group: 'edges',
-                data: {
-                    id: e.id(),
-                    source: e.subject_id(),
-                    target: e.object_id(),
-                    predicate: e.predicate_id(),
-                    label: rglyph.label ? rglyph.label : e.label(),
-                    color: rglyph.color ? rglyph.color : "black",
-                    glyph: rglyph.glyph ? rglyph.glyph : "circle",
-                    lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid"
-                }
-            });
-        }
-
-
-
-        // Get roots for algorithms that need it.
-        let roots = g.get_root_nodes();
-        let root_ids = [];
-        for (let root of roots) {
-            root_ids.push(root.id());
-        }
-
-
-
-        this.currentGraph = g;
-        this.ghandler = new GraphHandler(graph.clone());
-        this.ghandler.setDBXrefs(dbxrefs);
-
-
-        // Showing loading message
-        let viz = this.gocamviz.querySelector("#gocam-viz");
-        // viz.innerHTML = "";
-        console.log("Displaying GO-CAM ", gocamId, graph);
-
-
-        let layout = 'cose-bilkent';
-        // let layout = "noctuadef";
-
-        this.renderCytoscape(gocamId, graph, elements, layout);
-
-    }
-
-
-
 
 
     /**
@@ -611,7 +353,7 @@ export class GoCamViz {
      * @param graph bbop graph
      * @param nest nesting strategy (default = "no")
      */
-    renderGoCam2(gocamId, graph, nest = "no", layout = 'cose-bilkent') {
+    renderGoCam(gocamId, graph, nest = "no", layout = 'cose-bilkent') {
 
         this.currentGraph = graph;
         this.ghandler = new GraphHandler(this.currentGraph);
@@ -620,70 +362,70 @@ export class GoCamViz {
 
         let activities = this.ghandler.getAllActivities();
         this.ghandler.enrichActivities(activities)
-        .then((data) => {
-            
-            let elements = [];
+            .then((data) => {
 
-            // 1 - create the nodes
-            for(let enrichedActivity of data) {
+                let elements = [];
 
-                let label = "";
-                if(enrichedActivity.geneProducts.length > 0) {
-                    label = enrichedActivity.geneProducts.map(elt => elt.label).join(" | ");
-                } else {
-                    label = enrichedActivity.labels.join(" | ");
+                // 1 - create the nodes
+                for (let enrichedActivity of data) {
+
+                    let label = "";
+                    if (enrichedActivity.geneProducts.length > 0) {
+                        label = enrichedActivity.geneProducts.map(elt => elt.label).join(" | ");
+                    } else {
+                        label = enrichedActivity.labels.join(" | ");
+                    }
+
+                    let eanode = {
+                        group: "nodes",
+                        data: {
+                            id: enrichedActivity.nodeId,
+                            label: label,
+                            width: Math.max(115, label.length * 11),
+                            textwidth: Math.max(115, label.length * 9),
+                            // link: ??
+                            // parent: ??
+                            "text-valign": "top",
+                            "text-halign": "left",
+                            "background-color": this.defaultNodeStyle["background-color"],
+                            // degree: (child * 10 + parent)
+                        }
+                    }
+                    elements.push(eanode);
                 }
 
-                let eanode = {
-                    group: "nodes",
-                    data: {
-                        id : enrichedActivity.nodeId,
-                        label : label,
-                        width: Math.max(115, label.length * 11),
-                        textwidth: Math.max(115, label.length * 9),
-                        // link: ??
-                        // parent: ??
-                        "text-valign": "top",
-                        "text-halign": "left",
-                        "background-color": this.defaultNodeStyle["background-color"],
-                        // degree: (child * 10 + parent)
+                // 2 - create the edges
+                for (let enrichedActivity of data) {
+                    let connected = this.ghandler.getCausalActivities(enrichedActivity, data);
+                    // console.log("activity ", enrichedActivity, " is connected to ", connected);
+                    let relids = Object.keys(connected)
+                    for (let relid of relids) {
+                        let targets = connected[relid];
+                        let rglyph = glyph(relid);
+
+                        for (let target of targets) {
+                            // console.log("target: ", target);
+                            let ed = {
+                                group: "edges",
+                                data: {
+                                    id: target.relationId,
+                                    source: enrichedActivity.nodeId,
+                                    target: target.activity.nodeId,
+                                    label: rglyph.label ? rglyph.label : target.relationLabel,
+                                    color: rglyph.color ? rglyph.color : "black",
+                                    glyph: rglyph.glyph ? rglyph.glyph : "circle",
+                                    lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid",
+                                    width: rglyph.width ? rglyph.width : this.defaultEdgeStyle.width
+                                }
+                            };
+                            // console.log("ED: ", ed);
+                            elements.push(ed);
+                        }
                     }
                 }
-                elements.push(eanode);
-            }
 
-            // 2 - create the edges
-            for(let enrichedActivity of data) {
-                let connected = this.ghandler.getCausalActivities(enrichedActivity, data);
-                // console.log("activity ", enrichedActivity, " is connected to ", connected);
-                let relids = Object.keys(connected)
-                for(let relid of relids) {
-                    let targets = connected[relid];
-                    let rglyph = glyph(relid);
-
-                    for(let target of targets) {
-                        // console.log("target: ", target);
-                        let ed = {
-                            group: "edges",
-                            data: {
-                                id: target.relationId,
-                                source: enrichedActivity.nodeId,
-                                target: target.activity.nodeId,
-                                label: rglyph.label ? rglyph.label : target.relationLabel,
-                                color: rglyph.color ? rglyph.color : "black",
-                                glyph: rglyph.glyph ? rglyph.glyph : "circle",
-                                lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid",
-                                width: rglyph.width ? rglyph.width : this.defaultEdgeStyle.width
-                            }
-                        };
-                        // console.log("ED: ", ed);
-                        elements.push(ed);
-                    }
-                }
-            }
-
-            this.renderCytoscape(gocamId, graph, elements, layout);
-        });
+                this.renderCytoscape(gocamId, graph, elements, layout);
+            });
 
     }
 
@@ -749,7 +491,7 @@ export class GoCamViz {
 
         if (this.genesPanel) {
             this.genesPanel.parentCy = this.cy;
-        }        
+        }
     }
 
 
@@ -1082,13 +824,13 @@ export class GoCamViz {
         return [
 
             <div>
-                {this.showGoCamSelector ? 
-                <div class="control__panel">
-                    {this.showGoCamSelector ? <wc-gocam-selector></wc-gocam-selector> : ""}
-                    <button class='open__in_noctua__label button-gcv' onClick={() => this.openInNoctua()}>Open in Noctua</button>
-                    <button class='reset__view button-gcv' onClick={() => this.resetView()}>Reset View</button>
-                </div>
-                : ""}
+                {this.showGoCamSelector ?
+                    <div class="control__panel">
+                        {this.showGoCamSelector ? <wc-gocam-selector></wc-gocam-selector> : ""}
+                        <button class='open__in_noctua__label button-gcv' onClick={() => this.openInNoctua()}>Open in Noctua</button>
+                        <button class='reset__view button-gcv' onClick={() => this.resetView()}>Reset View</button>
+                    </div>
+                    : ""}
             </div>,
 
             this.loading ? this.error ? "" : <div class="gocam-viz-loader">Loading GO-CAM {this.gocamId} ...</div> : "",

@@ -1,32 +1,31 @@
 <html dir="ltr" lang="en">
 
 
-  <head>
-    <script type="module" src="/build/wc-gocam-viz.esm.js"></script>
-    <script nomodule src="/build/wc-gocam-viz.js"></script>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  </head>
-  
+<head>
+  <script type="module" src="/build/wc-gocam-viz.esm.js"></script>
+  <script nomodule src="/build/wc-gocam-viz.js"></script>
 
-  <body>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 
 
-    <!-- ACTUAL INTEGRATION OF THE GOCAM-VIZ COMPONENT -->
-    <wc-gocam-viz 
-      id="gocam-1"
-      repository="prod"
-      gocam-id="gomodel:568b0f9600000284"
-      show-go-cam-selector=true
-      show-has-input=false
-      show-has-output=false
-      show-gene-product=true
-      show-activity=false
-      show-isolated-activity=true
-    ></wc-gocam-viz>
+<body>
+
+  <label for="cars">Select Repository:</label>
+
+  <select name="repository" id="goc-repository-select">
+    <option value="prod">Noctua Production</option>
+    <option value="dev">Noctua Development(for developers onl;y)</option>
+  </select>
 
 
-    <!-- <wc-gocam-viz 
+  <!-- ACTUAL INTEGRATION OF THE GOCAM-VIZ COMPONENT -->
+  <wc-gocam-viz id="gocam-1" repository="prod" gocam-id="gomodel:568b0f9600000284" show-go-cam-selector=true
+    show-has-input=false show-has-output=false show-gene-product=true show-activity=false show-isolated-activity=true>
+  </wc-gocam-viz>
+
+
+  <!-- <wc-gocam-viz 
       id="gocam-1"
       repository="dev"
       gocam-id="gomodel:YEAST-SALV-PYRMID-DNTP"
@@ -39,35 +38,44 @@
     ></wc-gocam-viz> -->
 
 
-    <!-- OPTIONAL: SPECIAL HANDLING OF EVENTS -->
-    <script>
+  <!-- OPTIONAL: SPECIAL HANDLING OF EVENTS -->
+  <script>
 
-        /**
-         * General Key listener, here to recenter the graph visualization
-         */
-        document.addEventListener('keydown', (key) => {
-          if(key.code == 'Space') {
-            key.preventDefault();
-            let viz = document.getElementById("gocam-1");
-            if(viz) { viz.resetView(); }
-          }
-        })
+    var repositorySelect = document.getElementById("goc-repository-select");
+    repositorySelect.addEventListener('change', updateRepository);
 
-        /**
-         * Listen to a mouse over event on an activity node
-         */
-        document.addEventListener('nodeOver', function hideMenu(e, v) {
-          let payload = e.detail;
-        });
+    function updateRepository(e) {
+      var goCamViz = document.getElementById("gocam-1");
+      console.log(e.target.value)
+      goCamViz.setAttribute('repository', e.target.value);
+    }
 
-        /**
-         * Listen to a mouse out event from an activity node
-         */
-        document.addEventListener('nodeOut', function hideMenu(e, v) {
-        });
-        
-    </script>
+    /**
+     * General Key listener, here to recenter the graph visualization
+     */
+    document.addEventListener('keydown', (key) => {
+      if (key.code == 'Space') {
+        key.preventDefault();
+        let viz = document.getElementById("gocam-1");
+        if (viz) { viz.resetView(); }
+      }
+    })
+
+    /**
+     * Listen to a mouse over event on an activity node
+     */
+    document.addEventListener('nodeOver', function hideMenu(e, v) {
+      let payload = e.detail;
+    });
+
+    /**
+     * Listen to a mouse out event from an activity node
+     */
+    document.addEventListener('nodeOut', function hideMenu(e, v) {
+    });
+
+  </script>
 
 
-  </body>
+</body>
 </html>

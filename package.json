@@ -1,6 +1,6 @@
 {
   "name": "@geneontology/wc-gocam-viz",
-  "version": "0.0.45",
+  "version": "0.0.48",
   "description": "Web component to visualize GO-CAM",
   "main": "dist/index.cjs.js",
   "module": "dist/custom-elements/index.js",
@@ -24,7 +24,7 @@
   "dependencies": {
     "@geneontology/dbxrefs": "^1.0.16",
     "@geneontology/wc-light-modal": "0.0.7",
-    "@stencil/core": "^1.8.8",
+    "@stencil/core": "^2.10.0",
     "bbop-graph-noctua": "0.0.35",
     "cytoscape": "^3.16.1",
     "cytoscape-cose-bilkent": "^4.1.0"

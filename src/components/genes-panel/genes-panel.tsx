@@ -49,7 +49,10 @@ export class GenesPanel {
             this.ghandler.enrichActivities(activities)
                 .then((data) => {
                     // we sort activities by BP, as much as we can; ordered alphabetically and when no partOf = end of list
-                    data.sort((a, b) => (a.partOf.length == 0) ? 1 : (b.partOf.length == 0) ? -1 : (a.partOf[0].label < b.partOf[0].label) ? -1 : 1)
+                    data.sort((a, b) => (a.partOf.length == 0) ?
+                        1 : (b.partOf.length == 0) ?
+                            -1 : (a.partOf[0].label < b.partOf[0].label) ?
+                                -1 : 1)
                     this.enrichedActivities = data;
                     // console.log("GenesPanel:EnrichedActivities: ", this.enrichedActivities);
                     this.groupedActivities = this.ghandler.groupActivitiesByProcess(this.enrichedActivities);
@@ -138,7 +141,7 @@ export class GenesPanel {
         let label = gp.taxonLabel;
         // no label present for taxon
         if (!label) {
-            return <a class='a-gcv genes-panel__item__title__gp__taxon' href={gp.taxonURL} target='_blank'>N/A</a>;
+            return <a class='a-gcv genes-panel__item__title__gp__taxon' href={gp.taxonURL} target='_blank'></a>;
         }
         // otherwise parse and show it
         if (label.includes(" ")) {
@@ -192,10 +195,13 @@ export class GenesPanel {
             <div class="genes-panel__item" id={"gp_item_" + activity.nodeId} onClick={() => this.select(activity)} onMouseOver={() => this.highlight(activity.nodeId)} onMouseOut={() => this.clearHighlight()} >
 
                 <div class='genes-panel__item__title'>
-                    {activity.geneProducts.length == 0 ? <a class='a-gcv genes-panel__item__title__gp' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> : activity.geneProducts.map(gp => { return <a class='a-gcv genes-panel__item__title__gp' href={gp.url} target='_blank'>{gp.label}</a> })}
-                    {activity.geneProducts.length == 0 ? <span class='genes-panel__item__title__gp__taxon'>N/A</span> : activity.geneProducts.map(gp => { return this.renderTaxon(gp) })}
+                    {activity.geneProducts.length == 0 ?
+                        <a class='a-gcv genes-panel__item__title__gp' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a>
+                        : activity.geneProducts.map(gp => { return <a class='a-gcv genes-panel__item__title__gp' href={gp.url} target='_blank'>{gp.label}</a> })}
+                    {activity.geneProducts.length == 0 ?
+                        <span class='genes-panel__item__title__gp__taxon'></span>
+                        : activity.geneProducts.map(gp => { return this.renderTaxon(gp) })}
                 </div>
-
 
                 <div class='genes-panel__item__activity__block'>
                     <a class='a-gcv genes-panel__item__activity block-right' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> <span class="activity__references">{activity.geneProducts.map(gp => { return this.renderGeneReferences(gp) })}</span>

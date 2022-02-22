@@ -283,13 +283,6 @@ export class GoCamViz {
     relations_collapsible = ["RO:0002333", "BFO:0000066", "RO:0002233", "RO:0002488", "RO:0002234"]; // 2233 : has input ; 2234 : has output
     // relations_collapsible = ["RO:0002333", "BFO:0000066", "RO:0002233", "RO:0002488", "RO:0002234"]; // 2233 : has input ; 2234 : has output
     relations_nestable = {};
-    relations_strippable = {
-        "BFO:0000050": true,    // part of
-        "BFO:0000051": true,    // has part
-        "RO:0002220": true,     // adjacent to
-        "BFO:0000066": true,    // occurs in
-        "RO:0012005": true     // is small molecule activator
-    };
 
 
     initCytoscape() {

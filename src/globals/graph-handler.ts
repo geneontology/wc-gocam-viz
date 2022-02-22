@@ -43,13 +43,7 @@ export class GraphHandler {
     relations_enabled_by = ['http://purl.obolibrary.org/obo/RO_0002333', 'RO_0002333', 'RO:0002333'];
     relations_collapsible = ["RO:0002333", "BFO:0000066", "RO:0002233", "RO:0002488", "RO:0002234"]; // 2233 : has input ; 2234 : has output
     relations_nestable = {};
-    relations_strippable = {
-        "BFO:0000050": true,    // part of
-        "BFO:0000051": true,    // has part
-        "RO:0002220": true,     // adjacent to
-        "BFO:0000066": true,    // occurs in
-        "RO:0012005": true     // is small molecule activator
-    };
+
 
     bbopGraph = undefined;
     bbopGraphBackup = undefined;        // this is used to restore the graph if needed
@@ -251,31 +245,7 @@ export class GraphHandler {
 
         // the graph must NOT be processed to remove part of as it was before
         let partOf = [];
-        let edges = this.bbopGraph.get_edges_by_subject(nodeId);
-        // console.log("ARE YOU GONNA TEST THIS ? ", edges);
-        for (let edge of edges) {
-            if (edge.predicate_id() == this.BFO_PART_OF) {
-                let object = this.bbopGraph.get_node(edge.object_id());
-                // if yes, we are locating a activity part of BP
-                if (object.root_types().some(elt => elt.class_id() == "GO:0008150")) {
-
-                    let keys = Object.keys(object._id2type)
-                    for (let key of keys) {
-                        let node = object._id2type[key];
-
-                        // console.log("id2type: ", node);
-                        if (node.class_id() == "GO:0008150") { continue; }
-
-                        partOf.push({
-                            id: node.class_id(),
-                            label: node.class_label(),
-                            evidences: this.nodeEvidences(edge)
-                        })
-
-                    }
-                }
-            }
-        }
+        this.getNestedPartOfs(nodeId, partOf)
 
 
         // var x_node = subgraph.get_node(entity_id);
@@ -320,6 +290,41 @@ export class GraphHandler {
         }
     }
 
+    getNestedPartOfs(nodeId, partOfs: any[]) {
+        let edges = this.bbopGraph.get_edges_by_subject(nodeId);
+        for (let edge of edges) {
+            if (edge.predicate_id() == this.BFO_PART_OF) {
+                let object = this.bbopGraph.get_node(edge.object_id());
+                if (object.root_types().some(elt => elt.class_id() == "GO:0008150")) {
+
+                    let keys = Object.keys(object._id2type)
+                    for (let key of keys) {
+                        let node = object._id2type[key];
+
+                        // console.log("id2type: ", node);
+                        if (node.class_id() == "GO:0008150") { continue; }
+
+                        let outEdges = this.bbopGraph.get_edges_by_subject(object.id());
+
+                        if (outEdges && Array.isArray(outEdges) && outEdges.length === 0) {
+                            partOfs.push({
+                                id: node.class_id(),
+                                label: node.class_label(),
+                                evidences: this.nodeEvidences(edge)
+                            })
+                        }
+
+                    }
+                }
+
+                //avoid overflow; low chances
+                if (partOfs.length < 10) {
+                    this.getNestedPartOfs(object.id(), partOfs)
+                }
+            }
+        }
+    }
+
     /**
      * This will return a list of activities enriched with additional meta data, such as gene taxon and URLs
      * Note: require dbxrefs to be set
@@ -358,7 +363,12 @@ export class GraphHandler {
         map.forEach((val, process) => {
             let item = {
                 id: process.split(","),
-                url: (process.split(",") != "" && this.dbxrefs) ? process.split(",").map(elt => { let db = elt.split(":")[0]; let id = elt.split(":")[1]; return this.dbxrefs.getURL(db, undefined, id) }) : "#",
+                url: (process.split(",") != "" && this.dbxrefs) ?
+                    process.split(",").map(elt => {
+                        let db = elt.split(":")[0];
+                        let id = elt.split(":")[1];
+                        return this.dbxrefs.getURL(db, undefined, id)
+                    }) : "#",
                 label: val[0].partOf.map(elt => elt.label) == "" ? ["others processes"] : val[0].partOf.map(elt => elt.label),
                 activities: val
             };

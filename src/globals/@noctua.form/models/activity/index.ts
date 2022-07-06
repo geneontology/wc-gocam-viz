@@ -20,7 +20,6 @@ export {
 } from './cam';
 export { Evidence } from './evidence';
 export {
-    ConnectorState,
     ConnectorActivity,
     ConnectorType
 } from './connector-activity';

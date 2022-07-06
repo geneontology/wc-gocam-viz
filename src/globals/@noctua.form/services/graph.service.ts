@@ -4,10 +4,9 @@ import * as ModelDefinition from './../data/config/model-definition';
 import * as EntityDefinition from './../data/config/entity-definition';
 
 import { noctuaFormConfig } from './../noctua-form-config';
-import { NoctuaFormConfigService } from './config/noctua-form-config.service';
+import { NoctuaFormConfigService } from './noctua-form-config.service';
 import { Activity, ActivityType } from './../models/activity/activity';
 import { find, each, chain, uniq } from 'lodash';
-import { CurieService } from './../../@noctua.curie/services/curie.service';
 import { ActivityNode, ActivityNodeType, compareTerm } from './../models/activity/activity-node';
 import { Cam } from './../models/activity/cam';
 import { Entity } from './../models/activity/entity';
@@ -31,10 +30,7 @@ export class NoctuaGraphService {
 
 
   constructor(
-    private curieService: CurieService,
     public noctuaFormConfigService: NoctuaFormConfigService) {
-
-    this.curieUtil = this.curieService.getCurieUtil();
   }
 
 
@@ -66,19 +62,16 @@ export class NoctuaGraphService {
     cam.graph.load_data_basic(responseData);
 
     cam.id = responseData.id;
-    cam.model = Object.assign({}, {
-      modelInfo: this.noctuaFormConfigService.getModelUrls(cam.id)
-    });
     cam.modified = responseData['modified-p'];
 
     const titleAnnotations = cam.graph.get_annotations_by_key('title');
     const stateAnnotations = cam.graph.get_annotations_by_key('state');
     const dateAnnotations = cam.graph.get_annotations_by_key('date');
-    const groupAnnotations = cam.graph.get_annotations_by_key('providedBy');
-    const contributorAnnotations = cam.graph.get_annotations_by_key('contributor');
+    // const groupAnnotations = cam.graph.get_annotations_by_key('providedBy');
+    //  const contributorAnnotations = cam.graph.get_annotations_by_key('contributor');
 
-    cam.contributors = self.noctuaUserService.getContributorsFromAnnotations(contributorAnnotations);
-    cam.groups = self.noctuaUserService.getGroupsFromAnnotations(groupAnnotations);
+    // cam.contributors = self.noctuaUserService.getContributorsFromAnnotations(contributorAnnotations);
+    // cam.groups = self.noctuaUserService.getGroupsFromAnnotations(groupAnnotations);
 
     if (dateAnnotations.length > 0) {
       cam.date = dateAnnotations[0].value();
@@ -86,10 +79,6 @@ export class NoctuaGraphService {
 
     if (titleAnnotations.length > 0) {
       cam.title = titleAnnotations[0].value();
-    }
-
-    if (stateAnnotations.length > 0) {
-      cam.state = self.noctuaFormConfigService.findModelState(stateAnnotations[0].value());
     }
 
     return cam;

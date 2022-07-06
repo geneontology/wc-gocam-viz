@@ -34,9 +34,9 @@ export const activityUnitBaseDescription: ActivityDescription = {
             aspect: 'F',
             displaySection: noctuaFormConfig.displaySection.fd,
             displayGroup: noctuaFormConfig.displayGroup.mf,
-            skipEvidenceCheck: true,
-            canDelete: false,
-            termRequired: true,
+
+
+
             weight: 1
         },
     },
@@ -55,9 +55,9 @@ export const bpOnlyAnnotationBaseDescription: ActivityDescription = {
             aspect: 'F',
             displaySection: noctuaFormConfig.displaySection.fd,
             displayGroup: noctuaFormConfig.displayGroup.mf,
-            skipEvidenceCheck: true,
+
             visible: false,
-            canDelete: false,
+
             weight: 1
         }
     },
@@ -72,9 +72,9 @@ export const ccOnlyAnnotationBaseDescription: ActivityDescription = {
             type: ActivityNodeType.GoMolecularEntity,
             category: [EntityDefinition.GoMolecularEntity, EntityDefinition.GoProteinContainingComplex],
             label: 'Gene Product',
-            skipEvidenceCheck: true,
-            termRequired: true,
-            canDelete: false,
+
+
+
             displaySection: noctuaFormConfig.displaySection.gp,
             displayGroup: noctuaFormConfig.displayGroup.gp,
             weight: 1
@@ -94,9 +94,9 @@ export const proteinComplexBaseDescription: ActivityDescription = {
             aspect: 'F',
             displaySection: noctuaFormConfig.displaySection.fd,
             displayGroup: noctuaFormConfig.displayGroup.mf,
-            skipEvidenceCheck: true,
+
             visible: false,
-            canDelete: false,
+
             weight: 1
         }
     },
@@ -111,10 +111,6 @@ export const moleculeBaseDescription: ActivityDescription = {
             type: ActivityNodeType.GoChemicalEntity,
             category: [EntityDefinition.GoChemicalEntity],
             label: 'Molecule',
-            skipEvidenceCheck: true,
-            showEvidence: false,
-            termRequired: true,
-            canDelete: false,
             displaySection: noctuaFormConfig.displaySection.gp,
             displayGroup: noctuaFormConfig.displayGroup.gp,
             weight: 1
@@ -135,8 +131,8 @@ export const activityUnitDescription: ActivityDescription = {
             aspect: 'F',
             displaySection: noctuaFormConfig.displaySection.fd,
             displayGroup: noctuaFormConfig.displayGroup.mf,
-            termRequired: true,
-            canDelete: false,
+
+
             weight: 1
         },
         [ActivityNodeType.GoMolecularEntity]: <ActivityNodeDisplay>{
@@ -146,9 +142,9 @@ export const activityUnitDescription: ActivityDescription = {
             label: 'enabled by (GP)',
             displaySection: noctuaFormConfig.displaySection.gp,
             displayGroup: noctuaFormConfig.displayGroup.gp,
-            termRequired: true,
-            skipEvidenceCheck: true,
-            canDelete: false,
+
+
+
             weight: 2
         },
         [ActivityNodeType.GoBiologicalProcess]: <ActivityNodeDisplay>{
@@ -199,7 +195,7 @@ export const bpOnlyAnnotationDescription: ActivityDescription = {
             displaySection: noctuaFormConfig.displaySection.fd,
             displayGroup: noctuaFormConfig.displayGroup.mf,
             visible: false,
-            canDelete: false,
+
             weight: 1
         },
         [ActivityNodeType.GoMolecularEntity]: <ActivityNodeDisplay>{
@@ -209,9 +205,9 @@ export const bpOnlyAnnotationDescription: ActivityDescription = {
             label: 'enabled by (GP)',
             displaySection: noctuaFormConfig.displaySection.gp,
             displayGroup: noctuaFormConfig.displayGroup.gp,
-            termRequired: true,
-            skipEvidenceCheck: true,
-            canDelete: false,
+
+
+
             weight: 2
         },
 
@@ -223,7 +219,7 @@ export const bpOnlyAnnotationDescription: ActivityDescription = {
             aspect: 'P',
             displaySection: noctuaFormConfig.displaySection.fd,
             displayGroup: noctuaFormConfig.displayGroup.bp,
-            termRequired: true,
+
             weight: 10
         },
         [ActivityNodeType.GoCellularComponent]: <ActivityNodeDisplay>{
@@ -269,9 +265,9 @@ export const ccOnlyAnnotationDescription: ActivityDescription = {
             type: ActivityNodeType.GoMolecularEntity,
             category: [EntityDefinition.GoMolecularEntity, EntityDefinition.GoProteinContainingComplex],
             label: 'Gene Product',
-            skipEvidenceCheck: true,
-            termRequired: true,
-            canDelete: false,
+
+
+
             displaySection: noctuaFormConfig.displaySection.gp,
             displayGroup: noctuaFormConfig.displayGroup.gp,
             weight: 1
@@ -281,7 +277,7 @@ export const ccOnlyAnnotationDescription: ActivityDescription = {
             type: ActivityNodeType.GoCellularComponent,
             category: [EntityDefinition.GoCellularComponent],
             aspect: 'C',
-            termRequired: true,
+            
             label: 'part of (CC)',
             displaySection: noctuaFormConfig.displaySection.fd,
             displayGroup: noctuaFormConfig.displayGroup.cc,
@@ -306,9 +302,7 @@ export const proteinComplexDescription: ActivityDescription = {
             type: ActivityNodeType.GoProteinContainingComplex,
             category: [EntityDefinition.GoProteinContainingComplex],
             label: 'Protein Complex',
-            skipEvidenceCheck: true,
-            termRequired: true,
-            canDelete: false,
+
             displaySection: noctuaFormConfig.displaySection.gp,
             displayGroup: noctuaFormConfig.displayGroup.gp,
             weight: 2
@@ -321,8 +315,7 @@ export const proteinComplexDescription: ActivityDescription = {
             aspect: 'F',
             displaySection: noctuaFormConfig.displaySection.fd,
             displayGroup: noctuaFormConfig.displayGroup.mf,
-            termRequired: true,
-            canDelete: false,
+
             weight: 1
         },
         [ActivityNodeType.GoBiologicalProcess]: <ActivityNodeDisplay>{
@@ -369,9 +362,6 @@ export const moleculeDescription: ActivityDescription = {
             type: ActivityNodeType.GoChemicalEntity,
             category: [EntityDefinition.GoChemicalEntity],
             label: 'Molecule',
-            skipEvidenceCheck: true,
-            termRequired: true,
-            canDelete: false,
             displaySection: noctuaFormConfig.displaySection.gp,
             displayGroup: noctuaFormConfig.displayGroup.gp,
             weight: 1

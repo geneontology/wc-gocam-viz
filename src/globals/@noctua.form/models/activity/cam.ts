@@ -243,7 +243,7 @@ export class Cam {
   }
 
   private _getGPText(a: Activity): string {
-    return a.presentation.gpText.toLowerCase()
+    return a.gpNode?.term.label.toLowerCase() || ''
   }
 
   private _getMFText(a: Activity): string {

@@ -1,26 +1,18 @@
-import { environment } from '../../../environments/environment';
-import { Injectable } from '@angular/core';
-import { noctuaFormConfig } from './../../noctua-form-config';
-import * as ModelDefinition from './../../data/config/model-definition';
-import * as ShapeDescription from './../../data/config/shape-definition';
+import { noctuaFormConfig } from './../noctua-form-config';
+import * as ModelDefinition from './../data/config/model-definition';
+import * as ShapeDescription from './../data/config/shape-definition';
 
-import { Activity, ActivityType } from './../../models/activity/activity';
-import { find, filter, each } from 'lodash';
-import { HttpParams } from '@angular/common/http';
-import * as EntityDefinition from './../../data/config/entity-definition';
-import { NoctuaUserService } from '../user.service';
-import { BehaviorSubject } from 'rxjs';
-import { ActivityNode } from './../../models/activity/activity-node';
-import { ConnectorActivity } from './../../models/activity/connector-activity';
-import { Entity } from './../../models/activity/entity';
-import { Evidence } from './../../models/activity/evidence';
-import { Predicate } from './../../models/activity/predicate';
-
+import { Activity, ActivityType } from './../models/activity/activity';
+import { find, each } from 'lodash';
+import * as EntityDefinition from './../data/config/entity-definition';
+import { ActivityNode } from './../models/activity/activity-node';
+import { Entity } from './../models/activity/entity';
+import { Evidence } from './../models/activity/evidence';
+import { Predicate } from './../models/activity/predicate';
 
 export class NoctuaFormConfigService {
 
-
-  constructor(private noctuaUserService: NoctuaUserService) {
+  constructor() {
   }
 
   get edges() {
@@ -149,8 +141,6 @@ export class NoctuaFormConfigService {
   createPredicate(edge: Entity, evidence?: Evidence[]): Predicate {
     const predicate = new Predicate(edge, evidence);
 
-    EntityDefinition.setEvidenceLookup(predicate);
-
     return predicate;
   }
   createActivityBaseModel(modelType: ActivityType): Activity {
@@ -211,7 +201,7 @@ export class NoctuaFormConfigService {
 
   findEdge(predicateId) {
 
-    const edge = find(noctuaFormConfig.allEdges, {
+    const edge = find(noctuaFormConfig.edge, {
       id: predicateId
     });
 

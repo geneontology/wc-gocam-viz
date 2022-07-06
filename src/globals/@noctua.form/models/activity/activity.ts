@@ -6,7 +6,6 @@ import { Evidence } from './evidence';
 import { compareTripleWeight, Triple } from './triple';
 import { Entity } from './entity';
 import { Predicate } from './predicate';
-import { getEdges, Edge, getNodes, subtractNodes } from './noctua-form-graph';
 import * as ShapeDescription from './../../data/config/shape-definition';
 import { each, filter, find } from 'lodash';
 import { NoctuaFormUtils } from './../../utils/noctua-form-utils';
@@ -294,9 +293,7 @@ export class Activity extends SaeGraph<ActivityNode> {
       });
 
       node.canInsertNodes = insertNodes;
-      node.insertMenuNodes = filter(insertNodes, (insertNode: ShapeDescription.ShapeDescription) => {
-        return insertNode.node.showInMenu;
-      });
+
     });
 
     // remove the subject menu
@@ -547,68 +544,6 @@ export class Activity extends SaeGraph<ActivityNode> {
     return result[0]
   }
 
-
-  get presentation() {
-    const self = this;
-
-    if (this._presentation) {
-      return this._presentation;
-    }
-
-    const gp = self.getNode(ActivityNodeType.GoMolecularEntity);
-    const mf = self.getNode(ActivityNodeType.GoMolecularFunction);
-    const gpText = gp ? gp.getTerm().label : '';
-    const mfText = mf ? mf.getTerm().label : '';
-    let qualifier = '';
-    let title = '';
-
-    if (self.activityType === ActivityType.ccOnly) {
-      title = gpText;
-    } else if (self.activityType === ActivityType.molecule) {
-      title = gpText;
-    } else if (self.activityType === ActivityType.proteinComplex) {
-      title = gpText;
-    } else {
-      qualifier = mf.isComplement ? 'NOT' : '';
-      title = `enabled by ${gpText}`;
-    }
-
-    const result = {
-      qualifier: qualifier,
-      title: title,
-      gpText: gpText,
-      mfText: mfText,
-      gp: {},
-      fd: {},
-      extra: []
-    };
-
-    const sortedNodes = self.nodes.sort(compareNodeWeight);
-
-    each(sortedNodes, function (node: ActivityNode) {
-      if (node.displaySection && node.displayGroup) {
-        if (!result[node.displaySection.id][node.displayGroup.id]) {
-          result[node.displaySection.id][node.displayGroup.id] = {
-            shorthand: node.displayGroup.shorthand,
-            label: node.displayGroup.label,
-            nodes: []
-          };
-        }
-
-        result[node.displaySection.id][node.displayGroup.id].nodes.push(node);
-        node.nodeGroup = result[node.displaySection.id][node.displayGroup.id];
-
-        if (node.isComplement) {
-          node.nodeGroup.isComplement = true;
-        }
-      }
-    });
-
-
-    this._presentation = result;
-
-    return this._presentation;
-  }
 
 }
 

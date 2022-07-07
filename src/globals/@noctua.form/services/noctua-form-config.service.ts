@@ -4,7 +4,6 @@ import * as ShapeDescription from './../data/config/shape-definition';
 
 import { Activity, ActivityType } from './../models/activity/activity';
 import { find, each } from 'lodash';
-import * as EntityDefinition from './../data/config/entity-definition';
 import { ActivityNode } from './../models/activity/activity-node';
 import { Entity } from './../models/activity/entity';
 import { Evidence } from './../models/activity/evidence';

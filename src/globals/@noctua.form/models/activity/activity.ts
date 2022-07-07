@@ -11,11 +11,6 @@ import { each, filter, find } from 'lodash';
 import { NoctuaFormUtils } from './../../utils/noctua-form-utils';
 import { TermsSummary } from './summary';
 
-
-import moment from 'moment';
-//const moment = moment_;
-
-
 export enum ActivitySortField {
   GP = 'gp',
   MF = 'mf',
@@ -61,7 +56,7 @@ export class ActivityPosition {
 export class Activity extends SaeGraph<ActivityNode> {
   gp;
   label: string;
-  date: moment.Moment;
+  date: string;
 
   activityRows;
   activityType;
@@ -96,7 +91,6 @@ export class Activity extends SaeGraph<ActivityNode> {
   position: ActivityPosition = new ActivityPosition();
   size: ActivitySize = new ActivitySize();
 
-  formattedDate: string
 
   private _backgroundColor = 'green'
   private _id: string;
@@ -200,22 +194,18 @@ export class Activity extends SaeGraph<ActivityNode> {
     return noctuaFormConfig.activityType.options[this.activityType];
   }
 
-
-
   updateDate() {
     const self = this;
     const rootNode = this.rootNode;
 
     if (!rootNode) return;
 
-    self.date = (moment as any)(rootNode.date, 'YYYY-MM-DD')
-    // self.date = rootNode.date
+    self.date = rootNode.date;
 
     each(self.nodes, (node: ActivityNode) => {
-      const nodeDate = (moment as any)(node.date, 'YYYY-MM-DD')
 
-      if (nodeDate > self.date) {
-        self.date = nodeDate
+      if (node.date > self.date) {
+        self.date = node.date
       }
     });
 
@@ -223,15 +213,12 @@ export class Activity extends SaeGraph<ActivityNode> {
     each(self.edges, (triple: Triple<ActivityNode>) => {
       each(triple.predicate.evidence, (evidence: Evidence) => {
 
-        const evidenceDate = (moment as any)(evidence.date, 'YYYY-MM-DD')
-
-        if (evidenceDate > self.date) {
-          self.date = evidenceDate
+        if (evidence.date > self.date) {
+          self.date = evidence.date
         }
       })
     });
 
-    this.formattedDate = self.date.format('ll');
   }
 
   updateSummary() {

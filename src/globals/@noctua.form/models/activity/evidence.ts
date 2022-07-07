@@ -31,7 +31,6 @@ export class Evidence {
   ontologyClass = [];
   frequency: number;
   date: string;
-  formattedDate: string
   evidenceExts: EvidenceExt[] = [];
 
   constructor() {

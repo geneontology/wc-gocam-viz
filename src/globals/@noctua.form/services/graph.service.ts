@@ -16,16 +16,11 @@ import { Triple } from './../models/activity/triple';
 import { TermsSummary } from './../models/activity/summary';
 import { Article } from './../models/article';
 import { Contributor, equalContributor } from '../models/contributor';
-import * as moment from 'moment';
 
-declare const require: any;
-
-const model = require('bbop-graph-noctua');
-const amigo = require('amigo2');
+import { graph as bbopGraph } from 'bbop-graph-noctua';
 
 
 export class NoctuaGraphService {
-  linker = new amigo.linker();
   curieUtil: any;
 
 
@@ -48,17 +43,16 @@ export class NoctuaGraphService {
       }
 
     } else {
-      return self.linker.url(id);
+      return '';// linker.url(id);
     }
   }
 
 
   getMetadata(responseData) {
     const self = this;
-    const noctua_graph = model.graph;
     const cam = new Cam()
 
-    cam.graph = new noctua_graph();
+    cam.graph = new bbopGraph();
     cam.graph.load_data_basic(responseData);
 
     cam.id = responseData.id;
@@ -86,7 +80,7 @@ export class NoctuaGraphService {
   }
 
 
-  loadCam(cam: Cam) {
+  loadCam(cam: Cam): void {
     const self = this;
     const activities = self.graphToActivities(cam.graph);
 
@@ -181,7 +175,7 @@ export class NoctuaGraphService {
     const result = {
       uuid: objectId,
       date: self.getNodeDate(node),
-      term: new Entity(nodeInfo.id, nodeInfo.label, self.linker.url(nodeInfo.id), objectId),
+      term: new Entity(nodeInfo.id, nodeInfo.label, self.getTermURL(nodeInfo.id), objectId),
       rootTypes: self.getNodeRootInfo(node),
       classExpression: nodeInfo.classExpression,
       location: self.getNodeLocation(node),
@@ -217,9 +211,7 @@ export class NoctuaGraphService {
         const groupAnnotations = annotationNode.get_annotations_by_key('providedBy');
 
         const date = self.getNodeDate(annotationNode);
-        const formattedDate = (moment as any)(date, 'YYYY-MM-DD')
         evidence.date = date
-        evidence.formattedDate = formattedDate.format('ll');
 
         if (sources.length > 0) {
           const sorted = sources.sort(self._compareSources)
@@ -393,11 +385,6 @@ export class NoctuaGraphService {
       .uniqWith(equalContributor)
       .value();
 
-    each(uniqueDates, (evidence: Evidence) => {
-      const dateEntity = new Entity(evidence.date, evidence.formattedDate)
-      dateEntity.frequency = frequency[evidence.date]
-      termsSummary.dates.append(dateEntity)
-    })
 
     each(uniqueRelations, (relationId: string) => {
       const edge = self.noctuaFormConfigService.findEdge(relationId);

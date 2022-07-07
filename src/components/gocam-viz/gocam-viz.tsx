@@ -1,20 +1,13 @@
 import { Component, Prop, Element, Event, EventEmitter, Watch, getAssetPath, h } from '@stencil/core';
 import { Listen, Method, State } from '@stencil/core';
-
 import { graph as noctua_graph } from 'bbop-graph-noctua';
-
 import cytoscape from 'cytoscape';
 import coseBilkent from 'cytoscape-cose-bilkent';
-
 import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globals/utils';
-
 import * as dbxrefs from "@geneontology/dbxrefs";
-
 import '@geneontology/wc-light-modal';
 import { GraphHandler } from '../../globals/graph-handler';
-import { GenesPanel } from '../genes-panel/genes-panel';
-
-
+import { Activity, ActivityType, Cam, NoctuaFormConfigService, NoctuaGraphService, Triple } from '../../globals/@noctua.form';
 
 cytoscape.use(coseBilkent);
 
@@ -89,6 +82,8 @@ export class GoCamViz {
      */
     @State() error: boolean = false;
 
+    configService = new NoctuaFormConfigService();
+    graphService = new NoctuaGraphService(this.configService)
     // variables for bbop graph
     currentGraph = undefined;
 
@@ -100,9 +95,7 @@ export class GoCamViz {
      * Base URL used to fetch gocam as bbop graph
      */
     apiUrl = "https://api.geneontology.xyz/gocam/";
-
     devBaristaUrl = 'http://barista-dev.berkeleybop.org/search/stored?id=';
-
     productionBaristaUrl = 'http://barista.berkeleybop.org/search/stored?id=';
 
     noctuaGraphURL = {
@@ -160,11 +153,11 @@ export class GoCamViz {
 
     // Default cytoscape edge styling
     defaultEdgeStyle = {
-        // 'content': 'data(label)',
+        'content': 'data(label)',
         'line-color': 'data(color)',
         'line-style': 'data(lineStyle)',
         'target-arrow-color': 'data(color)',
-        'target-arrow-shape': 'data(glyph)',
+        //'target-arrow-shape': 'data(glyph)',
         'curve-style': 'bezier',
         'text-rotation': 'autorotate',
         'text-margin-y': '-6px',
@@ -304,6 +297,8 @@ export class GoCamViz {
      * @param gocamId valid gocam id gomodel:xxx
      */
     loadGoCam(gocamId) {
+
+
         // just to make sure we are working with ID without base URL
         gocamId = gocamId.replace("http://model.geneontology.org/", "");
 
@@ -332,9 +327,10 @@ export class GoCamViz {
         }).then(graph => {
             let model = (this.repository === 'release') ? graph : graph.activeModel;
             if (model) {
-                let ngraph = new noctua_graph();
-                ngraph.load_data_basic(model);
-                this.renderGoCam(gocamId, ngraph);
+                const cam: Cam = new Cam();
+                cam.graph = new noctua_graph();
+                cam.graph.load_data_basic(model);
+                this.renderGoCam(gocamId, cam);
             }
         })
     }
@@ -346,88 +342,180 @@ export class GoCamViz {
      * @param graph bbop graph
      * @param nest nesting strategy (default = "no")
      */
-    renderGoCam(gocamId, graph, nest = "no", layout = 'cose-bilkent') {
+    renderGoCam(gocamId, cam: Cam, nest = "no", layout = 'cose-bilkent') {
+        const self = this;
+        this.currentGraph = cam.graph;
+        //  this.ghandler = new GraphHandler(this.currentGraph);
+        // this.ghandler.setDBXrefs(dbxrefs);
 
-        this.currentGraph = graph;
-        this.ghandler = new GraphHandler(this.currentGraph);
-        this.ghandler.setDBXrefs(dbxrefs);
-
-
-        let activities = this.ghandler.getAllActivities();
-        this.ghandler.enrichActivities(activities)
-            .then((data) => {
-
-                let elements = [];
-
-                // 1 - create the nodes
-                for (let enrichedActivity of data) {
-
-                    let label = "";
-                    if (enrichedActivity.geneProducts.length > 0) {
-                        label = enrichedActivity.geneProducts.map(elt => elt.label).join(" | ");
-                    } else {
-                        label = enrichedActivity.labels.join(" | ");
-                    }
-
-                    let eanode = {
-                        group: "nodes",
-                        data: {
-                            id: enrichedActivity.nodeId,
-                            label: label,
-                            width: Math.max(115, label.length * 11),
-                            textwidth: Math.max(115, label.length * 9),
-                            // link: ??
-                            // parent: ??
-                            "text-valign": "top",
-                            "text-halign": "left",
-                            "background-color": this.defaultNodeStyle["background-color"],
-                            // degree: (child * 10 + parent)
-                        }
-                    }
-                    elements.push(eanode);
-                }
-
-                // 2 - create the edges
-                for (let enrichedActivity of data) {
-                    let connected = this.ghandler.getCausalActivities(enrichedActivity, data);
-                    // console.log("activity ", enrichedActivity, " is connected to ", connected);
-                    let relids = Object.keys(connected)
-                    for (let relid of relids) {
-                        let targets = connected[relid];
-                        let rglyph = glyph(relid);
-
-                        for (let target of targets) {
-                            // console.log("target: ", target);
-                            let ed = {
-                                group: "edges",
+        /* 
+                this.ghandler.enrichActivities(activities)
+                    .then((data) => {
+        
+                        let elements = [];
+        
+                        // 1 - create the nodes
+                        for (let enrichedActivity of data) {
+        
+                            let label = "";
+                            if (enrichedActivity.geneProducts.length > 0) {
+                                label = enrichedActivity.geneProducts.map(elt => elt.label).join(" | ");
+                            } else {
+                                label = enrichedActivity.labels.join(" | ");
+                            }
+        
+                            let eanode = {
+                                group: "nodes",
                                 data: {
-                                    id: target.relationId,
-                                    source: enrichedActivity.nodeId,
-                                    target: target.activity.nodeId,
-                                    label: rglyph.label ? rglyph.label : target.relationLabel,
-                                    color: rglyph.color ? rglyph.color : "black",
-                                    glyph: rglyph.glyph ? rglyph.glyph : "circle",
-                                    lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid",
-                                    width: rglyph.width ? rglyph.width : this.defaultEdgeStyle.width
+                                    id: enrichedActivity.nodeId,
+                                    label: label,
+                                    width: Math.max(115, label.length * 11),
+                                    textwidth: Math.max(115, label.length * 9),
+                                    // link: ??
+                                    // parent: ??
+                                    "text-valign": "top",
+                                    "text-halign": "left",
+                                    "background-color": this.defaultNodeStyle["background-color"],
+                                    // degree: (child * 10 + parent)
                                 }
-                            };
-                            // console.log("ED: ", ed);
-                            elements.push(ed);
+                            }
+                            elements.push(eanode);
                         }
-                    }
+        
+                        // 2 - create the edges
+                        for (let enrichedActivity of data) {
+                            let connected = this.ghandler.getCausalActivities(enrichedActivity, data);
+                            // console.log("activity ", enrichedActivity, " is connected to ", connected);
+                            let relids = Object.keys(connected)
+                            for (let relid of relids) {
+                                let targets = connected[relid];
+                                let rglyph = glyph(relid);
+        
+                                for (let target of targets) {
+                                    // console.log("target: ", target);
+                                    let ed = {
+                                        group: "edges",
+                                        data: {
+                                            id: target.relationId,
+                                            source: enrichedActivity.nodeId,
+                                            target: target.activity.nodeId,
+                                            label: rglyph.label ? rglyph.label : target.relationLabel,
+                                            color: rglyph.color ? rglyph.color : "black",
+                                            glyph: rglyph.glyph ? rglyph.glyph : "circle",
+                                            lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid",
+                                            width: rglyph.width ? rglyph.width : this.defaultEdgeStyle.width
+                                        }
+                                    };
+                                    // console.log("ED: ", ed);
+                                    elements.push(ed);
+                                }
+                            }
+                        }
+        
+                        this.renderCytoscape(gocamId, graph, elements, layout);
+                    }); */
+
+
+
+        this.graphService.loadCam(cam)
+
+
+        const elements = [];
+
+
+
+        cam.activities.forEach((activity: Activity) => {
+            if (activity.visible) {
+                let el;
+                if (activity.activityType === ActivityType.molecule) {
+                    el = self.createMolecule(activity);
+                } else {
+                    el = self.createNode(activity);
                 }
+                elements.push(el);
+            }
+        });
 
-                this.renderCytoscape(gocamId, graph, elements, layout);
-            });
+        cam.causalRelations.forEach((triple: Triple<Activity>) => {
+            if (triple.predicate.visible && triple.isTripleComplete()) {
+                const source = triple.predicate.isReverseLink ? triple.subject : triple.object
+                const target = triple.predicate.isReverseLink ? triple.object : triple.subject
 
+                const link = {
+                    group: "edges",
+                    data: {
+                        id: triple.predicate.uuid,
+                        source: source.id,
+                        target: target.id,
+                        label: triple.predicate.edge.label,
+                        color: "black",
+                        glyph: "circle",
+                        lineStyle: "solid",
+                        width: this.defaultEdgeStyle.width
+                    }
+                };
+
+                elements.push(link);
+            }
+        });
+
+        console.log(elements)
+
+        this.renderCytoscape(cam, elements, layout);
     }
 
-    renderCytoscape(gocamId, graph, elements, layout) {
+    createNode(activity: Activity) {
+
+        const label = activity.gpNode?.term.label || activity.label || '';
+        const el = {
+            group: "nodes",
+            data: {
+                id: activity.id,
+                label: label,
+                width: Math.max(115, label.length * 11),
+                textwidth: Math.max(115, label.length * 9),
+                // link: ??
+                // parent: ??
+                "text-valign": "top",
+                "text-halign": "left",
+                "background-color": this.defaultNodeStyle["background-color"],
+                // degree: (child * 10 + parent)
+            }
+        }
+
+        return el
+    }
+
+    createMolecule(activity: Activity) {
+        const moleculeNode = activity.rootNode;
+        const label = moleculeNode?.term.label || activity.label || '';
+
+        const el = {
+            group: "nodes",
+            data: {
+                id: activity.id,
+                label: label,
+                width: Math.max(115, label.length * 11),
+                textwidth: Math.max(115, label.length * 9),
+                // link: ??
+                // parent: ??
+                "text-valign": "top",
+                "text-halign": "left",
+                "background-color": this.defaultNodeStyle["background-color"],
+                // degree: (child * 10 + parent)
+            }
+        }
+
+        return el
+    }
+
+
+    renderCytoscape(cam: Cam, elements, layout) {
 
         // Showing loading message
         let viz = this.gocamviz.querySelector("#gocam-viz");
         // viz.innerHTML = "";
-        console.log("Displaying GO-CAM ", gocamId, graph);
+        console.log("Displaying GO-CAM ", cam.id);
 
         // Creating the cytoscape component
         this.cy = cytoscape({
@@ -486,8 +574,6 @@ export class GoCamViz {
             this.genesPanel.parentCy = this.cy;
         }
     }
-
-
 
     /** 
      * Called when cytoscape.ready is called
@@ -777,8 +863,6 @@ export class GoCamViz {
         // this.cy.center();
         this.layoutChange.emit(evt);
     }
-
-
 
     /** 
      * Before the component is rendered (executed once)

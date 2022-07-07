@@ -3,13 +3,14 @@ import { Listen, Method, State } from '@stencil/core';
 import { graph as noctua_graph } from 'bbop-graph-noctua';
 import cytoscape from 'cytoscape';
 import coseBilkent from 'cytoscape-cose-bilkent';
+import dagre from 'cytoscape-dagre';
 import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globals/utils';
 import * as dbxrefs from "@geneontology/dbxrefs";
 import '@geneontology/wc-light-modal';
 import { GraphHandler } from '../../globals/graph-handler';
 import { Activity, ActivityType, Cam, NoctuaFormConfigService, NoctuaGraphService, Triple } from '../../globals/@noctua.form';
 
-cytoscape.use(coseBilkent);
+cytoscape.use(dagre);
 
 
 @Component({
@@ -153,11 +154,11 @@ export class GoCamViz {
 
     // Default cytoscape edge styling
     defaultEdgeStyle = {
-        'content': 'data(label)',
+        //'content': 'data(label)',
         'line-color': 'data(color)',
         'line-style': 'data(lineStyle)',
         'target-arrow-color': 'data(color)',
-        //'target-arrow-shape': 'data(glyph)',
+        'target-arrow-shape': 'data(glyph)',
         'curve-style': 'bezier',
         'text-rotation': 'autorotate',
         'text-margin-y': '-6px',
@@ -226,7 +227,12 @@ export class GoCamViz {
             spacingFactor: 1.0,// 1.75,
             padding: 30,// 30,
             circle: false//,
-        }
+        },
+        dagre: {
+            name: 'dagre',
+            rankDir: 'TB',
+            align: 'UR',
+        },
     };
 
 
@@ -279,7 +285,7 @@ export class GoCamViz {
 
 
     initCytoscape() {
-        cytoscape.use(coseBilkent);
+        cytoscape.use(dagre);
     }
 
     /** 
@@ -342,7 +348,7 @@ export class GoCamViz {
      * @param graph bbop graph
      * @param nest nesting strategy (default = "no")
      */
-    renderGoCam(gocamId, cam: Cam, nest = "no", layout = 'cose-bilkent') {
+    renderGoCam(gocamId, cam: Cam, nest = "no", layout = 'dagre') {
         const self = this;
         this.currentGraph = cam.graph;
         //  this.ghandler = new GraphHandler(this.currentGraph);
@@ -420,8 +426,8 @@ export class GoCamViz {
         this.graphService.loadCam(cam)
 
 
-        const elements = [];
-
+        const nodes = [];
+        const edges = [];
 
 
         cam.activities.forEach((activity: Activity) => {
@@ -432,14 +438,15 @@ export class GoCamViz {
                 } else {
                     el = self.createNode(activity);
                 }
-                elements.push(el);
+                nodes.push(el);
             }
         });
 
         cam.causalRelations.forEach((triple: Triple<Activity>) => {
             if (triple.predicate.visible && triple.isTripleComplete()) {
-                const source = triple.predicate.isReverseLink ? triple.subject : triple.object
-                const target = triple.predicate.isReverseLink ? triple.object : triple.subject
+                const source = triple.predicate.isReverseLink ? triple.object : triple.subject;
+                const target = triple.predicate.isReverseLink ? triple.subject : triple.object;
+                let rglyph = glyph(triple.predicate.edge.id);
 
                 const link = {
                     group: "edges",
@@ -448,18 +455,18 @@ export class GoCamViz {
                         source: source.id,
                         target: target.id,
                         label: triple.predicate.edge.label,
-                        color: "black",
-                        glyph: "circle",
-                        lineStyle: "solid",
-                        width: this.defaultEdgeStyle.width
+                        color: rglyph.color ? rglyph.color : "black",
+                        glyph: rglyph.glyph ? rglyph.glyph : "circle",
+                        lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid",
+                        width: rglyph.width ? rglyph.width : this.defaultEdgeStyle.width
                     }
                 };
 
-                elements.push(link);
+                edges.push(link);
             }
         });
 
-        console.log(elements)
+        const elements = { nodes, edges }
 
         this.renderCytoscape(cam, elements, layout);
     }

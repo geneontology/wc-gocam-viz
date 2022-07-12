@@ -6,7 +6,7 @@ import { Contributor } from '../contributor';
 import { Evidence } from './evidence';
 import { Triple } from './triple';
 import { Entity } from './entity';
-import { each, find, orderBy } from 'lodash';
+import { each, find, orderBy, groupBy } from 'lodash';
 import { NoctuaFormUtils } from './../../utils/noctua-form-utils';
 
 export class CamSortBy {
@@ -230,6 +230,14 @@ export class Cam {
     });
 
     return result;
+  }
+
+  groupActivitiesByProcess() {
+    const groupedActivities = groupBy(this.activities, (activity: Activity) => {
+      return activity.bpNode ? activity.bpNode.term.label : 'No Processes'
+    })
+
+    return groupedActivities;
   }
 
   updateProperties() {

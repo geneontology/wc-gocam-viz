@@ -5,13 +5,13 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { GraphHandler } from "./globals/graph-handler";
+import { Cam } from "./globals/@noctua.form";
 export namespace Components {
     interface WcGenesPanel {
         /**
           * BBOP Graph Handler -> GO-CAM Must be provided to build the side panel
          */
-        "ghandler": GraphHandler;
+        "cam": Cam;
         /**
           * Passed by the parent to highlight & clear highlight nodes
          */
@@ -103,7 +103,7 @@ declare namespace LocalJSX {
         /**
           * BBOP Graph Handler -> GO-CAM Must be provided to build the side panel
          */
-        "ghandler"?: GraphHandler;
+        "cam"?: Cam;
         "onSelectChanged"?: (event: CustomEvent<any>) => void;
         /**
           * Passed by the parent to highlight & clear highlight nodes

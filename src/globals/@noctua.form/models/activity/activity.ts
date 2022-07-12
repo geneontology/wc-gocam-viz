@@ -92,7 +92,7 @@ export class Activity extends SaeGraph<ActivityNode> {
   size: ActivitySize = new ActivitySize();
 
 
-  private _backgroundColor = 'green'
+  private _backgroundColor = '#e8f5e9'
   private _id: string;
 
   constructor() {
@@ -124,11 +124,11 @@ export class Activity extends SaeGraph<ActivityNode> {
   get backgroundColor() {
     switch (this.activityType) {
       case ActivityType.ccOnly:
-        return 'purple'
+        return '#d1c4e9'
       case ActivityType.bpOnly:
-        return 'brown'
+        return '#efebe9'
       case ActivityType.molecule:
-        return 'teal'
+        return '#e0f2f1' //teal
       default:
         return this._backgroundColor;
     }

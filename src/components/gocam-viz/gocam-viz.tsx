@@ -115,7 +115,7 @@ export class GoCamViz {
     /**
      * This state is updated whenever loading a new graph, in order to trigger a new rendering of genes-panel
      */
-    @State() ghandler: GraphHandler;
+    @State() cam: Cam;
 
     @Watch('repository')
     changeRepository(newValue, oldValue) {
@@ -139,14 +139,14 @@ export class GoCamViz {
         'content': 'data(label)',
         'width': 'data(width)',
         'height': 55,
-        'background-color': 'white',
+        'backgroundColor': 'data(backgroundColor)',
         'border-width': 1,
         'border-color': 'black',
         'font-size': 20,
         'min-zoomed-font-size': 1, //10,
         'text-valign': 'center',
         'color': 'black',
-        'shape': "round-rectangle",
+        'shape': "rectangle",
         'text-wrap': 'wrap',
         // 'text-overflow-wrap': "anywhere",
         'text-max-width': 'data(textwidth)'
@@ -315,7 +315,7 @@ export class GoCamViz {
         }
         this.loading = true;
         this.error = false;
-        this.ghandler = undefined;
+        this.cam = undefined;
         let url = ''
 
         if (this.repository === 'prod') {
@@ -333,10 +333,10 @@ export class GoCamViz {
         }).then(graph => {
             let model = (this.repository === 'release') ? graph : graph.activeModel;
             if (model) {
-                const cam: Cam = new Cam();
-                cam.graph = new noctua_graph();
-                cam.graph.load_data_basic(model);
-                this.renderGoCam(gocamId, cam);
+                this.cam = new Cam();
+                this.cam.graph = new noctua_graph();
+                this.cam.graph.load_data_basic(model);
+                this.renderGoCam(gocamId, this.cam);
             }
         })
     }
@@ -429,7 +429,6 @@ export class GoCamViz {
         const nodes = [];
         const edges = [];
 
-
         cam.activities.forEach((activity: Activity) => {
             if (activity.visible) {
                 let el;
@@ -458,7 +457,7 @@ export class GoCamViz {
                         color: rglyph.color ? rglyph.color : "black",
                         glyph: rglyph.glyph ? rglyph.glyph : "circle",
                         lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid",
-                        width: rglyph.width ? rglyph.width : this.defaultEdgeStyle.width
+                        width: rglyph.width ? rglyph.width : 2,
                     }
                 };
 
@@ -485,7 +484,7 @@ export class GoCamViz {
                 // parent: ??
                 "text-valign": "top",
                 "text-halign": "left",
-                "background-color": this.defaultNodeStyle["background-color"],
+                "backgroundColor": activity.backgroundColor || 'white',
                 // degree: (child * 10 + parent)
             }
         }
@@ -508,7 +507,7 @@ export class GoCamViz {
                 // parent: ??
                 "text-valign": "top",
                 "text-halign": "left",
-                "background-color": this.defaultNodeStyle["background-color"],
+                "backgroundColor": activity.backgroundColor || 'white',
                 // degree: (child * 10 + parent)
             }
         }
@@ -596,7 +595,7 @@ export class GoCamViz {
         if (sel.size() > 0) {
             sel.style("border-width", "2px")
             sel.style("border-color", "blue")
-            sel.style("background-color", "#eef2ff")
+            // sel.style("background-color", "#eef2ff")
             this.selectedNode = sel;
         }
     }
@@ -605,7 +604,7 @@ export class GoCamViz {
         if (cyNode) {
             cyNode.style("border-width", "1px");
             cyNode.style("border-color", "black");
-            cyNode.style("background-color", "white");
+            // cyNode.style("background-color", "white");
         }
     }
 
@@ -631,10 +630,10 @@ export class GoCamViz {
             this.selectedEvent = evt;
             let entity_id = evt.target.id();
 
-            let activity = this.ghandler.getActivity(entity_id);
+            const activity = this.cam.findActivityById(entity_id);
             // console.log("graph handler: " , activity);
 
-            this.ghandler.enrichActivity(activity);
+            //this.cam.enrichActivity(activity);
 
             if (entity_id.substr(0, 8) == "gomodel:") {
                 let data = evt.target.data();
@@ -921,7 +920,7 @@ export class GoCamViz {
 
             <div id="gocam-viz-container">
                 <div id="gocam-viz" class={classes}></div>
-                <wc-genes-panel id="gocam-viz-panel" ghandler={this.ghandler} ref={el => this.genesPanel = el}></wc-genes-panel>
+                <wc-genes-panel id="gocam-viz-panel" cam={this.cam} ref={el => this.genesPanel = el}></wc-genes-panel>
             </div>,
 
             this.showLegend ? <img class="img-gcv" src={getAssetPath("./assets/legendv2.png")}></img> : ""

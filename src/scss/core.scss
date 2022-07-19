@@ -40,3 +40,8 @@ $gocam-height: 800px;
   min-height: $number;
   max-height: $number;
 }
+
+.gocam-hidden {
+  display: none !important;
+  visibility: hidden !important;
+}

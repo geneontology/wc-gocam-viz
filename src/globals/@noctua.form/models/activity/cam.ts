@@ -235,7 +235,7 @@ export class Cam {
   groupActivitiesByProcess() {
     const groupedActivities = groupBy(this.activities, (activity: Activity) => {
       if (activity.activityType === ActivityType.molecule) {
-        return 'Small molecules'
+        return 'Small Molecules'
       }
       return activity.bpNode ? activity.bpNode.term.label : 'Other Processes'
     })

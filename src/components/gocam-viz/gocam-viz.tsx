@@ -8,6 +8,8 @@ import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globa
 import * as dbxrefs from "@geneontology/dbxrefs";
 import '@geneontology/wc-light-modal';
 import { Activity, ActivityType, Cam, NoctuaFormConfigService, NoctuaGraphService, Triple } from '../../globals/@noctua.form';
+import { legend } from '../../globals/constants';
+
 
 cytoscape.use(dagre);
 
@@ -802,8 +804,7 @@ export class GoCamViz {
     */
     render() {
 
-        console.log(this.cam)
-        let classes = this.loading ? "" : "gocam-viz";
+        let classes = this.loading ? "gocam-hidden" : "container";
 
         if (this.genesPanel && !this.genesPanel.parentCy) {
             this.genesPanel.parentCy = this.cy;
@@ -811,20 +812,16 @@ export class GoCamViz {
 
         return [
 
-            /*    <div>
-                   {this.showGoCamSelector ?
-                       <div class="control__panel">
-                           {this.showGoCamSelector ? <wc-gocam-selector></wc-gocam-selector> : ""}
-                           <button class='open__in_noctua__label button-gcv' onClick={() => this.openInNoctua()}>Open in Noctua</button>
-                           <button class='reset__view button-gcv' onClick={() => this.resetView()}>Reset View</button>
-                       </div>
-                       : ""}
-               </div>, */
+            this.loading ? this.error ? "" : <div class="gocam-viz-loader d-flex flex-column justify-content-center">
+                <div class="">
+                    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                </div>
+                <div class="">
+                    Loading GO-CAM {this.gocamId}
+                </div>
+            </div> : "",
 
-            this.loading ? this.error ? "" : <div class="gocam-viz-loader">Loading GO-CAM {this.gocamId} ...</div> : "",
-
-
-            <div id="gocam-viz-container" class="container">
+            <div id="gocam-viz-container" class={classes}>
                 <div class="row align-items-start">
                     <div class="card col col-lg-8 p-0">
                         <div class="d-flex card-header gocam-card-header-md">
@@ -836,7 +833,8 @@ export class GoCamViz {
 
                         </div>
                         <div class="card-body p-0">
-                            <div id="gocam-viz" class={classes}></div>
+                            <div id="gocam-viz" class="gocam-viz"></div>
+                            {this.renderLegend()}
                         </div>
                     </div>
                     <div class="card col col-lg-4 p-0">
@@ -850,9 +848,36 @@ export class GoCamViz {
                 </div>
             </div >,
 
-            this.showLegend ? <img class="img-gcv" src={getAssetPath("./assets/legendv2.png")}></img> : ""
 
         ];
+
+    }
+
+    renderLegend() {
+        return this.showLegend ?
+            <div class="container">
+                <div class="row align-items-start">
+                    {Object.keys(legend).map((section) => {
+                        return <div class="card col col-lg-4 p-0">
+                            <ul class="list-group list-group-flush">
+                                {legend[section].map((item) => {
+                                    return (
+                                        <li class="list-group-item d-flex">
+                                            <div class="flex-grow-1 gocam-node-term">
+                                                {item.label}
+                                            </div>
+                                            <div class="gocam-node-evidence">
+                                                I
+                                            </div>
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
+                    })}
+                </div>
+            </div>
+            : ""
 
     }
 

@@ -130,7 +130,7 @@ export class Activity extends SaeGraph<ActivityNode> {
       case ActivityType.molecule:
         return '#e0f2f1' //teal
       default:
-        return this._backgroundColor;
+        return '#ebe3f9';
     }
   }
 

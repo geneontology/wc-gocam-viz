@@ -1,5 +1,5 @@
 import { noctuaFormConfig } from './../../noctua-form-config';
-import { Activity, ActivitySortField } from './activity'
+import { Activity, ActivitySortField, ActivityType } from './activity'
 import { ActivityNode, ActivityNodeType } from './activity-node';
 import { Group } from '../group';
 import { Contributor } from '../contributor';
@@ -234,7 +234,10 @@ export class Cam {
 
   groupActivitiesByProcess() {
     const groupedActivities = groupBy(this.activities, (activity: Activity) => {
-      return activity.bpNode ? activity.bpNode.term.label : 'No Processes'
+      if (activity.activityType === ActivityType.molecule) {
+        return 'Small molecules'
+      }
+      return activity.bpNode ? activity.bpNode.term.label : 'Other Processes'
     })
 
     return groupedActivities;

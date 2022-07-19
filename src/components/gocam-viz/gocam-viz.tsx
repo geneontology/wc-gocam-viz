@@ -7,7 +7,6 @@ import dagre from 'cytoscape-dagre';
 import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globals/utils';
 import * as dbxrefs from "@geneontology/dbxrefs";
 import '@geneontology/wc-light-modal';
-import { GraphHandler } from '../../globals/graph-handler';
 import { Activity, ActivityType, Cam, NoctuaFormConfigService, NoctuaGraphService, Triple } from '../../globals/@noctua.form';
 
 cytoscape.use(dagre);
@@ -15,7 +14,7 @@ cytoscape.use(dagre);
 
 @Component({
     tag: 'wc-gocam-viz',
-    styleUrl: 'gocam-viz.css',
+    styleUrl: 'gocam-viz.scss',
     shadow: false,
     assetsDirs: ['assets']
 })
@@ -351,80 +350,7 @@ export class GoCamViz {
     renderGoCam(gocamId, cam: Cam, nest = "no", layout = 'dagre') {
         const self = this;
         this.currentGraph = cam.graph;
-        //  this.ghandler = new GraphHandler(this.currentGraph);
-        // this.ghandler.setDBXrefs(dbxrefs);
-
-        /* 
-                this.ghandler.enrichActivities(activities)
-                    .then((data) => {
-        
-                        let elements = [];
-        
-                        // 1 - create the nodes
-                        for (let enrichedActivity of data) {
-        
-                            let label = "";
-                            if (enrichedActivity.geneProducts.length > 0) {
-                                label = enrichedActivity.geneProducts.map(elt => elt.label).join(" | ");
-                            } else {
-                                label = enrichedActivity.labels.join(" | ");
-                            }
-        
-                            let eanode = {
-                                group: "nodes",
-                                data: {
-                                    id: enrichedActivity.nodeId,
-                                    label: label,
-                                    width: Math.max(115, label.length * 11),
-                                    textwidth: Math.max(115, label.length * 9),
-                                    // link: ??
-                                    // parent: ??
-                                    "text-valign": "top",
-                                    "text-halign": "left",
-                                    "background-color": this.defaultNodeStyle["background-color"],
-                                    // degree: (child * 10 + parent)
-                                }
-                            }
-                            elements.push(eanode);
-                        }
-        
-                        // 2 - create the edges
-                        for (let enrichedActivity of data) {
-                            let connected = this.ghandler.getCausalActivities(enrichedActivity, data);
-                            // console.log("activity ", enrichedActivity, " is connected to ", connected);
-                            let relids = Object.keys(connected)
-                            for (let relid of relids) {
-                                let targets = connected[relid];
-                                let rglyph = glyph(relid);
-        
-                                for (let target of targets) {
-                                    // console.log("target: ", target);
-                                    let ed = {
-                                        group: "edges",
-                                        data: {
-                                            id: target.relationId,
-                                            source: enrichedActivity.nodeId,
-                                            target: target.activity.nodeId,
-                                            label: rglyph.label ? rglyph.label : target.relationLabel,
-                                            color: rglyph.color ? rglyph.color : "black",
-                                            glyph: rglyph.glyph ? rglyph.glyph : "circle",
-                                            lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid",
-                                            width: rglyph.width ? rglyph.width : this.defaultEdgeStyle.width
-                                        }
-                                    };
-                                    // console.log("ED: ", ed);
-                                    elements.push(ed);
-                                }
-                            }
-                        }
-        
-                        this.renderCytoscape(gocamId, graph, elements, layout);
-                    }); */
-
-
-
         this.graphService.loadCam(cam)
-
 
         const nodes = [];
         const edges = [];
@@ -663,18 +589,6 @@ export class GoCamViz {
                     }
                 }
 
-                // console.log("BIOCONTEXT: ", biocontext);
-                // console.log("std types: ", standardTypes);
-                // console.log("inf types: ", inferredTypes);
-
-                // console.log("node anns: ", annotations);
-
-                // var x_node = subgraph.get_node(entity_id);
-                // if(x_node) {
-                //     var ev_node_anns = x_node.get_annotations_by_key('evidence');
-                //     // console.log("node evs: ", ev_node_anns);
-                // }
-
                 let annotations = node.annotations();
                 let annotationMap = {};
                 for (let ann of annotations) {
@@ -838,17 +752,6 @@ export class GoCamViz {
             this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
             this.selectedNode = undefined;
         }
-        // console.log("Mouse click ", evt);
-        // if(evt && evt.target && evt.target.id) {
-        //     let entity_id = evt.target.id();
-        //     if(entity_id.substr(0, 8) == "gomodel:") {
-        //         this.nodeOut.emit(evt);
-        //     }
-        // }
-        // if(this.selectedNode) {
-        //     this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
-        //     this.selectedNode = undefined;
-        // }
 
         this.nodeClick.emit(evt);
     }
@@ -898,6 +801,8 @@ export class GoCamViz {
      * Main render method; any change to a @Prop or @State triggers this
     */
     render() {
+
+        console.log(this.cam)
         let classes = this.loading ? "" : "gocam-viz";
 
         if (this.genesPanel && !this.genesPanel.parentCy) {
@@ -906,22 +811,44 @@ export class GoCamViz {
 
         return [
 
-            <div>
-                {this.showGoCamSelector ?
-                    <div class="control__panel">
-                        {this.showGoCamSelector ? <wc-gocam-selector></wc-gocam-selector> : ""}
-                        <button class='open__in_noctua__label button-gcv' onClick={() => this.openInNoctua()}>Open in Noctua</button>
-                        <button class='reset__view button-gcv' onClick={() => this.resetView()}>Reset View</button>
-                    </div>
-                    : ""}
-            </div>,
+            /*    <div>
+                   {this.showGoCamSelector ?
+                       <div class="control__panel">
+                           {this.showGoCamSelector ? <wc-gocam-selector></wc-gocam-selector> : ""}
+                           <button class='open__in_noctua__label button-gcv' onClick={() => this.openInNoctua()}>Open in Noctua</button>
+                           <button class='reset__view button-gcv' onClick={() => this.resetView()}>Reset View</button>
+                       </div>
+                       : ""}
+               </div>, */
 
             this.loading ? this.error ? "" : <div class="gocam-viz-loader">Loading GO-CAM {this.gocamId} ...</div> : "",
 
-            <div id="gocam-viz-container">
-                <div id="gocam-viz" class={classes}></div>
-                <wc-genes-panel id="gocam-viz-panel" cam={this.cam} ref={el => this.genesPanel = el}></wc-genes-panel>
-            </div>,
+
+            <div id="gocam-viz-container" class="container">
+                <div class="row align-items-start">
+                    <div class="card col col-lg-8 p-0">
+                        <div class="d-flex card-header gocam-card-header-md">
+                            <h6 class="flex-grow-1">
+                                {this.cam?.title}
+                            </h6>
+
+                            <button class='float-end btn btn-primary btn-sm' onClick={() => this.resetView()}>Reset View</button>
+
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="gocam-viz" class={classes}></div>
+                        </div>
+                    </div>
+                    <div class="card col col-lg-4 p-0">
+                        <div class="card-header gocam-h-md">
+                            Processes and Activities
+                        </div>
+                        <div class="card-body p-0">
+                            <wc-genes-panel id="gocam-viz-panel" class="" cam={this.cam} ref={el => this.genesPanel = el}></wc-genes-panel>
+                        </div>
+                    </div>
+                </div>
+            </div >,
 
             this.showLegend ? <img class="img-gcv" src={getAssetPath("./assets/legendv2.png")}></img> : ""
 

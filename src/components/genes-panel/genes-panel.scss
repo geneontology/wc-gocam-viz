@@ -1,0 +1,52 @@
+@import './../../scss/core';
+.genes-panel__list {
+  padding: 0;
+  width: 100%;
+  height: $gocam-height;
+  // line-height: 1.5;
+  overflow-y: scroll;
+  border: 1px solid #bdc9eb;
+
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  .card {
+    border: none;
+    .card-header {
+      background-color: transparent;
+    }
+  }
+
+  .gocam-process-card {
+    .card-header {
+      a {
+        color: #fff;
+      }
+
+      background-color: #7a548d;
+    }
+  }
+
+  .gocam-activity-card {
+    border-bottom: 3px solid #d1b6df;
+    .card-header {
+      font-weight: bold;
+      a {
+        font-size: 18px;
+        color: #333;
+      }
+      background-color: #fff;
+    }
+
+    .gocam-node-relation {
+      font-size: 10px;
+      @include deep-width(80px);
+    }
+
+    .gocam-node-evidence {
+      @include deep-width(30px);
+    }
+  }
+}

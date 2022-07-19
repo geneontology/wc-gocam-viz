@@ -1,0 +1,59 @@
+@import './../../scss/core';
+$gocam-width: 800px;
+
+.card-header {
+  &.gocam-h-md {
+    @include deep-height(48px);
+  }
+}
+.gocam-viz {
+  width: 100%;
+  padding: 16px;
+  height: $gocam-height;
+  width: $gocam-width;
+  border: 1px solid #d1c4e9;
+}
+
+#gocam-viz-panel {
+  width: 100%;
+  height: 100%;
+  //border: 1px solid #bdc9eb;
+}
+
+.gocam-viz-loader {
+  width: $gocam-width;
+  height: $gocam-height;
+  margin: auto;
+  font-size: 24px;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.pop-line {
+  line-height: 1.1rem;
+  text-decoration: none;
+}
+
+.open__in_noctua__label {
+  margin-left: 3rem;
+  background-color: rgb(74, 74, 211);
+  color: white;
+}
+
+.button-gcv {
+  background-color: rgb(74, 74, 211);
+  color: white;
+  padding: 0.2rem 0.6rem;
+}
+
+.control__panel {
+  position: relative;
+  width: $gocam-width;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.img-gcv {
+  height: 150px;
+}

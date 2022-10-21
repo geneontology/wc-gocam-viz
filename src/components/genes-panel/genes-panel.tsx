@@ -177,7 +177,7 @@ export class GenesPanel {
         });
 
         return (
-            <div class="card  mb-2 gocam-activity-card" id={"gp_item_" + activity.id} onClick={() => this.select(activity)} onMouseOver={() => this.highlight(activity.id)} onMouseOut={() => this.clearHighlight()} >
+            <div class="card mb-2 gocam-activity-card" id={"gp_item_" + activity.id} onClick={() => this.select(activity)} onMouseOver={() => this.highlight(activity.id)} onMouseOut={() => this.clearHighlight()} >
                 <div class='card-header'>
                     {
                         activity.gpNode ?
@@ -186,21 +186,20 @@ export class GenesPanel {
                     }
                 </div>
                 {activity.mfNode ?
-                    <div class='card-body gocam-activity-card__activity__block'>
-                        <a class='a-gcv gocam-activity-card__activity block-right' href={activity.mfNode?.term.url} target='_blank'>
+                    <div class='card-body'>
+                        <a class='a-gcv block-right' href={activity.mfNode?.term.url} target='_blank'>
                             {activity.mfNode?.term.label}
                         </a>
                         <ul class="list-group list-group-flush">
 
                             {nodes.map((node: ActivityNode) => {
-                                //if (node == "RO:0002333") { return; }
                                 return (
                                     <li class="list-group-item d-flex">
                                         <div class="gocam-node-relation d-flex align-items-center">
                                             <a class='' target='_blank' href="">{node.predicate?.edge.label}</a>
                                         </div>
                                         <div class="flex-grow-1 gocam-node-term">
-                                            <a class='col' target='_blank' href="">{node.term.label}</a>
+                                            <a class='col' target='_blank' href={node.term.url}>{node.term.label}</a>
                                         </div>
                                         <div class="gocam-node-evidence">
                                             {this.renderReferences(node.predicate.evidence)}

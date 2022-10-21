@@ -7,6 +7,10 @@
   overflow-y: scroll;
   border: 1px solid #bdc9eb;
 
+  .list-group-item {
+    padding: 3px 0;
+  }
+
   a {
     color: #000;
     text-decoration: none;
@@ -16,6 +20,9 @@
     border: none;
     .card-header {
       background-color: transparent;
+    }
+    .card-body {
+      padding: 8px;
     }
   }
 
@@ -43,6 +50,10 @@
     .gocam-node-relation {
       font-size: 10px;
       @include deep-width(80px);
+    }
+
+    .gocam-node-term {
+      font-size: 12px;
     }
 
     .gocam-node-evidence {

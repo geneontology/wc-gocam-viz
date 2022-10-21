@@ -474,11 +474,6 @@ export class GraphHandler {
 
 
 
-
-
-
-
-
     /**
      * Return the URL, taxon and taxon URL for a gene CURIE
      */

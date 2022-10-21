@@ -18,6 +18,7 @@ import { Article } from './../models/article';
 import { Contributor, equalContributor } from '../models/contributor';
 
 import { graph as bbopGraph } from 'bbop-graph-noctua';
+import * as dbxrefs from "@geneontology/dbxrefs";
 
 
 export class NoctuaGraphService {
@@ -43,7 +44,12 @@ export class NoctuaGraphService {
       }
 
     } else {
-      return '';// linker.url(id);
+      const dbId = id.split(':')
+      console.log(dbId)
+      if (dbId.length > 1) {
+        return dbxrefs.getURL(dbId[0], undefined, dbId[1]);
+      }
+
     }
   }
 
@@ -59,7 +65,6 @@ export class NoctuaGraphService {
     cam.modified = responseData['modified-p'];
 
     const titleAnnotations = cam.graph.get_annotations_by_key('title');
-    const stateAnnotations = cam.graph.get_annotations_by_key('state');
     const dateAnnotations = cam.graph.get_annotations_by_key('date');
     // const groupAnnotations = cam.graph.get_annotations_by_key('providedBy');
     //  const contributorAnnotations = cam.graph.get_annotations_by_key('contributor');

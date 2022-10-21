@@ -55,8 +55,33 @@ $gocam-width: 800px;
   margin-bottom: 1rem;
 }
 
-.img-gcv {
-  height: 150px;
+.gocam-legend-container {
+  .list-group,
+  .list-group-item {
+    border: none !important;
+  }
+  .gocam-legend-header {
+    padding: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .left {
+    .gocam-legend-key {
+      img {
+        height: 4px;
+      }
+    }
+  }
+  .gocam-legend-key {
+    img {
+      height: 20px;
+    }
+  }
+  .gocam-legend-value {
+    height: 20px;
+    padding-left: 8px;
+  }
 }
 
 //loader

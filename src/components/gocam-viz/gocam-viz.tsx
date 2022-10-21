@@ -294,7 +294,6 @@ export class GoCamViz {
     */
     initDBXrefs() {
         dbxrefs.init(() => {
-            // console.log("dbxrefs ready");
             this.dbXrefsReady = true;
         })
     }
@@ -446,10 +445,7 @@ export class GoCamViz {
 
     renderCytoscape(cam: Cam, elements, layout) {
 
-        // Showing loading message
         let viz = this.gocamviz.querySelector("#gocam-viz");
-        // viz.innerHTML = "";
-        console.log("Displaying GO-CAM ", cam.id);
 
         // Creating the cytoscape component
         this.cy = cytoscape({
@@ -683,8 +679,6 @@ export class GoCamViz {
 
     previousPanelElt = undefined;
     onMouseOver(evt) {
-        // we don't need that timeout anymore since it's not showing pop up but just highlighting
-        // this.timerPopup = setTimeout(() => this.showPopup(evt), this.delayPopup);
 
         if (evt && evt.target && evt.target.id) {
             this.highlight(evt.target.id());
@@ -700,17 +694,6 @@ export class GoCamViz {
                 this.previousPanelElt = elt;
             }
 
-            if (this.genesPanel) {
-
-                let scrollList = document.getElementById("genes-panel__list");
-                let elt2 = document.getElementById("gp_item_" + evt.target.id());
-                if (scrollList && elt2) {
-                    scrollList.scroll(0, elt2.offsetTop - 220);
-                    elt2.style["box-shadow"] = "2px 2px 5px 6px rgb(194 194 255)";
-                }
-
-                // this.genesPanel.scrollToActivity(evt.target.id());
-            }
 
         }
     }
@@ -750,9 +733,22 @@ export class GoCamViz {
             }
             this.selectedEvent = undefined;
         }
+
         if (this.selectedNode) {
             this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
             this.selectedNode = undefined;
+        }
+
+        if (this.genesPanel) {
+
+            let scrollList = document.getElementById("genes-panel__list");
+            let elt2 = document.getElementById("gp_item_" + evt.target.id());
+            if (scrollList && elt2) {
+                scrollList.scroll(0, elt2.offsetTop - 220);
+                elt2.style["box-shadow"] = "2px 2px 5px 6px rgb(194 194 255)";
+            }
+
+            // this.genesPanel.scrollToActivity(evt.target.id());
         }
 
         this.nodeClick.emit(evt);
@@ -855,20 +851,24 @@ export class GoCamViz {
 
     renderLegend() {
         return this.showLegend ?
-            <div class="container">
+            <div class="container gocam-legend-container">
+                <div class="row align-items-center">
+                    <div class="gocam-legend-header">Relation Types</div>
+                </div>
                 <div class="row align-items-start">
                     {Object.keys(legend).map((section) => {
-                        return <div class="card col col-lg-4 p-0">
+                        return <div class={'card col col-lg-4 p-0 ' + section}>
                             <ul class="list-group list-group-flush">
                                 {legend[section].map((item) => {
                                     return (
                                         <li class="list-group-item d-flex">
-                                            <div class="flex-grow-1 gocam-node-term">
+                                            <div class="gocam-legend-key">
+                                                <img class="img-gcv" src={getAssetPath(`./assets/relation/${item.id}.png`)}></img>
+                                            </div>
+                                            <div class="flex-grow-1 gocam-legend-value">
                                                 {item.label}
                                             </div>
-                                            <div class="gocam-node-evidence">
-                                                I
-                                            </div>
+
                                         </li>
                                     )
                                 })}

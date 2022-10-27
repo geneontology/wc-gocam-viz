@@ -98,6 +98,7 @@ export class GoCamViz {
      */
     apiUrl = "https://api.geneontology.xyz/gocam/";
     devBaristaUrl = 'http://barista-dev.berkeleybop.org/search/stored?id=';
+    localDevBaristaUrl = 'http://localhost:3400/search/stored?id=';
     productionBaristaUrl = 'http://barista.berkeleybop.org/search/stored?id=';
 
     noctuaGraphURL = {
@@ -322,6 +323,8 @@ export class GoCamViz {
             url = this.productionBaristaUrl + gocamId;
         } else if (this.repository === 'dev') {
             url = this.devBaristaUrl + gocamId;
+        } else if (this.repository === 'local-dev') {
+            url = this.localDevBaristaUrl + gocamId;
         } else if (this.repository === 'release') {
             url = this.apiUrl + gocamId + "/raw"
         }
@@ -676,6 +679,21 @@ export class GoCamViz {
         return this.cy.userZoomingEnabled;
     }
 
+    scrollDiv(parent, elt) {
+        const findPosition = (obj) => {
+            var currenttop = 0;
+            if (obj.offsetParent) {
+                do {
+                    currenttop += obj.offsetTop;
+                } while ((obj = obj.offsetParent));
+                return currenttop;
+            }
+        }
+
+        parent.scroll(0, findPosition(elt));
+    }
+
+
 
     previousPanelElt = undefined;
     onMouseOver(evt) {
@@ -744,7 +762,11 @@ export class GoCamViz {
             let scrollList = document.getElementById("genes-panel__list");
             let elt2 = document.getElementById("gp_item_" + evt.target.id());
             if (scrollList && elt2) {
-                scrollList.scroll(0, elt2.offsetTop - 220);
+                //elt2.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+                //scrollList.scroll(0, elt2.offsetTop - 220);
+                this.scrollDiv(scrollList, elt2)
+
+
                 elt2.style["box-shadow"] = "2px 2px 5px 6px rgb(194 194 255)";
             }
 

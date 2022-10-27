@@ -1,5 +1,6 @@
 @import './../../scss/core';
 .genes-panel__list {
+  scroll-behavior: smooth;
   padding: 0;
   width: 100%;
   height: $gocam-height;

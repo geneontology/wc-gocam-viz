@@ -66,8 +66,8 @@ export class GenesPanel {
 
     @Method()
     async scrollToActivity(nodeId) {
-        let scrollList = document.getElementById("genes-panel__list");
-        let elt = document.getElementById("gp_item_" + nodeId);
+        const scrollList = document.getElementById("genes-panel__list");
+        const elt = document.getElementById("gp_item_" + nodeId);
         if (scrollList && elt) {
             scrollList.scroll(0, elt.offsetTop)
         }

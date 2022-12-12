@@ -19,9 +19,9 @@
   </select>
 
 
-  <!-- ACTUAL INTEGRATION OF THE GOCAM-VIZ COMPONENT -->
-  <wc-gocam-viz id="gocam-1" repository="prod" gocam-id="gomodel:568b0f9600000284" show-go-cam-selector=true
-    show-has-input=false show-has-output=false show-gene-product=true show-activity=false show-isolated-activity=true>
+  <!-- ACTUAL INTEGRATION OF THE GOCAM-VIZ COMPONENT ex gomodel:56d1143000000176 gomodel:6202e3b700000172-->
+  <wc-gocam-viz id="gocam-1" repository="local-dev" gocam-id="gomodel:61f34dd300001044" show-go-cam-selector=true
+    show-has-input=true show-has-output=true show-gene-product=true show-activity=true show-isolated-activity=true>
   </wc-gocam-viz>
 
 
@@ -46,7 +46,6 @@
 
     function updateRepository(e) {
       var goCamViz = document.getElementById("gocam-1");
-      console.log(e.target.value)
       goCamViz.setAttribute('repository', e.target.value);
     }
 

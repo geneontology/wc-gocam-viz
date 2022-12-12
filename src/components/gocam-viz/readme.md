@@ -59,13 +59,11 @@ Type: `Promise<void>`
 
 ### Depends on
 
-- [wc-gocam-selector](../gocam-selector)
 - [wc-genes-panel](../genes-panel)
 
 ### Graph
 ```mermaid
 graph TD;
-  wc-gocam-viz --> wc-gocam-selector
   wc-gocam-viz --> wc-genes-panel
   style wc-gocam-viz fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -240,6 +240,8 @@ export class GraphHandler {
             for (let key of Object.keys(biocontext)) {
                 biocontext[key] = Array.from(biocontext[key]);
             }
+
+            console.log(biocontext);
         }
 
 
@@ -414,14 +416,6 @@ export class GraphHandler {
         return activity;
     }
 
-    getCausalRelationshipIn(activity) {
-
-    }
-
-    getCausalRelationshipOut(activity) {
-
-    }
-
     getCausalActivities(activity, enrichedActivities) {
         let connected = {};
         let edges = this.bbopGraph.get_edges_by_subject(activity.nodeId);
@@ -477,11 +471,6 @@ export class GraphHandler {
         }
         return null;
     }
-
-
-
-
-
 
 
 

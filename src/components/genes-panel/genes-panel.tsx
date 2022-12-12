@@ -1,11 +1,11 @@
 import { Component, Prop, Element, Event, EventEmitter, Watch, h, Method } from '@stencil/core';
 import { State } from '@stencil/core';
-import { GraphHandler } from '../../globals/graph-handler';
+import { Activity, ActivityNode, ActivityNodeType, Cam, Evidence, noctuaFormConfig } from '../../globals/@noctua.form';
 
 
 @Component({
     tag: 'wc-genes-panel',
-    styleUrl: 'genes-panel.css',
+    styleUrl: 'genes-panel.scss',
     shadow: false,
 })
 export class GenesPanel {
@@ -19,7 +19,7 @@ export class GenesPanel {
      * BBOP Graph Handler -> GO-CAM
      * Must be provided to build the side panel
      */
-    @Prop() ghandler: GraphHandler
+    @Prop() cam: Cam
 
     /**
      * Passed by the parent to highlight & clear highlight nodes
@@ -36,28 +36,29 @@ export class GenesPanel {
     componentDidLoad() {
     }
 
-    // If the ghandler, should redraw
-    @Watch('ghandler')
-    ghandlerChanged(newValue, oldValue) {
+    // If the cam, should redraw
+    @Watch('cam')
+    camChanged(newValue, oldValue) {
         if (newValue != oldValue) {
             this.enrichedActivities = undefined;
 
             // if an undefined handler was provided, do nothing
-            if (!this.ghandler) { return; }
+            if (!this.cam) { return; }
 
-            let activities = this.ghandler.getAllActivities();
-            this.ghandler.enrichActivities(activities)
-                .then((data) => {
-                    // we sort activities by BP, as much as we can; ordered alphabetically and when no partOf = end of list
-                    data.sort((a, b) => (a.partOf.length == 0) ?
-                        1 : (b.partOf.length == 0) ?
-                            -1 : (a.partOf[0].label < b.partOf[0].label) ?
-                                -1 : 1)
-                    this.enrichedActivities = data;
-                    // console.log("GenesPanel:EnrichedActivities: ", this.enrichedActivities);
-                    this.groupedActivities = this.ghandler.groupActivitiesByProcess(this.enrichedActivities);
-                    // console.log("GenesPanel:GroupedActivities: ", this.groupedActivities);
-                })
+            let activities = this.cam.activities;
+            this.groupedActivities = this.cam.groupActivitiesByProcess();
+            /*  this.cam.enrichActivities(activities)
+                 .then((data) => {
+                     // we sort activities by BP, as much as we can; ordered alphabetically and when no partOf = end of list
+                     data.sort((a, b) => (a.partOf.length == 0) ?
+                         1 : (b.partOf.length == 0) ?
+                             -1 : (a.partOf[0].label < b.partOf[0].label) ?
+                                 -1 : 1)
+                     this.enrichedActivities = data;
+                     // console.log("GenesPanel:EnrichedActivities: ", this.enrichedActivities);
+                     this.groupedActivities = this.cam.groupActivitiesByProcess(this.enrichedActivities);
+                     // console.log("GenesPanel:GroupedActivities: ", this.groupedActivities);
+                 }) */
         }
     }
 
@@ -65,10 +66,10 @@ export class GenesPanel {
 
     @Method()
     async scrollToActivity(nodeId) {
-        let scrollList = document.getElementById("genes-panel__list");
-        let elt = document.getElementById("gp_item_" + nodeId);
+        const scrollList = document.getElementById("genes-panel__list");
+        const elt = document.getElementById("gp_item_" + nodeId);
         if (scrollList && elt) {
-            scrollList.scroll(0, elt.offsetTop - 150)
+            scrollList.scroll(0, elt.offsetTop)
         }
     }
 
@@ -83,7 +84,7 @@ export class GenesPanel {
         if (sel.size() > 0) {
             sel.style("border-width", "2px")
             sel.style("border-color", "blue")
-            sel.style("background-color", "#eef2ff")
+            //  sel.style("background-color", "#eef2ff")
             this.previousElt = sel;
         }
     }
@@ -92,15 +93,15 @@ export class GenesPanel {
         if (this.previousElt) {
             this.previousElt.style("border-width", "1px")
             this.previousElt.style("border-color", "black")
-            this.previousElt.style("background-color", "white")
+            // this.previousElt.style("background-color", "white")
             this.previousElt = undefined;
         }
     }
 
 
     highlightSelf(activityNode) {
-        if (!activityNode.classList.contains("genes-panel__item:hover")) {
-            activityNode.classList.add("genes-panel__item:hover");
+        if (!activityNode.classList.contains("gocam-activity-card:hover")) {
+            activityNode.classList.add("gocam-activity-card:hover");
         }
     }
 
@@ -124,13 +125,13 @@ export class GenesPanel {
      * Render the references for a biological context
      * @param context a biological context (see graphHandler)
      */
-    renderReferences(context) {
-        let pos = Array.from(Array(context.evidences.pmid.length).keys())
+    renderReferences(evidences: Evidence[]) {
         return (
             <span class='reference-list'>
                 {
-                    pos.map(i => {
-                        return <a class='a-gcv reference-article far fa-newspaper' href={context.evidences.url[i]} target='_blank' title={"Source: " + context.evidences.pmid[i] + "\nEvidence: " + context.evidences.label[i]}></a>
+                    evidences.map(evidence => {
+                        return <a class='a-gcv reference-article far fa-newspaper' href={evidence.evidence.url} target='_blank'
+                            title={"Source: " + evidence.reference + "\nEvidence: " + evidence.evidence.label}>E</a>
                     })
                 }
             </span>
@@ -141,46 +142,26 @@ export class GenesPanel {
         let label = gp.taxonLabel;
         // no label present for taxon
         if (!label) {
-            return <a class='a-gcv genes-panel__item__title__gp__taxon' href={gp.taxonURL} target='_blank'></a>;
+            return <a class='a-gcv gocam-activity-card__title__gp__taxon' href={gp.taxonURL} target='_blank'></a>;
         }
         // otherwise parse and show it
         if (label.includes(" ")) {
             let split = label.split(" ");
             label = split[0].substring(0, 1) + "." + split[1];
         }
-        return <a class='a-gcv genes-panel__item__title__gp__taxon' href={gp.taxonURL} target='_blank'>{label}</a>;
+        return <a class='a-gcv gocam-activity-card__title__gp__taxon' href={gp.taxonURL} target='_blank'>{label}</a>;
     }
 
     renderProcess(process) {
-        // console.log("- rendering process: ", process);
-
-        let item = process.id.length > 1 ? "¤ " : "";
-
-        let tmp = [];
-        for (let p = 0; p < process.id.length; p++) {
-            tmp.push({
-                id: process.id[p],
-                url: process.url[p],
-                label: process.label[p]
-            })
-        }
 
         return (
-            <div class="genes-panel__item__process">
-                <div class="genes-panel__item__process__list">
-                    {
-                        tmp.map(process => {
-                            return <a href={process.url} class="a-gcv genes-panel__item__process__list-name" target="_blank">{item + process.label}</a>
-                        })
-                        // process.label.map(elt => {
-                        //     return <a href={process.url} class="a-gcv genes-panel__item__process__list-name" target="_blank">{process.label}</a>
-                        // }) 
-                    }
+            <div class="card gocam-process-card mb-5 gocam-activity-card__process">
+                <div class="card-header gocam-activity-card__process__list">
+                    <a href={process} class="a-gcv gocam-activity-card__process__list-name" target="_blank">{process}</a>
                 </div>
-
-                <div class="genes-panel__item__process__activities">
+                <div class="card-body p-0 gocam-activity-card__process__activities">
                     {
-                        process.activities.map(activity => {
+                        this.groupedActivities[process].map(activity => {
                             return this.renderActivity(activity);
                         })
                     }
@@ -189,94 +170,62 @@ export class GenesPanel {
         )
     }
 
-    renderActivity(activity) {
-        let contexts = Object.keys(activity.biocontexts);
+    renderActivity(activity: Activity) {
+        const nodes = activity.nodes.filter((node: ActivityNode) => {
+            return (node.displaySection.id === noctuaFormConfig.displaySection.fd.id &&
+                node.type !== ActivityNodeType.GoMolecularFunction);
+        });
+
         return (
-            <div class="genes-panel__item" id={"gp_item_" + activity.nodeId} onClick={() => this.select(activity)} onMouseOver={() => this.highlight(activity.nodeId)} onMouseOut={() => this.clearHighlight()} >
-
-                <div class='genes-panel__item__title'>
-                    {activity.geneProducts.length == 0 ?
-                        <a class='a-gcv genes-panel__item__title__gp' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a>
-                        : activity.geneProducts.map(gp => { return <a class='a-gcv genes-panel__item__title__gp' href={gp.url} target='_blank'>{gp.label}</a> })}
-                    {activity.geneProducts.length == 0 ?
-                        <span class='genes-panel__item__title__gp__taxon'></span>
-                        : activity.geneProducts.map(gp => { return this.renderTaxon(gp) })}
+            <div class="card mb-2 gocam-activity-card" id={"gp_item_" + activity.id} onClick={() => this.select(activity)} onMouseOver={() => this.highlight(activity.id)} onMouseOut={() => this.clearHighlight()} >
+                <div class='card-header'>
+                    {
+                        activity.gpNode ?
+                            <a class='a-gcv gocam-activity-card__title__gp' href={activity.gpNode?.term.url} target='_blank'>{activity.gpNode?.term.label}</a>
+                            : ""
+                    }
                 </div>
+                {activity.mfNode ?
+                    <div class='card-body'>
+                        <a class='a-gcv block-right' href={activity.mfNode?.term.url} target='_blank'>
+                            {activity.mfNode?.term.label}
+                        </a>
+                        <ul class="list-group list-group-flush">
 
-                <div class='genes-panel__item__activity__block'>
-                    <a class='a-gcv genes-panel__item__activity block-right' href={activity.urls[0]} target='_blank'>{activity.labels[0]}</a> <span class="activity__references">{activity.geneProducts.map(gp => { return this.renderGeneReferences(gp) })}</span>
-                    {contexts.map(context => {
-                        if (context == "RO:0002333") { return; }
-                        return (
-                            <div>
-                                {
-                                    activity.biocontexts[context].map(ctx => {
-                                        //                                                        console.log(context , ctx);
-                                        return (
-                                            <div>
-                                                <a class='a-gcv block-left' target='_blank' href={ctx.relationURL}><i>{ctx.relationLabel}</i></a>
-                                                <a class='a-gcv block-right' target='_blank' href={ctx.termURL}>{ctx.termLabel}</a>
-                                                {this.renderReferences(ctx)}
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
-                        )
-                    })}
-                </div>
+                            {nodes.map((node: ActivityNode) => {
+                                return (
+                                    <li class="list-group-item d-flex">
+                                        <div class="gocam-node-relation d-flex align-items-center">
+                                            <a class='' target='_blank' href="">{node.predicate?.edge.label}</a>
+                                        </div>
+                                        <div class="flex-grow-1 gocam-node-term">
+                                            <a class='col' target='_blank' href={node.term.url}>{node.term.label}</a>
+                                        </div>
+                                        <div class="gocam-node-evidence">
+                                            {this.renderReferences(node.predicate.evidence)}
+                                        </div>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    </div>
+                    : ""}
             </div>
         )
     }
 
-    // render() {
-
-    //     if(!this.ghandler || !this.enrichedActivities) {
-    //         return "";
-    //     }
-
-    //     return(
-    //         <div class="genes-panel__container" id={"gpc_" + this.ghandler.getBBOPGraph().id()}>
-    //             <div class="genes-panel__container__title">
-    //                 <h1>Gene Products and Activities</h1>
-    //                 <hr/>
-    //             </div>
-    //             <div class="genes-panel__list" id="genes-panel__list">
-    //             {
-    //                 this.enrichedActivities.map((activity) => {
-    //                     return this.renderActivity(activity);
-    //                 })
-    //             }
-    //             </div>
-    //         </div>
-    //     )
-
-    // }
-
-
-
     render() {
-        if (!this.ghandler || !this.groupedActivities) {
+        if (!this.cam || !this.groupedActivities) {
             return "";
         }
 
-        console.log("GenesPanel:EnrichedActivities (render): ", this.enrichedActivities);
-        console.log("GenesPanel:GraphHandler (render): ", this.ghandler);
-        console.log("GenesPanel:GroupedActivities (render): ", this.groupedActivities);
-
         return (
-            <div class="genes-panel__container" id={"gpc_" + this.ghandler.getBBOPGraph().id()}>
-                <div class="genes-panel__container__title">
-                    <h1 class="h1-gcv">Processes and Activities</h1>
-                    <hr />
-                </div>
-                <div class="genes-panel__list" id="genes-panel__list">
-                    {
-                        this.groupedActivities.map((process) => {
-                            return this.renderProcess(process);
-                        })
-                    }
-                </div>
+            <div class="genes-panel__list" id="genes-panel__list">
+                {
+                    Object.keys(this.groupedActivities).map((process) => {
+                        return this.renderProcess(process);
+                    })
+                }
             </div>
         )
 

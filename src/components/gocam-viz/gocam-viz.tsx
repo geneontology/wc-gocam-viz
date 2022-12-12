@@ -1,27 +1,22 @@
 import { Component, Prop, Element, Event, EventEmitter, Watch, getAssetPath, h } from '@stencil/core';
 import { Listen, Method, State } from '@stencil/core';
-
 import { graph as noctua_graph } from 'bbop-graph-noctua';
-
 import cytoscape from 'cytoscape';
 import coseBilkent from 'cytoscape-cose-bilkent';
-
+import dagre from 'cytoscape-dagre';
 import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globals/utils';
-
 import * as dbxrefs from "@geneontology/dbxrefs";
-
 import '@geneontology/wc-light-modal';
-import { GraphHandler } from '../../globals/graph-handler';
-import { GenesPanel } from '../genes-panel/genes-panel';
+import { Activity, ActivityType, Cam, NoctuaFormConfigService, NoctuaGraphService, Triple } from '../../globals/@noctua.form';
+import { legend } from '../../globals/constants';
 
 
-
-cytoscape.use(coseBilkent);
+cytoscape.use(dagre);
 
 
 @Component({
     tag: 'wc-gocam-viz',
-    styleUrl: 'gocam-viz.css',
+    styleUrl: 'gocam-viz.scss',
     shadow: false,
     assetsDirs: ['assets']
 })
@@ -89,6 +84,8 @@ export class GoCamViz {
      */
     @State() error: boolean = false;
 
+    configService = new NoctuaFormConfigService();
+    graphService = new NoctuaGraphService(this.configService)
     // variables for bbop graph
     currentGraph = undefined;
 
@@ -100,9 +97,8 @@ export class GoCamViz {
      * Base URL used to fetch gocam as bbop graph
      */
     apiUrl = "https://api.geneontology.xyz/gocam/";
-
     devBaristaUrl = 'http://barista-dev.berkeleybop.org/search/stored?id=';
-
+    localDevBaristaUrl = 'http://localhost:3400/search/stored?id=';
     productionBaristaUrl = 'http://barista.berkeleybop.org/search/stored?id=';
 
     noctuaGraphURL = {
@@ -121,7 +117,7 @@ export class GoCamViz {
     /**
      * This state is updated whenever loading a new graph, in order to trigger a new rendering of genes-panel
      */
-    @State() ghandler: GraphHandler;
+    @State() cam: Cam;
 
     @Watch('repository')
     changeRepository(newValue, oldValue) {
@@ -145,14 +141,14 @@ export class GoCamViz {
         'content': 'data(label)',
         'width': 'data(width)',
         'height': 55,
-        'background-color': 'white',
+        'backgroundColor': 'data(backgroundColor)',
         'border-width': 1,
         'border-color': 'black',
         'font-size': 20,
         'min-zoomed-font-size': 1, //10,
         'text-valign': 'center',
         'color': 'black',
-        'shape': "round-rectangle",
+        'shape': "rectangle",
         'text-wrap': 'wrap',
         // 'text-overflow-wrap': "anywhere",
         'text-max-width': 'data(textwidth)'
@@ -160,7 +156,7 @@ export class GoCamViz {
 
     // Default cytoscape edge styling
     defaultEdgeStyle = {
-        // 'content': 'data(label)',
+        //'content': 'data(label)',
         'line-color': 'data(color)',
         'line-style': 'data(lineStyle)',
         'target-arrow-color': 'data(color)',
@@ -233,7 +229,12 @@ export class GoCamViz {
             spacingFactor: 1.0,// 1.75,
             padding: 30,// 30,
             circle: false//,
-        }
+        },
+        dagre: {
+            name: 'dagre',
+            rankDir: 'TB',
+            align: 'UR',
+        },
     };
 
 
@@ -286,7 +287,7 @@ export class GoCamViz {
 
 
     initCytoscape() {
-        cytoscape.use(coseBilkent);
+        cytoscape.use(dagre);
     }
 
     /** 
@@ -294,7 +295,6 @@ export class GoCamViz {
     */
     initDBXrefs() {
         dbxrefs.init(() => {
-            // console.log("dbxrefs ready");
             this.dbXrefsReady = true;
         })
     }
@@ -304,6 +304,8 @@ export class GoCamViz {
      * @param gocamId valid gocam id gomodel:xxx
      */
     loadGoCam(gocamId) {
+
+
         // just to make sure we are working with ID without base URL
         gocamId = gocamId.replace("http://model.geneontology.org/", "");
 
@@ -314,13 +316,15 @@ export class GoCamViz {
         }
         this.loading = true;
         this.error = false;
-        this.ghandler = undefined;
+        this.cam = undefined;
         let url = ''
 
         if (this.repository === 'prod') {
             url = this.productionBaristaUrl + gocamId;
         } else if (this.repository === 'dev') {
             url = this.devBaristaUrl + gocamId;
+        } else if (this.repository === 'local-dev') {
+            url = this.localDevBaristaUrl + gocamId;
         } else if (this.repository === 'release') {
             url = this.apiUrl + gocamId + "/raw"
         }
@@ -332,9 +336,10 @@ export class GoCamViz {
         }).then(graph => {
             let model = (this.repository === 'release') ? graph : graph.activeModel;
             if (model) {
-                let ngraph = new noctua_graph();
-                ngraph.load_data_basic(model);
-                this.renderGoCam(gocamId, ngraph);
+                this.cam = new Cam();
+                this.cam.graph = new noctua_graph();
+                this.cam.graph.load_data_basic(model);
+                this.renderGoCam(gocamId, this.cam);
             }
         })
     }
@@ -346,88 +351,104 @@ export class GoCamViz {
      * @param graph bbop graph
      * @param nest nesting strategy (default = "no")
      */
-    renderGoCam(gocamId, graph, nest = "no", layout = 'cose-bilkent') {
+    renderGoCam(gocamId, cam: Cam, nest = "no", layout = 'dagre') {
+        const self = this;
+        this.currentGraph = cam.graph;
+        this.graphService.loadCam(cam)
 
-        this.currentGraph = graph;
-        this.ghandler = new GraphHandler(this.currentGraph);
-        this.ghandler.setDBXrefs(dbxrefs);
+        const nodes = [];
+        const edges = [];
 
-
-        let activities = this.ghandler.getAllActivities();
-        this.ghandler.enrichActivities(activities)
-            .then((data) => {
-
-                let elements = [];
-
-                // 1 - create the nodes
-                for (let enrichedActivity of data) {
-
-                    let label = "";
-                    if (enrichedActivity.geneProducts.length > 0) {
-                        label = enrichedActivity.geneProducts.map(elt => elt.label).join(" | ");
-                    } else {
-                        label = enrichedActivity.labels.join(" | ");
-                    }
-
-                    let eanode = {
-                        group: "nodes",
-                        data: {
-                            id: enrichedActivity.nodeId,
-                            label: label,
-                            width: Math.max(115, label.length * 11),
-                            textwidth: Math.max(115, label.length * 9),
-                            // link: ??
-                            // parent: ??
-                            "text-valign": "top",
-                            "text-halign": "left",
-                            "background-color": this.defaultNodeStyle["background-color"],
-                            // degree: (child * 10 + parent)
-                        }
-                    }
-                    elements.push(eanode);
+        cam.activities.forEach((activity: Activity) => {
+            if (activity.visible) {
+                let el;
+                if (activity.activityType === ActivityType.molecule) {
+                    el = self.createMolecule(activity);
+                } else {
+                    el = self.createNode(activity);
                 }
+                nodes.push(el);
+            }
+        });
 
-                // 2 - create the edges
-                for (let enrichedActivity of data) {
-                    let connected = this.ghandler.getCausalActivities(enrichedActivity, data);
-                    // console.log("activity ", enrichedActivity, " is connected to ", connected);
-                    let relids = Object.keys(connected)
-                    for (let relid of relids) {
-                        let targets = connected[relid];
-                        let rglyph = glyph(relid);
+        cam.causalRelations.forEach((triple: Triple<Activity>) => {
+            if (triple.predicate.visible && triple.isTripleComplete()) {
+                const source = triple.predicate.isReverseLink ? triple.object : triple.subject;
+                const target = triple.predicate.isReverseLink ? triple.subject : triple.object;
+                let rglyph = glyph(triple.predicate.edge.id);
 
-                        for (let target of targets) {
-                            // console.log("target: ", target);
-                            let ed = {
-                                group: "edges",
-                                data: {
-                                    id: target.relationId,
-                                    source: enrichedActivity.nodeId,
-                                    target: target.activity.nodeId,
-                                    label: rglyph.label ? rglyph.label : target.relationLabel,
-                                    color: rglyph.color ? rglyph.color : "black",
-                                    glyph: rglyph.glyph ? rglyph.glyph : "circle",
-                                    lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid",
-                                    width: rglyph.width ? rglyph.width : this.defaultEdgeStyle.width
-                                }
-                            };
-                            // console.log("ED: ", ed);
-                            elements.push(ed);
-                        }
+                const link = {
+                    group: "edges",
+                    data: {
+                        id: triple.predicate.uuid,
+                        source: source.id,
+                        target: target.id,
+                        label: triple.predicate.edge.label,
+                        color: rglyph.color ? rglyph.color : "black",
+                        glyph: rglyph.glyph ? rglyph.glyph : "circle",
+                        lineStyle: rglyph.lineStyle ? rglyph.lineStyle : "solid",
+                        width: rglyph.width ? rglyph.width : 2,
                     }
-                }
+                };
 
-                this.renderCytoscape(gocamId, graph, elements, layout);
-            });
+                edges.push(link);
+            }
+        });
 
+        const elements = { nodes, edges }
+
+        this.renderCytoscape(cam, elements, layout);
     }
 
-    renderCytoscape(gocamId, graph, elements, layout) {
+    createNode(activity: Activity) {
 
-        // Showing loading message
+        const label = activity.gpNode?.term.label || activity.label || '';
+        const el = {
+            group: "nodes",
+            data: {
+                id: activity.id,
+                label: label,
+                width: Math.max(115, label.length * 11),
+                textwidth: Math.max(115, label.length * 9),
+                // link: ??
+                // parent: ??
+                "text-valign": "top",
+                "text-halign": "left",
+                "backgroundColor": activity.backgroundColor || 'white',
+                // degree: (child * 10 + parent)
+            }
+        }
+
+        return el
+    }
+
+    createMolecule(activity: Activity) {
+        const moleculeNode = activity.rootNode;
+        const label = moleculeNode?.term.label || activity.label || '';
+
+        const el = {
+            group: "nodes",
+            data: {
+                id: activity.id,
+                label: label,
+                width: Math.max(115, label.length * 11),
+                textwidth: Math.max(115, label.length * 9),
+                // link: ??
+                // parent: ??
+                "text-valign": "top",
+                "text-halign": "left",
+                "backgroundColor": activity.backgroundColor || 'white',
+                // degree: (child * 10 + parent)
+            }
+        }
+
+        return el
+    }
+
+
+    renderCytoscape(cam: Cam, elements, layout) {
+
         let viz = this.gocamviz.querySelector("#gocam-viz");
-        // viz.innerHTML = "";
-        console.log("Displaying GO-CAM ", gocamId, graph);
 
         // Creating the cytoscape component
         this.cy = cytoscape({
@@ -487,8 +508,6 @@ export class GoCamViz {
         }
     }
 
-
-
     /** 
      * Called when cytoscape.ready is called
     */
@@ -503,7 +522,7 @@ export class GoCamViz {
         if (sel.size() > 0) {
             sel.style("border-width", "2px")
             sel.style("border-color", "blue")
-            sel.style("background-color", "#eef2ff")
+            // sel.style("background-color", "#eef2ff")
             this.selectedNode = sel;
         }
     }
@@ -512,7 +531,7 @@ export class GoCamViz {
         if (cyNode) {
             cyNode.style("border-width", "1px");
             cyNode.style("border-color", "black");
-            cyNode.style("background-color", "white");
+            // cyNode.style("background-color", "white");
         }
     }
 
@@ -538,10 +557,10 @@ export class GoCamViz {
             this.selectedEvent = evt;
             let entity_id = evt.target.id();
 
-            let activity = this.ghandler.getActivity(entity_id);
+            const activity = this.cam.findActivityById(entity_id);
             // console.log("graph handler: " , activity);
 
-            this.ghandler.enrichActivity(activity);
+            //this.cam.enrichActivity(activity);
 
             if (entity_id.substr(0, 8) == "gomodel:") {
                 let data = evt.target.data();
@@ -570,18 +589,6 @@ export class GoCamViz {
                         biocontext[key] = Array.from(biocontext[key]);
                     }
                 }
-
-                // console.log("BIOCONTEXT: ", biocontext);
-                // console.log("std types: ", standardTypes);
-                // console.log("inf types: ", inferredTypes);
-
-                // console.log("node anns: ", annotations);
-
-                // var x_node = subgraph.get_node(entity_id);
-                // if(x_node) {
-                //     var ev_node_anns = x_node.get_annotations_by_key('evidence');
-                //     // console.log("node evs: ", ev_node_anns);
-                // }
 
                 let annotations = node.annotations();
                 let annotationMap = {};
@@ -672,11 +679,24 @@ export class GoCamViz {
         return this.cy.userZoomingEnabled;
     }
 
+    scrollDiv(parent, elt) {
+        const findPosition = (obj) => {
+            var currenttop = 0;
+            if (obj.offsetParent) {
+                do {
+                    currenttop += obj.offsetTop;
+                } while ((obj = obj.offsetParent));
+                return currenttop;
+            }
+        }
+
+        parent.scroll(0, findPosition(elt));
+    }
+
+
 
     previousPanelElt = undefined;
     onMouseOver(evt) {
-        // we don't need that timeout anymore since it's not showing pop up but just highlighting
-        // this.timerPopup = setTimeout(() => this.showPopup(evt), this.delayPopup);
 
         if (evt && evt.target && evt.target.id) {
             this.highlight(evt.target.id());
@@ -692,17 +712,6 @@ export class GoCamViz {
                 this.previousPanelElt = elt;
             }
 
-            if (this.genesPanel) {
-
-                let scrollList = document.getElementById("genes-panel__list");
-                let elt2 = document.getElementById("gp_item_" + evt.target.id());
-                if (scrollList && elt2) {
-                    scrollList.scroll(0, elt2.offsetTop - 220);
-                    elt2.style["box-shadow"] = "2px 2px 5px 6px rgb(194 194 255)";
-                }
-
-                // this.genesPanel.scrollToActivity(evt.target.id());
-            }
 
         }
     }
@@ -742,21 +751,27 @@ export class GoCamViz {
             }
             this.selectedEvent = undefined;
         }
+
         if (this.selectedNode) {
             this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
             this.selectedNode = undefined;
         }
-        // console.log("Mouse click ", evt);
-        // if(evt && evt.target && evt.target.id) {
-        //     let entity_id = evt.target.id();
-        //     if(entity_id.substr(0, 8) == "gomodel:") {
-        //         this.nodeOut.emit(evt);
-        //     }
-        // }
-        // if(this.selectedNode) {
-        //     this.selectedNode.style("background-color", this.defaultNodeStyle["background-color"]);
-        //     this.selectedNode = undefined;
-        // }
+
+        if (this.genesPanel) {
+
+            let scrollList = document.getElementById("genes-panel__list");
+            let elt2 = document.getElementById("gp_item_" + evt.target.id());
+            if (scrollList && elt2) {
+                //elt2.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+                //scrollList.scroll(0, elt2.offsetTop - 220);
+                this.scrollDiv(scrollList, elt2)
+
+
+                elt2.style["box-shadow"] = "2px 2px 5px 6px rgb(194 194 255)";
+            }
+
+            // this.genesPanel.scrollToActivity(evt.target.id());
+        }
 
         this.nodeClick.emit(evt);
     }
@@ -777,8 +792,6 @@ export class GoCamViz {
         // this.cy.center();
         this.layoutChange.emit(evt);
     }
-
-
 
     /** 
      * Before the component is rendered (executed once)
@@ -808,7 +821,8 @@ export class GoCamViz {
      * Main render method; any change to a @Prop or @State triggers this
     */
     render() {
-        let classes = this.loading ? "" : "gocam-viz";
+
+        let classes = this.loading ? "gocam-hidden" : "container";
 
         if (this.genesPanel && !this.genesPanel.parentCy) {
             this.genesPanel.parentCy = this.cy;
@@ -816,26 +830,76 @@ export class GoCamViz {
 
         return [
 
-            <div>
-                {this.showGoCamSelector ?
-                    <div class="control__panel">
-                        {this.showGoCamSelector ? <wc-gocam-selector></wc-gocam-selector> : ""}
-                        <button class='open__in_noctua__label button-gcv' onClick={() => this.openInNoctua()}>Open in Noctua</button>
-                        <button class='reset__view button-gcv' onClick={() => this.resetView()}>Reset View</button>
+            this.loading ? this.error ? "" : <div class="gocam-viz-loader d-flex flex-column justify-content-center">
+                <div class="">
+                    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                </div>
+                <div class="">
+                    Loading GO-CAM {this.gocamId}
+                </div>
+            </div> : "",
+
+            <div id="gocam-viz-container" class={classes}>
+                <div class="row align-items-start">
+                    <div class="card col col-lg-8 p-0">
+                        <div class="d-flex card-header gocam-card-header-md">
+                            <h6 class="flex-grow-1">
+                                {this.cam?.title}
+                            </h6>
+
+                            <button class='float-end btn btn-primary btn-sm' onClick={() => this.resetView()}>Reset View</button>
+
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="gocam-viz" class="gocam-viz"></div>
+                            {this.renderLegend()}
+                        </div>
                     </div>
-                    : ""}
-            </div>,
+                    <div class="card col col-lg-4 p-0">
+                        <div class="card-header gocam-h-md">
+                            Processes and Activities
+                        </div>
+                        <div class="card-body p-0">
+                            <wc-genes-panel id="gocam-viz-panel" class="" cam={this.cam} ref={el => this.genesPanel = el}></wc-genes-panel>
+                        </div>
+                    </div>
+                </div>
+            </div >,
 
-            this.loading ? this.error ? "" : <div class="gocam-viz-loader">Loading GO-CAM {this.gocamId} ...</div> : "",
-
-            <div id="gocam-viz-container">
-                <div id="gocam-viz" class={classes}></div>
-                <wc-genes-panel id="gocam-viz-panel" ghandler={this.ghandler} ref={el => this.genesPanel = el}></wc-genes-panel>
-            </div>,
-
-            this.showLegend ? <img class="img-gcv" src={getAssetPath("./assets/legendv2.png")}></img> : ""
 
         ];
+
+    }
+
+    renderLegend() {
+        return this.showLegend ?
+            <div class="container gocam-legend-container">
+                <div class="row align-items-center">
+                    <div class="gocam-legend-header">Relation Types</div>
+                </div>
+                <div class="row align-items-start">
+                    {Object.keys(legend).map((section) => {
+                        return <div class={'card col col-lg-4 p-0 ' + section}>
+                            <ul class="list-group list-group-flush">
+                                {legend[section].map((item) => {
+                                    return (
+                                        <li class="list-group-item d-flex">
+                                            <div class="gocam-legend-key">
+                                                <img class="img-gcv" src={getAssetPath(`./assets/relation/${item.id}.png`)}></img>
+                                            </div>
+                                            <div class="flex-grow-1 gocam-legend-value">
+                                                {item.label}
+                                            </div>
+
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
+                    })}
+                </div>
+            </div>
+            : ""
 
     }
 

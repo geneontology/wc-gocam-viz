@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property   | Attribute   | Description                                                           | Type           | Default     |
-| ---------- | ----------- | --------------------------------------------------------------------- | -------------- | ----------- |
-| `ghandler` | --          | BBOP Graph Handler -> GO-CAM Must be provided to build the side panel | `GraphHandler` | `undefined` |
-| `parentCy` | `parent-cy` | Passed by the parent to highlight & clear highlight nodes             | `any`          | `undefined` |
+| Property   | Attribute   | Description                                                           | Type  | Default     |
+| ---------- | ----------- | --------------------------------------------------------------------- | ----- | ----------- |
+| `cam`      | --          | BBOP Graph Handler -> GO-CAM Must be provided to build the side panel | `Cam` | `undefined` |
+| `parentCy` | `parent-cy` | Passed by the parent to highlight & clear highlight nodes             | `any` | `undefined` |
 
 
 ## Events

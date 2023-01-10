@@ -22,14 +22,9 @@ export namespace Components {
     }
     interface WcGocamViz {
         /**
-          * Deprecated for the moment
-         */
-        "autoHideModal": boolean;
-        /**
           * ID of the gocam to be shown in this widget. Look for the watcher below that will load the GO-CAM upon a change of this variable
          */
         "gocamId": string;
-        "graphFold": string;
         /**
           * Used to connect to a barista instance. By default, always access production (prod) server prod = http://barista.berkeleybop.org dev  = http://barista-dev.berkeleybop.org
          */
@@ -44,34 +39,23 @@ export namespace Components {
          */
         "setAutoFocus": (shouldAF: any) => Promise<void>;
         /**
-          * Show/hide the activity in the activity node
-         */
-        "showActivity": boolean;
-        /**
-          * Show/hide the gene product in the activity node
-         */
-        "showGeneProduct": boolean;
-        /**
-          * If true, this will show the list of available GO-CAM in GO For more information, please refer to http://geneontology.org/docs/gocam-overview/
-         */
-        "showGoCamSelector": boolean;
-        /**
-          * Show/hide the input of an activity
-         */
-        "showHasInput": boolean;
-        /**
-          * Show/hide the output of an activity
-         */
-        "showHasOutput": boolean;
-        /**
-          * Show/hide isolated activity (not connected through causals)
-         */
-        "showIsolatedActivity": boolean;
-        /**
           * Show/hide default legend
          */
         "showLegend": boolean;
+        "toggleComplex": () => Promise<void>;
     }
+}
+export interface WcGenesPanelCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLWcGenesPanelElement;
+}
+export interface WcGocamSelectorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLWcGocamSelectorElement;
+}
+export interface WcGocamVizCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLWcGocamVizElement;
 }
 declare global {
     interface HTMLWcGenesPanelElement extends Components.WcGenesPanel, HTMLStencilElement {
@@ -104,57 +88,28 @@ declare namespace LocalJSX {
           * BBOP Graph Handler -> GO-CAM Must be provided to build the side panel
          */
         "cam"?: Cam;
-        "onSelectChanged"?: (event: CustomEvent<any>) => void;
+        "onSelectChanged"?: (event: WcGenesPanelCustomEvent<any>) => void;
         /**
           * Passed by the parent to highlight & clear highlight nodes
          */
         "parentCy"?: any;
     }
     interface WcGocamSelector {
-        "onSelectGOCAM"?: (event: CustomEvent<any>) => void;
+        "onSelectGOCAM"?: (event: WcGocamSelectorCustomEvent<any>) => void;
     }
     interface WcGocamViz {
-        /**
-          * Deprecated for the moment
-         */
-        "autoHideModal"?: boolean;
         /**
           * ID of the gocam to be shown in this widget. Look for the watcher below that will load the GO-CAM upon a change of this variable
          */
         "gocamId"?: string;
-        "graphFold"?: string;
-        "onLayoutChange"?: (event: CustomEvent<any>) => void;
-        "onNodeClick"?: (event: CustomEvent<any>) => void;
-        "onNodeOut"?: (event: CustomEvent<any>) => void;
-        "onNodeOver"?: (event: CustomEvent<any>) => void;
+        "onLayoutChange"?: (event: WcGocamVizCustomEvent<any>) => void;
+        "onNodeClick"?: (event: WcGocamVizCustomEvent<any>) => void;
+        "onNodeOut"?: (event: WcGocamVizCustomEvent<any>) => void;
+        "onNodeOver"?: (event: WcGocamVizCustomEvent<any>) => void;
         /**
           * Used to connect to a barista instance. By default, always access production (prod) server prod = http://barista.berkeleybop.org dev  = http://barista-dev.berkeleybop.org
          */
         "repository"?: string;
-        /**
-          * Show/hide the activity in the activity node
-         */
-        "showActivity"?: boolean;
-        /**
-          * Show/hide the gene product in the activity node
-         */
-        "showGeneProduct"?: boolean;
-        /**
-          * If true, this will show the list of available GO-CAM in GO For more information, please refer to http://geneontology.org/docs/gocam-overview/
-         */
-        "showGoCamSelector"?: boolean;
-        /**
-          * Show/hide the input of an activity
-         */
-        "showHasInput"?: boolean;
-        /**
-          * Show/hide the output of an activity
-         */
-        "showHasOutput"?: boolean;
-        /**
-          * Show/hide isolated activity (not connected through causals)
-         */
-        "showIsolatedActivity"?: boolean;
         /**
           * Show/hide default legend
          */

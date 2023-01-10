@@ -45,20 +45,7 @@ export class GenesPanel {
             // if an undefined handler was provided, do nothing
             if (!this.cam) { return; }
 
-            let activities = this.cam.activities;
             this.groupedActivities = this.cam.groupActivitiesByProcess();
-            /*  this.cam.enrichActivities(activities)
-                 .then((data) => {
-                     // we sort activities by BP, as much as we can; ordered alphabetically and when no partOf = end of list
-                     data.sort((a, b) => (a.partOf.length == 0) ?
-                         1 : (b.partOf.length == 0) ?
-                             -1 : (a.partOf[0].label < b.partOf[0].label) ?
-                                 -1 : 1)
-                     this.enrichedActivities = data;
-                     // console.log("GenesPanel:EnrichedActivities: ", this.enrichedActivities);
-                     this.groupedActivities = this.cam.groupActivitiesByProcess(this.enrichedActivities);
-                     // console.log("GenesPanel:GroupedActivities: ", this.groupedActivities);
-                 }) */
         }
     }
 
@@ -74,6 +61,7 @@ export class GenesPanel {
     }
 
     select(activity) {
+        this.clearHighlight()
         this.selectChanged.emit(activity);
     }
 
@@ -177,7 +165,7 @@ export class GenesPanel {
         });
 
         return (
-            <div class="card mb-2 gocam-activity-card" id={"gp_item_" + activity.id} onClick={() => this.select(activity)} onMouseOver={() => this.highlight(activity.id)} onMouseOut={() => this.clearHighlight()} >
+            <div class="card mb-2 gocam-activity-card" id={"gp_item_" + activity.id} onClick={() => this.select(activity)} >
                 <div class='card-header'>
                     {
                         activity.gpNode ?

@@ -1,14 +1,20 @@
 import { Component, Prop, Element, Event, EventEmitter, Watch, getAssetPath, h } from '@stencil/core';
 import { Listen, Method, State } from '@stencil/core';
-import { graph as noctua_graph } from 'bbop-graph-noctua';
 import cytoscape from 'cytoscape';
 import coseBilkent from 'cytoscape-cose-bilkent';
 import dagre from 'cytoscape-dagre';
 import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globals/utils';
 import * as dbxrefs from "@geneontology/dbxrefs";
 import '@geneontology/wc-light-modal';
-import { Activity, ActivityType, Cam, NoctuaFormConfigService, NoctuaGraphService, Triple } from '../../globals/@noctua.form';
+import {
+    Activity, ActivityType, Cam,
+    ActivityNodeType,
+    NoctuaFormConfigService,
+    NoctuaGraphService,
+    Triple
+} from '../../globals/@noctua.form';
 import { legend } from '../../globals/constants';
+
 
 
 cytoscape.use(dagre);
@@ -32,47 +38,9 @@ export class GoCamViz {
     @Prop() gocamId: string;
 
     /**
-     * If true, this will show the list of available GO-CAM in GO
-     * For more information, please refer to http://geneontology.org/docs/gocam-overview/
-     */
-    @Prop() showGoCamSelector: boolean = false;
-
-    /**
-     * Show/hide the input of an activity
-     */
-    @Prop() showHasInput: boolean = false;
-
-    /**
-     * Show/hide the output of an activity
-     */
-    @Prop() showHasOutput: boolean = false;
-
-    /**
-     * Show/hide the gene product in the activity node
-     */
-    @Prop() showGeneProduct: boolean = false;
-
-    /**
-     * Show/hide the activity in the activity node
-     */
-    @Prop() showActivity: boolean = false;
-
-    /**
-     * Show/hide isolated activity (not connected through causals)
-     */
-    @Prop() showIsolatedActivity: boolean = false;
-
-    /**
      * Show/hide default legend
      */
     @Prop() showLegend: boolean = true;
-
-    @Prop() graphFold: string = "editor";
-
-    /**
-     * Deprecated for the moment
-     */
-    @Prop() autoHideModal: boolean = false;
 
     /**
      * Indicates if the component is loading some data
@@ -119,6 +87,10 @@ export class GoCamViz {
      */
     @State() cam: Cam;
 
+    @State() title: string;
+
+    @State() expandComplex = false;
+
     @Watch('repository')
     changeRepository(newValue, oldValue) {
         const isNotString = typeof newValue !== 'string';
@@ -154,6 +126,26 @@ export class GoCamViz {
         'text-max-width': 'data(textwidth)'
     }
 
+    // Default cytoscape node styling
+    defaultParentStyle = {
+        'content': 'data(label)',
+        'width': 'data(width)',
+        'height': 55,
+        'backgroundColor': 'data(backgroundColor)',
+        'border-width': 1,
+        'border-color': 'black',
+        'font-size': 12,
+        'min-zoomed-font-size': 1, //10,
+        'text-valign': 'top',
+        'text-halign': 'center',
+        'color': 'black',
+        'shape': "rectangle",
+        'text-wrap': 'wrap',
+        // 'text-overflow-wrap': "anywhere",
+        'text-max-width': 'data(textwidth)'
+    }
+
+
     // Default cytoscape edge styling
     defaultEdgeStyle = {
         //'content': 'data(label)',
@@ -173,7 +165,6 @@ export class GoCamViz {
         'text-outline-color': '#222222',
         'width': 'data(width)'
     }
-
 
     // Cytoscape layouts
     layout_opts = {
@@ -245,7 +236,6 @@ export class GoCamViz {
     @Event({ eventName: 'layoutChange', cancelable: true, bubbles: true }) layoutChange: EventEmitter;
 
 
-
     /**
      * Called whenever an activity has been selected from the genes-panel
      */
@@ -305,10 +295,6 @@ export class GoCamViz {
      */
     loadGoCam(gocamId) {
 
-
-        // just to make sure we are working with ID without base URL
-        gocamId = gocamId.replace("http://model.geneontology.org/", "");
-
         let viz = this.gocamviz.querySelector("#gocam-viz");
         viz.innerHTML = ""
         if (!gocamId.startsWith("gomodel:")) {
@@ -336,38 +322,32 @@ export class GoCamViz {
         }).then(graph => {
             let model = (this.repository === 'release') ? graph : graph.activeModel;
             if (model) {
-                this.cam = new Cam();
-                this.cam.graph = new noctua_graph();
-                this.cam.graph.load_data_basic(model);
-                this.renderGoCam(gocamId, this.cam);
+                this.cam = this.graphService.getCam(model)
+                this.currentGraph = this.cam.graph;
+                this.renderGoCam(this.cam, this.expandComplex);
             }
         })
     }
 
 
-    /**
-     * Actual method to render the GO-CAM graph
-     * @param gocamId valid gocam id (e.g. gomodel:xxx)
-     * @param graph bbop graph
-     * @param nest nesting strategy (default = "no")
-     */
-    renderGoCam(gocamId, cam: Cam, nest = "no", layout = 'dagre') {
+    renderGoCam(cam: Cam, expandComplex = false, layout = 'dagre') {
         const self = this;
-        this.currentGraph = cam.graph;
-        this.graphService.loadCam(cam)
+
 
         const nodes = [];
         const edges = [];
 
         cam.activities.forEach((activity: Activity) => {
             if (activity.visible) {
-                let el;
+                let el
                 if (activity.activityType === ActivityType.molecule) {
                     el = self.createMolecule(activity);
+                } if (activity.activityType === ActivityType.proteinComplex) {
+                    el = self.createComplex(activity, expandComplex);
                 } else {
                     el = self.createNode(activity);
                 }
-                nodes.push(el);
+                nodes.push(...el);
             }
         });
 
@@ -419,7 +399,56 @@ export class GoCamViz {
             }
         }
 
-        return el
+
+
+        return [el]
+    }
+
+    createComplex(activity: Activity, expandComplex = false): any[] {
+
+        const result = []
+
+        const label = activity.gpNode?.term.label || activity.label || '';
+        const el = {
+            group: "nodes",
+            data: {
+                id: activity.id,
+                label: label,
+                width: Math.max(115, label.length * 11),
+                textwidth: Math.max(115, label.length * 9),
+                "backgroundColor": activity.backgroundColor || 'white',
+                // degree: (child * 10 + parent)
+            }
+        }
+
+        result.push(el)
+        if (expandComplex) {
+            const edges = activity.getEdges(ActivityNodeType.GoProteinContainingComplex)
+
+            const gps = edges.map(edge => {
+                return {
+                    group: "nodes",
+                    data: {
+                        id: edge.object.id,
+                        parent: activity.id,
+                        label: edge.object.term?.label,
+                        width: Math.max(115, label.length * 11),
+                        textwidth: Math.max(115, label.length * 9),
+                        // link: ??
+                        // parent: ??
+                        "text-valign": "top",
+                        "text-halign": "left",
+                        "backgroundColor": activity.backgroundColor || 'white',
+                        // degree: (child * 10 + parent)
+                    }
+                }
+            })
+
+            result.push(...gps)
+        }
+
+        return result
+
     }
 
     createMolecule(activity: Activity) {
@@ -442,7 +471,7 @@ export class GoCamViz {
             }
         }
 
-        return el
+        return [el]
     }
 
 
@@ -460,6 +489,10 @@ export class GoCamViz {
                 {
                     selector: 'node',
                     style: this.defaultNodeStyle
+                },
+                {
+                    selector: ':parent',
+                    style: this.defaultParentStyle
                 },
                 {
                     selector: 'edge',
@@ -666,6 +699,14 @@ export class GoCamViz {
         this.cy.center();
     }
 
+    @Method()
+    async toggleComplex() {
+        this.expandComplex = !this.expandComplex;
+        this.renderGoCam(this.cam, this.expandComplex);
+        this.cy.fit();
+        this.cy.center();
+    }
+
     /**
      * Define if the GO-CAM viz should capture the mouse scroll
      * @param shouldAF set to true if you want a mouse scroll to be captured by the component
@@ -734,7 +775,7 @@ export class GoCamViz {
             this.selectedNode.style("border-color", "black")
             this.selectedNode = undefined;
         }
-        if (this.autoHideModal && evt && evt.target && evt.target.id) {
+        if (evt && evt.target && evt.target.id) {
             let entity_id = evt.target.id();
             if (entity_id.substr(0, 8) == "gomodel:") {
                 this.nodeOut.emit(evt);
@@ -846,9 +887,8 @@ export class GoCamViz {
                             <h6 class="flex-grow-1">
                                 {this.cam?.title}
                             </h6>
-
+                            <button class='float-end btn btn-primary btn-sm' onClick={() => this.toggleComplex()}>Expand Complex</button>
                             <button class='float-end btn btn-primary btn-sm' onClick={() => this.resetView()}>Reset View</button>
-
                         </div>
                         <div class="card-body p-0">
                             <div id="gocam-viz" class="gocam-viz"></div>

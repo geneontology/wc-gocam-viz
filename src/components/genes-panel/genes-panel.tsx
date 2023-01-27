@@ -81,7 +81,7 @@ export class GenesPanel {
         if (this.previousElt) {
             this.previousElt.style("border-width", "1px")
             this.previousElt.style("border-color", "black")
-            // this.previousElt.style("background-color", "white")
+            this.previousElt.style("background-color", "white")
             this.previousElt = undefined;
         }
     }
@@ -160,7 +160,7 @@ export class GenesPanel {
 
     renderActivity(activity: Activity) {
         const nodes = activity.nodes.filter((node: ActivityNode) => {
-            return (node.displaySection.id === noctuaFormConfig.displaySection.fd.id &&
+            return (
                 node.type !== ActivityNodeType.GoMolecularFunction);
         });
 

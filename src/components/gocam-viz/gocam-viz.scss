@@ -20,6 +20,11 @@ $gocam-width: 800px;
   //border: 1px solid #bdc9eb;
 }
 
+.active {
+  background-color: rgb(74, 74, 211) !important;
+  color: #eee;
+}
+
 .gocam-viz-loader {
   width: $gocam-width;
   height: $gocam-height;

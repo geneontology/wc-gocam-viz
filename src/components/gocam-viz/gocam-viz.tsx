@@ -2,6 +2,7 @@ import { Component, Prop, Element, Event, EventEmitter, Watch, getAssetPath, h }
 import { Listen, Method, State } from '@stencil/core';
 import cytoscape from 'cytoscape';
 import coseBilkent from 'cytoscape-cose-bilkent';
+import cola from 'cytoscape-cola';
 import dagre from 'cytoscape-dagre';
 import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globals/utils';
 import * as dbxrefs from "@geneontology/dbxrefs";
@@ -226,6 +227,7 @@ export class GoCamViz {
             rankDir: 'TB',
             align: 'UR',
         },
+        cola: {}
     };
 
 
@@ -399,8 +401,6 @@ export class GoCamViz {
             }
         }
 
-
-
         return [el]
     }
 
@@ -408,46 +408,48 @@ export class GoCamViz {
 
         const result = []
 
-        const label = activity.gpNode?.term.label || activity.label || '';
-        const el = {
-            group: "nodes",
-            data: {
-                id: activity.id,
-                label: label,
-                width: Math.max(115, label.length * 11),
-                textwidth: Math.max(115, label.length * 9),
-                "backgroundColor": activity.backgroundColor || 'white',
-                // degree: (child * 10 + parent)
-            }
-        }
 
-        result.push(el)
+        const label = activity.gpNode?.term.label || activity.label || '';
+
+        let el
+        // result.push(el)
         if (expandComplex) {
+
             const edges = activity.getEdges(ActivityNodeType.GoProteinContainingComplex)
 
             const gps = edges.map(edge => {
-                return {
-                    group: "nodes",
-                    data: {
-                        id: edge.object.id,
-                        parent: activity.id,
-                        label: edge.object.term?.label,
-                        width: Math.max(115, label.length * 11),
-                        textwidth: Math.max(115, label.length * 9),
-                        // link: ??
-                        // parent: ??
-                        "text-valign": "top",
-                        "text-halign": "left",
-                        "backgroundColor": activity.backgroundColor || 'white',
-                        // degree: (child * 10 + parent)
-                    }
+                return edge.object.term?.label.split(' ')[0]
+            });
+            let s = gps.join(', ')
+            el = {
+                group: "nodes",
+                data: {
+                    id: activity.id,
+                    label: `${s}`,
+                    height: 200,
+                    width: Math.max(115, label.length * 11),
+                    textwidth: Math.max(115, label.length * 9),
+                    "backgroundColor": activity.backgroundColor || 'white',
+                    // degree: (child * 10 + parent)
                 }
-            })
+            }
 
-            result.push(...gps)
+
+        } else {
+            el = {
+                group: "nodes",
+                data: {
+                    id: activity.id,
+                    label: label,
+                    width: Math.max(115, label.length * 11),
+                    textwidth: Math.max(115, label.length * 9),
+                    "backgroundColor": activity.backgroundColor || 'white',
+                    // degree: (child * 10 + parent)
+                }
+            }
         }
-
-        return result
+        // result.push(...gps)
+        return [el]
 
     }
 
@@ -484,7 +486,6 @@ export class GoCamViz {
             container: viz,
             elements: elements,
             layout: this.layout_opts[layout],
-
             style: [
                 {
                     selector: 'node',
@@ -526,8 +527,8 @@ export class GoCamViz {
 
 
         // Binding mouse events
-        this.cy.on("mouseover", evt => this.onMouseOver(evt));
-        this.cy.on("mouseout", evt => this.onMouseOut(evt));
+        // this.cy.on("mouseover", evt => this.onMouseOver(evt));
+        // this.cy.on("mouseout", evt => this.onMouseOut(evt));
         this.cy.on("click", evt => this.onMouseClick(evt));
 
         // Events whenever the layout is changes, eg to remove modal
@@ -785,6 +786,10 @@ export class GoCamViz {
     }
 
     onMouseClick(evt) {
+        const cardEl = document.getElementsByClassName('gocam-activity-card')
+        for (let i = 0; i < cardEl.length; i++) {
+            cardEl[i].classList.remove('card-active')
+        }
         if (this.selectedEvent) {
             let entity_id = this.selectedEvent.target.id();
             if (entity_id.substr(0, 8) == "gomodel:") {
@@ -807,8 +812,7 @@ export class GoCamViz {
                 //scrollList.scroll(0, elt2.offsetTop - 220);
                 this.scrollDiv(scrollList, elt2)
 
-
-                elt2.style["box-shadow"] = "2px 2px 5px 6px rgb(194 194 255)";
+                elt2.classList.add("card-active")
             }
 
             // this.genesPanel.scrollToActivity(evt.target.id());
@@ -887,7 +891,9 @@ export class GoCamViz {
                             <h6 class="flex-grow-1">
                                 {this.cam?.title}
                             </h6>
-                            <button class='float-end btn btn-primary btn-sm' onClick={() => this.toggleComplex()}>Expand Complex</button>
+                            <button class='float-end btn btn-primary btn-sm mr-8' onClick={() => this.toggleComplex()}>
+                                {this.expandComplex ? 'Collapse Protein Complexes' : 'Expand Protein Complexes'}
+                            </button>
                             <button class='float-end btn btn-primary btn-sm' onClick={() => this.resetView()}>Reset View</button>
                         </div>
                         <div class="card-body p-0">

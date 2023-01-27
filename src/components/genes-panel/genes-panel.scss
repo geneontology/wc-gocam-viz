@@ -60,5 +60,19 @@
     .gocam-node-evidence {
       @include deep-width(30px);
     }
+
+    &.card-active {
+      background-color: #af732a;
+      color: #eee;
+
+      .card-header,
+      .list-group-item {
+        color: #eee !important;
+        background-color: transparent !important;
+      }
+      a {
+        color: #eee !important;
+      }
+    }
   }
 }

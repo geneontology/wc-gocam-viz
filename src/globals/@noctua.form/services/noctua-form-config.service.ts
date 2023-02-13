@@ -8,10 +8,13 @@ import { ActivityNode } from './../models/activity/activity-node';
 import { Entity } from './../models/activity/entity';
 import { Evidence } from './../models/activity/evidence';
 import { Predicate } from './../models/activity/predicate';
+import taxonDataset from './../data/taxon-dataset.json';
 
 export class NoctuaFormConfigService {
 
+  speciesList = []
   constructor() {
+    this.speciesList = this.generateSpeciesList()
   }
 
   get edges() {
@@ -135,6 +138,27 @@ export class NoctuaFormConfigService {
       options: options,
       selected: options[0]
     };
+  }
+
+  generateSpeciesList() {
+    const result = new Set<string>()
+    taxonDataset.forEach(taxon => {
+      if (taxon.species_code) {
+        result.add(taxon.species_code)
+      }
+    })
+
+    return [...result]
+  }
+
+  getGeneShorthand(geneName: string) {
+
+    for (let suffix of this.speciesList) {
+      geneName = geneName.replace(new RegExp(`${suffix}$`, 'i'), "").trim();
+    }
+
+    return geneName;
+
   }
 
   createPredicate(edge: Entity, evidence?: Evidence[]): Predicate {

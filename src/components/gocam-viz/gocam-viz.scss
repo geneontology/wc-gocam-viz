@@ -6,6 +6,10 @@ $gocam-width: 800px;
     @include deep-height(48px);
   }
 }
+
+.gocam-collapse-btn {
+  margin-right: 8px;
+}
 .gocam-viz {
   width: 100%;
   padding: 16px;

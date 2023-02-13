@@ -335,7 +335,6 @@ export class GoCamViz {
     renderGoCam(cam: Cam, expandComplex = false, layout = 'dagre') {
         const self = this;
 
-
         const nodes = [];
         const edges = [];
 
@@ -385,13 +384,17 @@ export class GoCamViz {
     createNode(activity: Activity) {
 
         const label = activity.gpNode?.term.label || activity.label || '';
+        const geneShorthand = this.configService.getGeneShorthand(label)
+
+        console.log(geneShorthand)
+
         const el = {
             group: "nodes",
             data: {
                 id: activity.id,
-                label: label,
-                width: Math.max(115, label.length * 11),
-                textwidth: Math.max(115, label.length * 9),
+                label: geneShorthand,
+                width: Math.max(115, geneShorthand.length * 11),
+                textwidth: Math.max(115, geneShorthand.length * 9),
                 // link: ??
                 // parent: ??
                 "text-valign": "top",
@@ -406,9 +409,6 @@ export class GoCamViz {
 
     createComplex(activity: Activity, expandComplex = false): any[] {
 
-        const result = []
-
-
         const label = activity.gpNode?.term.label || activity.label || '';
 
         let el
@@ -418,17 +418,23 @@ export class GoCamViz {
             const edges = activity.getEdges(ActivityNodeType.GoProteinContainingComplex)
 
             const gps = edges.map(edge => {
-                return edge.object.term?.label.split(' ')[0]
+                const geneShorthand = this.configService.getGeneShorthand(edge.object.term?.label)
+                return geneShorthand
             });
-            let s = gps.join(', ')
+            const truncatedGps = gps.slice(0, 3)
+            let geneString = gps.join(', ')
+
+            if (gps.length > truncatedGps.length) {
+                geneString += ' and ' + (gps.length - truncatedGps.length).toString() + ' more'
+            }
             el = {
                 group: "nodes",
                 data: {
                     id: activity.id,
-                    label: `${s}`,
+                    label: `${geneString}`,
                     height: 200,
-                    width: Math.max(115, label.length * 11),
-                    textwidth: Math.max(115, label.length * 9),
+                    width: Math.max(115, geneString.length * 11),
+                    textwidth: Math.max(115, geneString.length * 9),
                     "backgroundColor": activity.backgroundColor || 'white',
                     // degree: (child * 10 + parent)
                 }
@@ -456,14 +462,15 @@ export class GoCamViz {
     createMolecule(activity: Activity) {
         const moleculeNode = activity.rootNode;
         const label = moleculeNode?.term.label || activity.label || '';
+        const geneShorthand = this.configService.getGeneShorthand(label)
 
         const el = {
             group: "nodes",
             data: {
                 id: activity.id,
-                label: label,
-                width: Math.max(115, label.length * 11),
-                textwidth: Math.max(115, label.length * 9),
+                label: geneShorthand,
+                width: Math.max(115, geneShorthand.length * 11),
+                textwidth: Math.max(115, geneShorthand.length * 9),
                 // link: ??
                 // parent: ??
                 "text-valign": "top",
@@ -891,7 +898,7 @@ export class GoCamViz {
                             <h6 class="flex-grow-1">
                                 {this.cam?.title}
                             </h6>
-                            <button class='float-end btn btn-primary btn-sm mr-8' onClick={() => this.toggleComplex()}>
+                            <button class='float-end btn btn-primary btn-sm gocam-collapse-btn' onClick={() => this.toggleComplex()}>
                                 {this.expandComplex ? 'Collapse Protein Complexes' : 'Expand Protein Complexes'}
                             </button>
                             <button class='float-end btn btn-primary btn-sm' onClick={() => this.resetView()}>Reset View</button>

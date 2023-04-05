@@ -145,7 +145,7 @@ export class GenesPanel {
         return (
             <div class="card gocam-process-card mb-5 gocam-activity-card__process">
                 <div class="card-header gocam-activity-card__process__list">
-                    <a href={process} class="a-gcv gocam-activity-card__process__list-name" target="_blank">{process}</a>
+                    {process}
                 </div>
                 <div class="card-body p-0 gocam-activity-card__process__activities">
                     {

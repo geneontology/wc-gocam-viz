@@ -46,6 +46,16 @@ Type: `Promise<void>`
 
 
 
+### `toggleComplex() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 
 ## Dependencies
 

@@ -44,7 +44,7 @@ export class NoctuaGraphService {
       }
 
     } else {
-      const dbId = id.split(':')
+      const dbId = id.split(/:(.+)/, 2);
       if (dbId.length > 1) {
         return dbxrefs.getURL(dbId[0], undefined, dbId[1]);
       }

@@ -1,6 +1,6 @@
 {
   "name": "@geneontology/wc-gocam-viz",
-  "version": "0.0.50-beta.11",
+  "version": "0.0.51",
   "description": "Web component to visualize GO-CAM",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",

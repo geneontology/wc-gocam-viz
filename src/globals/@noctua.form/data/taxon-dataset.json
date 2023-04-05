@@ -1,0 +1,2312 @@
+[
+  {
+    "compression": "gzip",
+    "dataset": "cgd",
+    "description": "gaf file for cgd from Candida Genome Database",
+    "entity_type": null,
+    "id": "cgd.gaf",
+    "label": "cgd gaf file",
+    "source": "http://www.candidagenome.org/download/go/gene_association.cgd.gz",
+    "species_code": null,
+    "status": "active",
+    "submitter": "cgd",
+    "taxa": [
+      "NCBITaxon:5476",
+      "NCBITaxon:5478",
+      "NCBITaxon:5480",
+      "NCBITaxon:1136231",
+      "NCBITaxon:284592",
+      "NCBITaxon:294746",
+      "NCBITaxon:294747",
+      "NCBITaxon:294748",
+      "NCBITaxon:306902",
+      "NCBITaxon:379508",
+      "NCBITaxon:42374",
+      "NCBITaxon:573826",
+      "NCBITaxon:284593",
+      "NCBITaxon:578454",
+      "NCBITaxon:237561"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/cgd.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "dictybase",
+    "description": "gpad file for dictyBase from dictyBase",
+    "entity_type": null,
+    "id": "dictybase.gpa",
+    "label": "dictybase gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/contrib/goa/dictyBase.gpa.gz",
+    "species_code": "Ddis",
+    "status": "active",
+    "submitter": "dictyBase",
+    "taxa": [
+      "NCBITaxon:352472",
+      "NCBITaxon:366501",
+      "NCBITaxon:44689",
+      "NCBITaxon:5782"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/dictybase.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "dictybase",
+    "description": "gpi file for dictyBase from dictyBase",
+    "entity_type": null,
+    "id": "dictybase.gpi",
+    "label": "dictybase gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/contrib/goa/dictyBase.gpi.gz",
+    "species_code": "Ddis",
+    "status": "active",
+    "submitter": "dictyBase",
+    "taxa": [
+      "NCBITaxon:352472",
+      "NCBITaxon:366501",
+      "NCBITaxon:44689",
+      "NCBITaxon:5782"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/dictybase.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "dictybase",
+    "description": "gaf file for dictybase from dictyBase",
+    "entity_type": null,
+    "id": "dictybase.gaf",
+    "label": "dictybase gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/contrib/goa/dictyBase.gaf.gz",
+    "species_code": "Ddis",
+    "status": "active",
+    "submitter": "dictyBase",
+    "taxa": [
+      "NCBITaxon:352472",
+      "NCBITaxon:366501",
+      "NCBITaxon:44689",
+      "NCBITaxon:5782"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/dictybase.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "ecocyc",
+    "description": "gaf file for ecocyc from Encyclopedia of E. coli metabolism",
+    "entity_type": null,
+    "id": "ecocyc.gaf",
+    "label": "ecocyc gaf file",
+    "source": "https://ecoliwiki.org/gaf/gene_association.ecocyc.gz",
+    "species_code": null,
+    "status": "active",
+    "submitter": "ecocyc",
+    "taxa": [
+      "NCBITaxon:83333"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/ecocyc.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "fb",
+    "description": "gaf file for fb from FlyBase",
+    "entity_type": null,
+    "id": "fb.gaf",
+    "label": "fb gaf file",
+    "source": "ftp://ftp.flybase.net/releases/current/precomputed_files/go/gene_association.fb.gz",
+    "species_code": "Dmel",
+    "status": "active",
+    "submitter": "fb",
+    "taxa": [
+      "NCBITaxon:7227"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/fb.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "genedb_lmajor",
+    "description": "gaf file for genedb_lmajor from GeneDB",
+    "entity_type": null,
+    "id": "genedb_lmajor.gaf",
+    "label": "genedb_lmajor gaf file",
+    "source": "ftp://ftp.sanger.ac.uk/pub/project/pathogens/as44/Lmajor.gaf.gz",
+    "species_code": null,
+    "status": "active",
+    "submitter": "genedb",
+    "taxa": [
+      "NCBITaxon:5664"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/genedb_lmajor.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "genedb_tbrucei",
+    "description": "gaf file for genedb_tbrucei from GeneDB",
+    "id": "genedb_tbrucei.gaf",
+    "label": "genedb_tbrucei gaf file",
+    "source": "ftp://ftp.sanger.ac.uk/pub/project/pathogens/as44/Tbruceibrucei927.gaf.gz",
+    "species_code": null,
+    "status": "active",
+    "submitter": "genedb",
+    "taxa": [
+      "NCBITaxon:185431"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/genedb_tbrucei.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "genedb_pfalciparum",
+    "description": "gaf file for genedb_pfalciparum from GeneDB",
+    "entity_type": null,
+    "id": "genedb_pfalciparum.gaf",
+    "label": "genedb_pfalciparum gaf file",
+    "source": "ftp://ftp.sanger.ac.uk/pub/project/pathogens/as44/Pfalciparum.gaf.gz",
+    "species_code": null,
+    "status": "active",
+    "submitter": "genedb",
+    "taxa": [
+      "NCBITaxon:5833",
+      "NCBITaxon:36329"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/genedb_pfalciparum.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_chicken",
+    "description": "gpad file for goa_chicken from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_chicken.gpad",
+    "label": "goa_chicken gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/CHICKEN/goa_chicken.gpa.gz",
+    "species_code": "Ggal",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:208524",
+      "NCBITaxon:208525",
+      "NCBITaxon:208526",
+      "NCBITaxon:400035",
+      "NCBITaxon:9031"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_chicken.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_chicken",
+    "description": "gpi file for goa_chicken from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_chicken.gpi",
+    "label": "goa_chicken gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/CHICKEN/goa_chicken.gpi.gz",
+    "species_code": "Ggal",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:208524",
+      "NCBITaxon:208525",
+      "NCBITaxon:208526",
+      "NCBITaxon:400035",
+      "NCBITaxon:9031"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_chicken.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_chicken_complex",
+    "description": "gpad file for goa_chicken_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_chicken_complex.gpad",
+    "label": "goa_chicken_complex gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/CHICKEN/goa_chicken_complex.gpa.gz",
+    "species_code": "Ggal",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:208524",
+      "NCBITaxon:208525",
+      "NCBITaxon:208526",
+      "NCBITaxon:400035",
+      "NCBITaxon:9031"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_chicken_complex.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_chicken_complex",
+    "description": "gpi file for goa_chicken_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_chicken_complex.gpi",
+    "label": "goa_chicken_complex gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/CHICKEN/goa_chicken_complex.gpi.gz",
+    "species_code": "Ggal",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:208524",
+      "NCBITaxon:208525",
+      "NCBITaxon:208526",
+      "NCBITaxon:400035",
+      "NCBITaxon:9031"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_chicken_complex.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_chicken_isoform",
+    "description": "gpad file for goa_chicken_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_chicken_isoform.gpad",
+    "label": "goa_chicken_isoform gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/CHICKEN/goa_chicken_isoform.gpa.gz",
+    "species_code": "Ggal",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:208524",
+      "NCBITaxon:208525",
+      "NCBITaxon:208526",
+      "NCBITaxon:400035",
+      "NCBITaxon:9031"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_chicken_isoform.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_chicken_isoform",
+    "description": "gpi file for goa_chicken_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_chicken_isoform.gpi",
+    "label": "goa_chicken_isoform gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/CHICKEN/goa_chicken_isoform.gpi.gz",
+    "species_code": "Ggal",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:208524",
+      "NCBITaxon:208525",
+      "NCBITaxon:208526",
+      "NCBITaxon:400035",
+      "NCBITaxon:9031"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_chicken_isoform.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_chicken_rna",
+    "description": "gpad file for goa_chicken_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_chicken_rna.gpad",
+    "label": "goa_chicken_rna gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/CHICKEN/goa_chicken_rna.gpa.gz",
+    "species_code": "Ggal",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:208524",
+      "NCBITaxon:208525",
+      "NCBITaxon:208526",
+      "NCBITaxon:400035",
+      "NCBITaxon:9031"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_chicken_rna.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_chicken_rna",
+    "description": "gpi file for goa_chicken_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_chicken_rna.gpi",
+    "label": "goa_chicken_rna gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/CHICKEN/goa_chicken_rna.gpi.gz",
+    "species_code": "Ggal",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:208524",
+      "NCBITaxon:208525",
+      "NCBITaxon:208526",
+      "NCBITaxon:400035",
+      "NCBITaxon:9031"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_chicken_rna.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_cow",
+    "description": "gpad file for goa_cow from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_cow.gpad",
+    "label": "goa_cow gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/COW/goa_cow.gpa.gz",
+    "species_code": "Btau",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:297284",
+      "NCBITaxon:30523",
+      "NCBITaxon:9913"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_cow.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_cow",
+    "description": "gpi file for goa_cow from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_cow.gpi",
+    "label": "goa_cow gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/COW/goa_cow.gpi.gz",
+    "species_code": "Btau",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:297284",
+      "NCBITaxon:30523",
+      "NCBITaxon:9913"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_cow.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_cow_complex",
+    "description": "gpad file for goa_cow_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_cow_complex.gpad",
+    "label": "goa_cow_complex gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/COW/goa_cow_complex.gpa.gz",
+    "species_code": "Btau",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:297284",
+      "NCBITaxon:30523",
+      "NCBITaxon:9913"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_cow_complex.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_cow_complex",
+    "description": "gpi file for goa_cow_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_cow_complex.gpi",
+    "label": "goa_cow_complex gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/COW/goa_cow_complex.gpi.gz",
+    "species_code": "Btau",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:297284",
+      "NCBITaxon:30523",
+      "NCBITaxon:9913"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_cow_complex.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_cow_isoform",
+    "description": "gpad file for goa_cow_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_cow_isoform.gpad",
+    "label": "goa_cow_isoform gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/COW/goa_cow_isoform.gpa.gz",
+    "species_code": "Btau",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:297284",
+      "NCBITaxon:30523",
+      "NCBITaxon:9913"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_cow_isoform.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_cow_isoform",
+    "description": "gpi file for goa_cow_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_cow_isoform.gpi",
+    "label": "goa_cow_isoform gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/COW/goa_cow_isoform.gpi.gz",
+    "species_code": "Btau",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:297284",
+      "NCBITaxon:30523",
+      "NCBITaxon:9913"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_cow_isoform.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_cow_rna",
+    "description": "gpad file for goa_cow_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_cow_rna.gpad",
+    "label": "goa_cow_rna gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/COW/goa_cow_rna.gpa.gz",
+    "species_code": "Btau",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:297284",
+      "NCBITaxon:30523",
+      "NCBITaxon:9913"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_cow_rna.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_cow_rna",
+    "description": "gpi file for goa_cow_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_cow_rna.gpi",
+    "label": "goa_cow_rna gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/COW/goa_cow_rna.gpi.gz",
+    "species_code": "Btau",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:297284",
+      "NCBITaxon:30523",
+      "NCBITaxon:9913"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_cow_rna.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_dog",
+    "description": "gpad file for goa_dog from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_dog.gpad",
+    "label": "goa_dog gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/DOG/goa_dog.gpa.gz",
+    "species_code": "Cfam",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9615"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_dog.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_dog",
+    "description": "gpi file for goa_dog from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_dog.gpi",
+    "label": "goa_dog gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/DOG/goa_dog.gpi.gz",
+    "species_code": "Cfam",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9615"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_dog.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_dog_complex",
+    "description": "gpad file for goa_dog_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_dog_complex.gpad",
+    "label": "goa_dog_complex gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/DOG/goa_dog_complex.gpa.gz",
+    "species_code": "Cfam",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9615"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_dog_complex.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_dog_complex",
+    "description": "gpi file for goa_dog_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_dog_complex.gpi",
+    "label": "goa_dog_complex gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/DOG/goa_dog_complex.gpi.gz",
+    "species_code": "Cfam",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9615"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_dog_complex.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_dog_isoform",
+    "description": "gpad file for goa_dog_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_dog_isoform.gpad",
+    "label": "goa_dog_isoform gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/DOG/goa_dog_isoform.gpa.gz",
+    "species_code": "Cfam",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9615"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_dog_isoform.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_dog_isoform",
+    "description": "gpi file for goa_dog_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_dog_isoform.gpi",
+    "label": "goa_dog_isoform gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/DOG/goa_dog_isoform.gpi.gz",
+    "species_code": "Cfam",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9615"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_dog_isoform.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_dog_rna",
+    "description": "gpad file for goa_dog_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_dog_rna.gpad",
+    "label": "goa_dog_rna gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/DOG/goa_dog_rna.gpa.gz",
+    "species_code": "Cfam",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9615"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_dog_rna.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_dog_rna",
+    "description": "gpi file for goa_dog_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_dog_rna.gpi",
+    "label": "goa_dog_rna gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/DOG/goa_dog_rna.gpi.gz",
+    "species_code": "Cfam",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9615"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_dog_rna.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_human",
+    "description": "gpad file for goa_human from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_human.gpad",
+    "label": "goa_human gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/HUMAN/goa_human.gpa.gz",
+    "species_code": "Hsap",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9606"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_human.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_human",
+    "description": "gpi file for goa_human from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_human.gpi",
+    "label": "goa_human gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/HUMAN/goa_human.gpi.gz",
+    "species_code": "Hsap",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9606"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_human.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_human_complex",
+    "description": "gpad file for goa_human_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_human_complex.gpad",
+    "label": "goa_human_complex gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/HUMAN/goa_human_complex.gpa.gz",
+    "species_code": "Hsap",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9606"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_human_complex.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_human_complex",
+    "description": "gpi file for goa_human_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_human_complex.gpi",
+    "label": "goa_human_complex gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/HUMAN/goa_human_complex.gpi.gz",
+    "species_code": "Hsap",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9606"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_human_complex.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_human_isoform",
+    "description": "gpad file for goa_human_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_human_isoform.gpad",
+    "label": "goa_human_isoform gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/HUMAN/goa_human_isoform.gpa.gz",
+    "species_code": "Hsap",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9606"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_human_isoform.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_human_isoform",
+    "description": "gpi file for goa_human_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_human_isoform.gpi",
+    "label": "goa_human_isoform gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/HUMAN/goa_human_isoform.gpi.gz",
+    "species_code": "Hsap",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9606"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_human_isoform.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_human_rna",
+    "description": "gpad file for goa_human_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_human_rna.gpad",
+    "label": "goa_human_rna gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/HUMAN/goa_human_rna.gpa.gz",
+    "species_code": "Hsap",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9606"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_human_rna.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_human_rna",
+    "description": "gpi file for goa_human_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_human_rna.gpi",
+    "label": "goa_human_rna gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/HUMAN/goa_human_rna.gpi.gz",
+    "species_code": "Hsap",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9606"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_human_rna.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_pig",
+    "description": "gpad file for goa_pig from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_pig.gpad",
+    "label": "goa_pig gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/PIG/goa_pig.gpa.gz",
+    "species_code": "Sscr",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9823"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_pig.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_pig",
+    "description": "gpi file for goa_pig from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_pig.gpi",
+    "label": "goa_pig gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/PIG/goa_pig.gpi.gz",
+    "species_code": "Sscr",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9823"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_pig.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_pig_complex",
+    "description": "gpad file for goa_pig_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_pig_complex.gpad",
+    "label": "goa_pig_complex gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/PIG/goa_pig_complex.gpa.gz",
+    "species_code": "Sscr",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9823"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_pig_complex.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_pig_complex",
+    "description": "gpi file for goa_pig_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_pig_complex.gpi",
+    "label": "goa_pig_complex gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/PIG/goa_pig_complex.gpi.gz",
+    "species_code": "Sscr",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9823"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_pig_complex.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_pig_isoform",
+    "description": "gpad file for goa_pig_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_pig_isoform.gpad",
+    "label": "goa_pig_isoform gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/PIG/goa_pig_isoform.gpa.gz",
+    "species_code": "Sscr",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9823"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_pig_isoform.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_pig_isoform",
+    "description": "gpi file for goa_pig_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_pig_isoform.gpi",
+    "label": "goa_pig_isoform gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/PIG/goa_pig_isoform.gpi.gz",
+    "species_code": "Sscr",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9823"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_pig_isoform.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_pig_rna",
+    "description": "gpad file for goa_pig_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_pig_rna.gpad",
+    "label": "goa_pig_rna gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/PIG/goa_pig_rna.gpa.gz",
+    "species_code": "Sscr",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9823"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/goa_pig_rna.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_pig_rna",
+    "description": "gpi file for goa_pig_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_pig_rna.gpi",
+    "label": "goa_pig_rna gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/PIG/goa_pig_rna.gpi.gz",
+    "species_code": "Sscr",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9823"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/goa_pig_rna.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_chicken",
+    "description": "gaf file for goa_chicken from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_chicken.gaf",
+    "label": "goa_chicken gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/CHICKEN/goa_chicken.gaf.gz",
+    "species_code": "Ggal",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:208524",
+      "NCBITaxon:208525",
+      "NCBITaxon:208526",
+      "NCBITaxon:400035",
+      "NCBITaxon:9031"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_chicken.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_chicken_complex",
+    "description": "gaf file for goa_chicken_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_chicken_complex.gaf",
+    "label": "goa_chicken_complex gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/CHICKEN/goa_chicken_complex.gaf.gz",
+    "species_code": "Ggal",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:208524",
+      "NCBITaxon:208525",
+      "NCBITaxon:208526",
+      "NCBITaxon:400035",
+      "NCBITaxon:9031"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_chicken_complex.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_chicken_isoform",
+    "description": "gaf file for goa_chicken_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_chicken_isoform.gaf",
+    "label": "goa_chicken_isoform gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/CHICKEN/goa_chicken_isoform.gaf.gz",
+    "species_code": "Ggal",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:208524",
+      "NCBITaxon:208525",
+      "NCBITaxon:208526",
+      "NCBITaxon:400035",
+      "NCBITaxon:9031"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_chicken_isoform.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_chicken_rna",
+    "description": "gaf file for goa_chicken_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_chicken_rna.gaf",
+    "label": "goa_chicken_rna gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/CHICKEN/goa_chicken_rna.gaf.gz",
+    "species_code": "Ggal",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:208524",
+      "NCBITaxon:208525",
+      "NCBITaxon:208526",
+      "NCBITaxon:400035",
+      "NCBITaxon:9031"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_chicken_rna.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_cow",
+    "description": "gaf file for goa_cow from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_cow.gaf",
+    "label": "goa_cow gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/COW/goa_cow.gaf.gz",
+    "species_code": "Btau",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:297284",
+      "NCBITaxon:30523",
+      "NCBITaxon:9913"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_cow.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_cow_complex",
+    "description": "gaf file for goa_cow_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_cow_complex.gaf",
+    "label": "goa_cow_complex gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/COW/goa_cow_complex.gaf.gz",
+    "species_code": "Btau",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:297284",
+      "NCBITaxon:30523",
+      "NCBITaxon:9913"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_cow_complex.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_cow_isoform",
+    "description": "gaf file for goa_cow_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_cow_isoform.gaf",
+    "label": "goa_cow_isoform gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/COW/goa_cow_isoform.gaf.gz",
+    "species_code": "Btau",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:297284",
+      "NCBITaxon:30523",
+      "NCBITaxon:9913"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_cow_isoform.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_cow_rna",
+    "description": "gaf file for goa_cow_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_cow_rna.gaf",
+    "label": "goa_cow_rna gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/COW/goa_cow_rna.gaf.gz",
+    "species_code": "Btau",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:297284",
+      "NCBITaxon:30523",
+      "NCBITaxon:9913"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_cow_rna.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_dog",
+    "description": "gaf file for goa_dog from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_dog.gaf",
+    "label": "goa_dog gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/DOG/goa_dog.gaf.gz",
+    "species_code": "Cfam",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9615"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_dog.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_dog_complex",
+    "description": "gaf file for goa_dog_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_dog_complex.gaf",
+    "label": "goa_dog_complex gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/DOG/goa_dog_complex.gaf.gz",
+    "species_code": "Cfam",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9615"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_dog_complex.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_dog_isoform",
+    "description": "gaf file for goa_dog_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_dog_isoform.gaf",
+    "label": "goa_dog_isoform gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/DOG/goa_dog_isoform.gaf.gz",
+    "species_code": "Cfam",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9615"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_dog_isoform.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_dog_rna",
+    "description": "gaf file for goa_dog_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_dog_rna.gaf",
+    "label": "goa_dog_rna gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/DOG/goa_dog_rna.gaf.gz",
+    "species_code": "Cfam",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9615"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_dog_rna.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_human",
+    "description": "gaf file for goa_human from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_human.gaf",
+    "label": "goa_human gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/HUMAN/goa_human.gaf.gz",
+    "species_code": "Hsap",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9606"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_human.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_human_complex",
+    "description": "gaf file for goa_human_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_human_complex.gaf",
+    "label": "goa_human_complex gaf file",
+    "source": "http://release.geneontology.org/2022-01-13/products/annotations/goa_human_complex-src.gaf.gz",
+    "species_code": "Hsap",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9606"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_human_complex.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_human_isoform",
+    "description": "gaf file for goa_human_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_human_isoform.gaf",
+    "label": "goa_human_isoform gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/HUMAN/goa_human_isoform.gaf.gz",
+    "species_code": "Hsap",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9606"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_human_isoform.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_human_rna",
+    "description": "gaf file for goa_human_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_human_rna.gaf",
+    "label": "goa_human_rna gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/HUMAN/goa_human_rna.gaf.gz",
+    "species_code": "Hsap",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9606"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_human_rna.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_pdb",
+    "description": "gaf file for goa_pdb from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "exclude": true,
+    "id": "goa_pdb.gaf",
+    "label": "goa_pdb gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/PDB/goa_pdb.gaf.gz",
+    "species_code": null,
+    "status": "active",
+    "submitter": "goa",
+    "taxa": null,
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_pdb.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_pig",
+    "description": "gaf file for goa_pig from EBI Gene Ontology Annotation Database",
+    "entity_type": "protein",
+    "id": "goa_pig.gaf",
+    "label": "goa_pig gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/PIG/goa_pig.gaf.gz",
+    "species_code": "Sscr",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9823"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_pig.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_pig_complex",
+    "description": "gaf file for goa_pig_complex from EBI Gene Ontology Annotation Database",
+    "entity_type": "complex",
+    "id": "goa_pig_complex.gaf",
+    "label": "goa_pig_complex gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/PIG/goa_pig_complex.gaf.gz",
+    "species_code": "Sscr",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9823"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_pig_complex.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_pig_isoform",
+    "description": "gaf file for goa_pig_isoform from EBI Gene Ontology Annotation Database",
+    "entity_type": "isoform",
+    "id": "goa_pig_isoform.gaf",
+    "label": "goa_pig_isoform gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/PIG/goa_pig_isoform.gaf.gz",
+    "species_code": "Sscr",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9823"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_pig_isoform.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "goa_pig_rna",
+    "description": "gaf file for goa_pig_rna from EBI Gene Ontology Annotation Database",
+    "entity_type": "rna",
+    "id": "goa_pig_rna.gaf",
+    "label": "goa_pig_rna gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/PIG/goa_pig_rna.gaf.gz",
+    "species_code": "Sscr",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:9823"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_pig_rna.gaf.gz"
+  },
+  {
+    "aggregates": "goa",
+    "compression": "gzip",
+    "dataset": "goa_uniprot_all",
+    "description": "gaf file for goa_uniprot_all from EBI Gene Ontology Annotation Database",
+    "entity_type": "all",
+    "id": "goa_uniprot_all.gaf",
+    "label": "goa_uniprot_all gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_all.gaf.gz",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:1"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_uniprot_all.gaf.gz"
+  },
+  {
+    "aggregates": "goa",
+    "compression": "gzip",
+    "dataset": "goa_uniprot_all",
+    "description": "gpi file for goa_uniprot_all from EBI Gene Ontology Annotation Database",
+    "entity_type": "all",
+    "id": "goa_uniprot_all.gpi",
+    "label": "goa_uniprot_all gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_all.gpi.gz",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:1"
+    ],
+    "type": "gpi",
+    "url": "http://geneontology.org/gene-associations/goa_uniprot_all.gpi.gz"
+  },
+  {
+    "aggregates": "goa",
+    "compression": "gzip",
+    "dataset": "goa_uniprot_all",
+    "description": "gpad file for goa_uniprot_all from EBI Gene Ontology Annotation Database",
+    "entity_type": "all",
+    "id": "goa_uniprot_all.gpad",
+    "label": "goa_uniprot_all gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_all.gpa.gz",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:1"
+    ],
+    "type": "gpad",
+    "url": "http://geneontology.org/gene-associations/goa_uniprot_all.gpad.gz"
+  },
+  {
+    "aggregates": "goa",
+    "compression": "gzip",
+    "dataset": "goa_uniprot_gcrp",
+    "description": "gaf file for goa_uniprot_gcrp from EBI Gene Ontology Annotation Database",
+    "entity_type": "all",
+    "exclude": true,
+    "id": "goa_uniprot_gcrp.gaf",
+    "label": "goa_uniprot_gcrp gaf file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_gcrp.gaf.gz",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:1"
+    ],
+    "type": "gaf",
+    "url": "http://geneontology.org/gene-associations/goa_uniprot_gcrp.gaf.gz"
+  },
+  {
+    "aggregates": "goa",
+    "compression": "gzip",
+    "dataset": "goa_uniprot_gcrp",
+    "description": "gpi file for goa_uniprot_gcrp from EBI Gene Ontology Annotation Database",
+    "entity_type": "all",
+    "exclude": true,
+    "id": "goa_uniprot_gcrp.gpi",
+    "label": "goa_uniprot_gcrp gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_gcrp.gpi.gz",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:1"
+    ],
+    "type": "gpi",
+    "url": "http://geneontology.org/gene-associations/goa_uniprot_gcrp.gpi.gz"
+  },
+  {
+    "aggregates": "goa",
+    "compression": "gzip",
+    "dataset": "goa_uniprot_gcrp",
+    "description": "gpad file for goa_uniprot_gcrp from EBI Gene Ontology Annotation Database",
+    "entity_type": "all",
+    "exclude": true,
+    "id": "goa_uniprot_gcrp.gpad",
+    "label": "goa_uniprot_gcrp gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_gcrp.gpa.gz",
+    "status": "active",
+    "submitter": "goa",
+    "taxa": [
+      "NCBITaxon:1"
+    ],
+    "type": "gpad",
+    "url": "http://geneontology.org/gene-associations/goa_uniprot_gcrp.gpad.gz"
+  },
+  {
+    "dataset": "interpro2go",
+    "description": "external2go file to map InterPro entries to GO terms",
+    "id": "interpro2go",
+    "label": "interpro2go mapping file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/external2go/interpro2go",
+    "status": "active",
+    "submitter": "goa",
+    "type": "external2go",
+    "url": "http://geneontology.org/external2go/interpro2go"
+  },
+  {
+    "dataset": "pfam2go",
+    "description": "external2go file to map Pfam entries to GO terms",
+    "id": "pfam2go",
+    "label": "pfam2go mapping file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/external2go/pfam2go",
+    "status": "active",
+    "submitter": "goa",
+    "type": "external2go",
+    "url": "http://geneontology.org/external2go/pfam2go"
+  },
+  {
+    "dataset": "pirsf2go",
+    "description": "external2go file to map PIRSF entries to GO terms",
+    "id": "pirsf2go",
+    "label": "pirsf2go mapping file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/external2go/pirsf2go",
+    "status": "active",
+    "submitter": "goa",
+    "type": "external2go",
+    "url": "http://geneontology.org/external2go/pirsf2go"
+  },
+  {
+    "dataset": "prints2go",
+    "description": "external2go file to map PRINTS entries to GO terms",
+    "id": "prints2go",
+    "label": "prints2go mapping file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/external2go/prints2go",
+    "status": "active",
+    "submitter": "goa",
+    "type": "external2go",
+    "url": "http://geneontology.org/external2go/prints2go"
+  },
+  {
+    "dataset": "prodom2go",
+    "description": "external2go file to map PRODOM entries to GO terms",
+    "id": "prodom2go",
+    "label": "prodom2go mapping file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/external2go/prodom2go",
+    "status": "active",
+    "submitter": "goa",
+    "type": "external2go",
+    "url": "http://geneontology.org/external2go/prodom2go"
+  },
+  {
+    "dataset": "prosite2go",
+    "description": "external2go file to map PROSITE entries to GO terms",
+    "id": "prosite2go",
+    "label": "prosite2go mapping file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/external2go/prosite2go",
+    "status": "active",
+    "submitter": "goa",
+    "type": "external2go",
+    "url": "http://geneontology.org/external2go/prosite2go"
+  },
+  {
+    "dataset": "smart2go",
+    "description": "external2go file to map SMART entries to GO terms",
+    "id": "smart2go",
+    "label": "smart2go mapping file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/external2go/smart2go",
+    "status": "active",
+    "submitter": "goa",
+    "type": "external2go",
+    "url": "http://geneontology.org/external2go/smart2go"
+  },
+  {
+    "dataset": "uniprotkb_kw2go",
+    "description": "external2go file to map UniProtKB keywords to GO terms",
+    "id": "uniprotkb_kw2go",
+    "label": "uniprotkb_kw2go mapping file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/external2go/uniprotkb_kw2go",
+    "status": "active",
+    "submitter": "goa",
+    "type": "external2go",
+    "url": "http://geneontology.org/external2go/uniprotkb_kw2go"
+  },
+  {
+    "dataset": "uniprotkb_sl2go",
+    "description": "external2go file to map UniProtKB Subcellular Location vocabulary to GO terms",
+    "id": "uniprotkb_sl2go",
+    "label": "uniprotkb_sl2go mapping file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/external2go/uniprotkb_sl2go",
+    "status": "active",
+    "submitter": "goa",
+    "type": "external2go",
+    "url": "http://geneontology.org/external2go/uniprotkb_sl2go"
+  },
+  {
+    "dataset": "unirule2go",
+    "description": "external2go file to map UniRule rules to GO terms",
+    "id": "unirule2go",
+    "label": "unirule2go mapping file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/external2go/unirule2go",
+    "status": "active",
+    "submitter": "goa",
+    "type": "external2go",
+    "url": "http://geneontology.org/external2go/unirule2go"
+  },
+  {
+    "dataset": "hamap2go",
+    "description": "external2go file to map HAMAP family members to GO terms",
+    "id": "hamap2go",
+    "label": "hamap2go mapping file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/external2go/hamap2go",
+    "status": "active",
+    "submitter": "goa",
+    "type": "external2go",
+    "url": "http://geneontology.org/external2go/hamap2go"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "japonicusdb",
+    "description": "gaf file for japonicusdb from JaponicusDB",
+    "entity_type": null,
+    "id": "japonicusdb.gaf",
+    "label": "japonicusdb gaf file",
+    "source": "https://www.japonicusdb.org/data/annotations/Gene_ontology/gene_association.japonicusdb.gz",
+    "species_code": "Sjap",
+    "status": "active",
+    "submitter": "japonicusdb",
+    "taxa": [
+      "NCBITaxon:402676",
+      "NCBITaxon:4897"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/japonicusdb.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "japonicusdb",
+    "description": "gpi file for japonicusdb from JaponicusDB",
+    "entity_type": null,
+    "id": "japonicusdb.gpi",
+    "label": "japonicusdb gpi file",
+    "source": "https://www.japonicusdb.org/data/annotations/Gene_ontology/japonicusdb.gpi.gz",
+    "species_code": "Sjap",
+    "status": "active",
+    "submitter": "japonicusdb",
+    "taxa": [
+      "NCBITaxon:402676",
+      "NCBITaxon:4897"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/japonicusdb.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "japonicusdb",
+    "description": "gpad file for japonicusdb from JaponicusDB",
+    "entity_type": null,
+    "id": "japonicusdb.gpad",
+    "label": "japonicusdb gpad file",
+    "source": "https://www.japonicusdb.org/data/annotations/Gene_ontology/japonicusdb.gpad.gz",
+    "species_code": "Sjap",
+    "status": "active",
+    "submitter": "japonicusdb",
+    "taxa": [
+      "NCBITaxon:402676",
+      "NCBITaxon:4897"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/japonicusdb.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "mgi",
+    "description": "gaf file for mgi from Mouse Genome Informatics",
+    "entity_type": null,
+    "id": "mgi.gaf",
+    "label": "mgi gaf file",
+    "source": "http://www.informatics.jax.org/downloads/reports/gene_association_nonoctua.mgi.gz",
+    "species_code": "Mmus",
+    "status": "active",
+    "submitter": "mgi",
+    "taxa": [
+      "NCBITaxon:10090"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/mgi.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "mgi",
+    "description": "gpad file for mgi from Mouse Genome Informatics",
+    "entity_type": null,
+    "id": "mgi.gpad",
+    "label": "mgi gpad file",
+    "source": "http://www.informatics.jax.org/downloads/reports/mgi.gpad.gz",
+    "species_code": "Mmus",
+    "status": "active",
+    "submitter": "mgi",
+    "taxa": [
+      "NCBITaxon:10090"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/mgi.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "mgi",
+    "description": "gpi file for mgi from Mouse Genome Informatics",
+    "entity_type": null,
+    "id": "mgi.gpi",
+    "label": "mgi gpi file",
+    "source": "http://www.informatics.jax.org/downloads/reports/mgi.gpi.gz",
+    "species_code": "Mmus",
+    "status": "active",
+    "submitter": "mgi",
+    "taxa": [
+      "NCBITaxon:10090"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/mgi.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "noctua_mgi",
+    "description": "GPAD file for MGI from Noctua",
+    "entity_type": null,
+    "id": "noctua_mgi.gpad",
+    "label": "noctua_mgi gpad file",
+    "merges_into": "mgi",
+    "source": "./products/annotations/noctua_mgi-src.gpad.gz",
+    "species_code": null,
+    "status": "active",
+    "submitter": "GOC",
+    "taxa": [
+      "NCBITaxon:5476"
+    ],
+    "type": "gpad"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "noctua_fb",
+    "description": "GPAD file for FB from Noctua",
+    "entity_type": null,
+    "id": "noctua_fb.gpad",
+    "label": "noctua_fb gpad file",
+    "source": "./products/annotations/noctua_fb.gpad.gz",
+    "species_code": null,
+    "status": "inactive",
+    "submitter": "GOC",
+    "taxa": [
+      "NCBITaxon:7227"
+    ],
+    "type": "gpad"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "noctua_rgd",
+    "description": "GPAD file for RGD from Noctua",
+    "entity_type": null,
+    "id": "noctua_rgd.gpad",
+    "label": "noctua_rgd gpad file",
+    "source": "./products/annotations/noctua_rgd.gpad.gz",
+    "species_code": null,
+    "status": "inactive",
+    "submitter": "GOC",
+    "taxa": [
+      "NCBITaxon:10116"
+    ],
+    "type": "gpad"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "noctua_sgd",
+    "description": "GPAD file for SGD from Noctua",
+    "entity_type": null,
+    "id": "noctua_sgd.gpad",
+    "label": "noctua_sgd gpad file",
+    "source": "./products/annotations/noctua_sgd.gpad.gz",
+    "species_code": null,
+    "status": "inactive",
+    "submitter": "GOC",
+    "taxa": [
+      "NCBITaxon:285006",
+      "NCBITaxon:307796",
+      "NCBITaxon:41870",
+      "NCBITaxon:4932",
+      "NCBITaxon:559292"
+    ],
+    "type": "gpad"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "noctua_wb",
+    "description": "GPAD file for WB from Noctua",
+    "entity_type": null,
+    "id": "noctua_wb.gpad",
+    "label": "noctua_wb gpad file",
+    "source": "./products/annotations/noctua_wb.gpad.gz",
+    "species_code": null,
+    "status": "inactive",
+    "submitter": "GOC",
+    "taxa": [
+      "NCBITaxon:6239"
+    ],
+    "type": "gpad"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "noctua_xenbase",
+    "description": "GPAD file for Xenbase from Noctua",
+    "entity_type": null,
+    "id": "noctua_xenbase.gpad",
+    "label": "noctua_xenbase gpad file",
+    "merges_into": "xenbase",
+    "source": "./products/annotations/noctua_xenbase-src.gpad.gz",
+    "species_code": null,
+    "status": "active",
+    "submitter": "GOC",
+    "taxa": [
+      "NCBITaxon:8364",
+      "NCBITaxon:8355"
+    ],
+    "type": "gpad"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "noctua_zfin",
+    "description": "GPAD file for ZFIN from Noctua",
+    "entity_type": null,
+    "id": "noctua_zfin.gpad",
+    "label": "noctua_zfin gpad file",
+    "merges_into": "zfin",
+    "source": "./products/annotations/noctua_zfin-src.gpad.gz",
+    "species_code": null,
+    "status": "active",
+    "submitter": "GOC",
+    "taxa": [
+      "NCBITaxon:7955"
+    ],
+    "type": "gpad"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_cgd",
+    "description": "gaf file for paint_cgd from PAINT",
+    "entity_type": null,
+    "id": "paint_cgd.gaf",
+    "label": "paint_cgd gaf file",
+    "merges_into": "cgd",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_cgd.gaf.gz",
+    "species_code": null,
+    "status": "active",
+    "submitter": "paint",
+    "taxa": [
+      "NCBITaxon:5476"
+    ],
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_dictybase",
+    "description": "gaf file for paint_dictybase from PAINT",
+    "entity_type": null,
+    "id": "paint_dictybase.gaf",
+    "label": "paint_dictybase gaf file",
+    "merges_into": "dictybase",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_dictyBase.gaf.gz",
+    "species_code": "Ddis",
+    "status": "active",
+    "submitter": "paint",
+    "taxa": [
+      "NCBITaxon:352472",
+      "NCBITaxon:366501",
+      "NCBITaxon:44689",
+      "NCBITaxon:5782"
+    ],
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_ecocyc",
+    "description": "gaf file for paint_ecocyc from PAINT",
+    "entity_type": null,
+    "id": "paint_ecocyc.gaf",
+    "label": "paint_ecocyc gaf file",
+    "merges_into": "ecocyc",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_ecocyc.gaf.gz",
+    "species_code": null,
+    "status": "active",
+    "submitter": "paint",
+    "taxa": [
+      "NCBITaxon:83333"
+    ],
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_fb",
+    "description": "gaf file for paint_fb from PAINT",
+    "entity_type": null,
+    "id": "paint_fb.gaf",
+    "label": "paint_fb gaf file",
+    "merges_into": "fb",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_fb.gaf.gz",
+    "species_code": "Dmel",
+    "status": "active",
+    "submitter": "paint",
+    "taxa": [
+      "NCBITaxon:7227"
+    ],
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_goa_chicken",
+    "description": "gaf file for paint_goa_chicken from PAINT",
+    "entity_type": "chicken",
+    "id": "paint_goa_chicken.gaf",
+    "label": "paint_goa_chicken gaf file",
+    "merges_into": "goa_chicken",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_chicken.gaf.gz",
+    "species_code": null,
+    "status": "active",
+    "submitter": "paint",
+    "taxa": null,
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_goa_human",
+    "description": "gaf file for paint_goa_human from PAINT",
+    "entity_type": "human",
+    "id": "paint_goa_human.gaf",
+    "label": "paint_goa_human gaf file",
+    "merges_into": "goa_human",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_human.gaf.gz",
+    "species_code": null,
+    "status": "active",
+    "submitter": "paint",
+    "taxa": null,
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_mgi",
+    "description": "gaf file for paint_mgi from PAINT",
+    "entity_type": null,
+    "id": "paint_mgi.gaf",
+    "label": "paint_mgi gaf file",
+    "merges_into": "mgi",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_mgi.gaf.gz",
+    "species_code": "Mmus",
+    "status": "active",
+    "submitter": "paint",
+    "taxa": [
+      "NCBITaxon:10090"
+    ],
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_other",
+    "description": "gaf file for paint_other from PAINT",
+    "entity_type": null,
+    "id": "paint_other.gaf",
+    "label": "paint_other gaf file",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_other.gaf.gz",
+    "species_code": null,
+    "status": "active",
+    "submitter": "paint",
+    "taxa": [],
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_pombase",
+    "description": "gaf file for paint_pombase from PAINT",
+    "entity_type": null,
+    "id": "paint_pombase.gaf",
+    "label": "paint_pombase gaf file",
+    "merges_into": "pombase",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_pombase.gaf.gz",
+    "species_code": "Spom",
+    "status": "active",
+    "submitter": "paint",
+    "taxa": [
+      "NCBITaxon:284812",
+      "NCBITaxon:4896"
+    ],
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_rgd",
+    "description": "gaf file for paint_rgd from PAINT",
+    "entity_type": null,
+    "id": "paint_rgd.gaf",
+    "label": "paint_rgd gaf file",
+    "merges_into": "rgd",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_rgd.gaf.gz",
+    "species_code": "Rnor",
+    "status": "active",
+    "submitter": "paint",
+    "taxa": [
+      "NCBITaxon:10116"
+    ],
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_sgd",
+    "description": "gaf file for paint_sgd from PAINT",
+    "entity_type": null,
+    "id": "paint_sgd.gaf",
+    "label": "paint_sgd gaf file",
+    "merges_into": "sgd",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_sgd.gaf.gz",
+    "species_code": "Scer",
+    "status": "active",
+    "submitter": "paint",
+    "taxa": [
+      "NCBITaxon:285006",
+      "NCBITaxon:307796",
+      "NCBITaxon:41870",
+      "NCBITaxon:4932",
+      "NCBITaxon:559292"
+    ],
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_tair",
+    "description": "gaf file for paint_tair from PAINT",
+    "entity_type": null,
+    "id": "paint_tair.gaf",
+    "label": "paint_tair gaf file",
+    "merges_into": "tair",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_tair.gaf.gz",
+    "species_code": "Atal",
+    "status": "active",
+    "submitter": "paint",
+    "taxa": [
+      "NCBITaxon:3702"
+    ],
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_wb",
+    "description": "gaf file for paint_wb from PAINT",
+    "entity_type": null,
+    "id": "paint_wb.gaf",
+    "label": "paint_wb gaf file",
+    "merges_into": "wb",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_wb.gaf.gz",
+    "species_code": "Cele",
+    "status": "active",
+    "submitter": "paint",
+    "taxa": [
+      "NCBITaxon:6239"
+    ],
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_xenbase",
+    "description": "gaf file for paint_xenbase from PAINT",
+    "entity_type": null,
+    "id": "paint_xenbase.gaf",
+    "label": "paint_xenbase gaf file",
+    "merges_into": "xenbase",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_xenbase.gaf.gz",
+    "species_code": "Xenopus",
+    "status": "active",
+    "submitter": "paint",
+    "taxa": [
+      "NCBITaxon:8364",
+      "NCBITaxon:8355"
+    ],
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "paint_zfin",
+    "description": "gaf file for paint_zfin from PAINT",
+    "entity_type": null,
+    "id": "paint_zfin.gaf",
+    "label": "paint_zfin gaf file",
+    "merges_into": "zfin",
+    "source": "ftp://ftp.pantherdb.org/downloads/paint/presubmission/gene_association.paint_zfin.gaf.gz",
+    "species_code": "Drer",
+    "status": "active",
+    "submitter": "paint",
+    "taxa": [
+      "NCBITaxon:7955"
+    ],
+    "type": "gaf"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "pombase",
+    "description": "gaf file for pombase from PomBase",
+    "entity_type": null,
+    "id": "pombase.gaf",
+    "label": "pombase gaf file",
+    "source": "https://www.pombase.org/data/annotations/Gene_ontology/gene_association.pombase.gz",
+    "species_code": "Spom",
+    "status": "active",
+    "submitter": "pombase",
+    "taxa": [
+      "NCBITaxon:284812",
+      "NCBITaxon:4896"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/pombase.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "pombase",
+    "description": "gpi file for pombase from PomBase",
+    "entity_type": null,
+    "id": "pombase.gpi",
+    "label": "pombase gpi file",
+    "source": "https://www.pombase.org/data/annotations/Gene_ontology/pombase.gpi.gz",
+    "species_code": "Spom",
+    "status": "active",
+    "submitter": "pombase",
+    "taxa": [
+      "NCBITaxon:284812",
+      "NCBITaxon:4896"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/pombase.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "pombase",
+    "description": "gpad file for pombase from PomBase",
+    "entity_type": null,
+    "id": "pombase.gpad",
+    "label": "pombase gpad file",
+    "source": "https://www.pombase.org/data/annotations/Gene_ontology/pombase.gpad.gz",
+    "species_code": "Spom",
+    "status": "active",
+    "submitter": "pombase",
+    "taxa": [
+      "NCBITaxon:284812",
+      "NCBITaxon:4896"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/pombase.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "pseudocap",
+    "description": "gaf file for pseudocap from Pseudomonas Genome Project",
+    "entity_type": null,
+    "id": "pseudocap.gaf",
+    "label": "pseudocap gaf file",
+    "source": "https://github.com/brinkmanlab/pseudomonas-genome-database/raw/master/pseudocap-annotation-files/gene_association.pseudocap.gz",
+    "species_code": "Pseudomonas",
+    "status": "active",
+    "submitter": "pseudocap",
+    "taxa": [
+      "NCBITaxon:208964"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/pseudocap.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "reactome",
+    "description": "gaf file for reactome from Reactome - a curated knowledgebase of biological pathways",
+    "entity_type": null,
+    "id": "reactome.gaf",
+    "label": "reactome gaf file",
+    "source": "https://www.reactome.org/download/current/gene_association.reactome.gz",
+    "species_code": null,
+    "status": "inactive",
+    "submitter": "reactome",
+    "taxa": null,
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/reactome.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "rgd",
+    "description": "gaf file for rgd from Rat Genome Database",
+    "entity_type": null,
+    "id": "rgd.gaf",
+    "label": "rgd gaf file",
+    "source": "https://github.com/rat-genome-database/rgd-annotation-files/raw/master/gene_association.rgd.gz",
+    "species_code": "Rnor",
+    "status": "active",
+    "submitter": "rgd",
+    "taxa": [
+      "NCBITaxon:10116"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/rgd.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "rnacentral",
+    "description": "gpi file for RNA central, all species",
+    "entity_type": "rna",
+    "id": "rnacentral.gpi",
+    "label": "RNACentral gpi file",
+    "source": "https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/gpi/rnacentral.gpi.gz",
+    "status": "active",
+    "submitter": "rnacentral",
+    "taxa": [
+      "NCBITaxon:1"
+    ],
+    "type": "gpi"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "sgd",
+    "description": "gaf file for sgd from Saccharomyces Genome Database",
+    "entity_type": null,
+    "id": "sgd.gaf",
+    "label": "sgd gaf file",
+    "source": "https://sgd-prod-upload.s3.amazonaws.com/latest/gene_association.sgd.gaf.gz",
+    "species_code": "Scer",
+    "status": "active",
+    "submitter": "sgd",
+    "taxa": [
+      "NCBITaxon:285006",
+      "NCBITaxon:307796",
+      "NCBITaxon:41870",
+      "NCBITaxon:4932",
+      "NCBITaxon:559292"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/sgd.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "sgd",
+    "description": "gpad file for sgd from Saccharomyces Genome Database",
+    "entity_type": null,
+    "id": "sgd.gpad",
+    "label": "sgd gpad file",
+    "source": "https://ftp.ebi.ac.uk/pub/contrib/goa/gp_association.559292_sgd.gz",
+    "species_code": "Scer",
+    "status": "active",
+    "submitter": "sgd",
+    "taxa": [
+      "NCBITaxon:285006",
+      "NCBITaxon:307796",
+      "NCBITaxon:41870",
+      "NCBITaxon:4932",
+      "NCBITaxon:559292"
+    ],
+    "type": "gpad",
+    "url": "http://current.geneontology.org/annotations/sgd.gpad.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "sgd",
+    "description": "gpi file for sgd from Saccharomyces Genome Database",
+    "entity_type": null,
+    "id": "sgd.gpi",
+    "label": "sgd gpi file",
+    "source": "https://downloads.yeastgenome.org/latest/gpi.sgd.gz",
+    "species_code": "Scer",
+    "status": "active",
+    "submitter": "sgd",
+    "taxa": [
+      "NCBITaxon:285006",
+      "NCBITaxon:307796",
+      "NCBITaxon:41870",
+      "NCBITaxon:4932",
+      "NCBITaxon:559292"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/sgd.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "sgn",
+    "description": "gaf file for sgn from Sol Genomics Network",
+    "entity_type": "gene",
+    "id": "sgn.gaf",
+    "label": "sgn gaf file",
+    "source": "https://solgenomics.net/ftp/ontology/GO/gene_association.sgn.gz",
+    "species_code": "Solanaceae",
+    "status": "active",
+    "submitter": "sgn",
+    "taxa": [
+      "NCBITaxon:4081"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/sgn.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "tair",
+    "description": "gaf file for tair from The Arabidopsis Information Resource",
+    "entity_type": null,
+    "id": "tair.gaf",
+    "label": "tair gaf file",
+    "source": "https://www.arabidopsis.org/download_files/GO_and_PO_Annotations/Gene_Ontology_Annotations/gene_association.tair.gz",
+    "species_code": "Atal",
+    "status": "active",
+    "submitter": "tair",
+    "taxa": [
+      "NCBITaxon:3702"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/tair.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "wb",
+    "description": "gaf file for wb from WormBase database of nematode biology",
+    "entity_type": null,
+    "id": "wb.gaf",
+    "label": "wb gaf file",
+    "source": "ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/PRJNA13758/annotation/gene_association/c_elegans.PRJNA13758.current.gene_association.wb.gz",
+    "species_code": "Cele",
+    "status": "active",
+    "submitter": "wb",
+    "taxa": [
+      "NCBITaxon:6239"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/wb.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "wb",
+    "description": "gpi file for Caenorhabditis elegans from WormBase",
+    "entity_type": null,
+    "id": "wb.gpi",
+    "label": "wb gpi file",
+    "source": "ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/PRJNA13758/annotation/gene_product_info/c_elegans.PRJNA13758.current.gene_product_info.gpi.gz",
+    "species_code": "Cele",
+    "status": "active",
+    "submitter": "wb",
+    "taxa": [
+      "NCBITaxon:6239"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/wb.gpi.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "xenbase",
+    "description": "gpi file for Xenbase",
+    "entity_type": null,
+    "id": "xenbase.gpi",
+    "label": "Xenbase gpi file",
+    "source": "https://ftp.xenbase.org/pub/GenePageReports/xenbase.gpi.gz",
+    "species_code": "Xenopus",
+    "status": "active",
+    "submitter": "xenbase",
+    "taxa": [
+      "NCBITaxon:8364",
+      "NCBITaxon:8355"
+    ],
+    "type": "gpi"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "xenbase",
+    "description": "GAF file for Xenbase",
+    "entity_type": null,
+    "id": "xenbase.gaf",
+    "label": "xenbase gaf file",
+    "source": "https://ftp.xenbase.org/pub/DataExchange/GO/xenbase.EBI.only.2.2.gaf.gz",
+    "species_code": "Xenopus",
+    "status": "active",
+    "submitter": "xenbase",
+    "taxa": [
+      "NCBITaxon:8364",
+      "NCBITaxon:8355"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/xenbase.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "zfin",
+    "description": "gaf file for zfin from Zebrafish Information Network",
+    "entity_type": null,
+    "id": "zfin.gaf",
+    "label": "zfin gaf file",
+    "source": "https://zfin.org/downloads/gene_association2.2_automated_only.zfin.gz",
+    "species_code": "Drer",
+    "status": "active",
+    "submitter": "zfin",
+    "taxa": [
+      "NCBITaxon:7955"
+    ],
+    "type": "gaf",
+    "url": "http://current.geneontology.org/annotations/zfin.gaf.gz"
+  },
+  {
+    "compression": "gzip",
+    "dataset": "zfin",
+    "description": "gpi file for zfin from Zebrafish Information Network",
+    "entity_type": null,
+    "id": "zfin.gpi",
+    "label": "zfin gpi file",
+    "source": "https://zfin.org/downloads/zfin.gpi.gz",
+    "species_code": "Drer",
+    "status": "active",
+    "submitter": "zfin",
+    "taxa": [
+      "NCBITaxon:7955"
+    ],
+    "type": "gpi",
+    "url": "http://current.geneontology.org/annotations/zfin.gpi.gz"
+  }
+]

@@ -44,7 +44,7 @@ export class NoctuaGraphService {
       }
 
     } else {
-      const dbId = id.split(':')
+      const dbId = id.split(/:(.+)/, 2);
       if (dbId.length > 1) {
         return dbxrefs.getURL(dbId[0], undefined, dbId[1]);
       }
@@ -52,24 +52,32 @@ export class NoctuaGraphService {
     }
   }
 
-
-  getMetadata(responseData) {
-    const self = this;
+  getCam(responseData): Cam {
     const cam = new Cam()
-
     cam.graph = new bbopGraph();
     cam.graph.load_data_basic(responseData);
-
     cam.id = responseData.id;
     cam.modified = responseData['modified-p'];
 
+    this.getMetadata(cam)
+    this.loadCam(cam)
+
+    return cam;
+  }
+
+
+  getMetadata(cam: Cam) {
+    const self = this;
+
+    const commentAnnotations = cam.graph.get_annotations_by_key('comment');
     const titleAnnotations = cam.graph.get_annotations_by_key('title');
     const dateAnnotations = cam.graph.get_annotations_by_key('date');
-    // const groupAnnotations = cam.graph.get_annotations_by_key('providedBy');
-    //  const contributorAnnotations = cam.graph.get_annotations_by_key('contributor');
+    const groupAnnotations = cam.graph.get_annotations_by_key('providedBy');
+    const contributorAnnotations = cam.graph.get_annotations_by_key('contributor');
 
     // cam.contributors = self.noctuaUserService.getContributorsFromAnnotations(contributorAnnotations);
     // cam.groups = self.noctuaUserService.getGroupsFromAnnotations(groupAnnotations);
+
 
     if (dateAnnotations.length > 0) {
       cam.date = dateAnnotations[0].value();
@@ -79,7 +87,13 @@ export class NoctuaGraphService {
       cam.title = titleAnnotations[0].value();
     }
 
-    return cam;
+    /*  cam.comments = commentAnnotations.map(c => {
+       return c.value();
+     }) */
+
+    if (dateAnnotations.length > 0) {
+      cam.date = dateAnnotations[0].value();
+    }
 
   }
 
@@ -87,15 +101,12 @@ export class NoctuaGraphService {
   loadCam(cam: Cam): void {
     const self = this;
     const activities = self.graphToActivities(cam.graph);
-
     const molecules = self.graphToMolecules(cam.graph);
 
     activities.push(...molecules);
 
     cam.activities = activities;
     cam.causalRelations = self.getCausalRelations(cam);
-    self.getActivityLocations(cam)
-
 
     cam.updateProperties()
   }
@@ -565,35 +576,6 @@ export class NoctuaGraphService {
 
     return triples;
   }
-
-
-
-  getActivityLocations(cam: Cam) {
-    const locations = localStorage.getItem(`activityLocations-${cam.id}`);
-
-    if (locations) {
-      const activityLocations = JSON.parse(locations)
-      cam.activities.forEach((activity: Activity) => {
-        const activityLocation = find(activityLocations, { id: activity.id })
-        if (activityLocation) {
-          activity.position.x = activityLocation.x;
-          activity.position.y = activityLocation.y
-        }
-      })
-    }
-  }
-
-  setActivityLocations(cam: Cam) {
-    const locations = cam.activities.map((activity: Activity) => {
-      return {
-        id: activity.id,
-        x: activity.position.x,
-        y: activity.position.y
-      }
-    })
-    localStorage.setItem(`activityLocations-${cam.id}`, JSON.stringify(locations));
-  }
-
 
   private _graphToActivityDFS(camGraph, activity: Activity, bbopEdges, subjectNode: ActivityNode) {
     const self = this;

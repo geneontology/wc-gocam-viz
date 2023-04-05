@@ -45,20 +45,7 @@ export class GenesPanel {
             // if an undefined handler was provided, do nothing
             if (!this.cam) { return; }
 
-            let activities = this.cam.activities;
             this.groupedActivities = this.cam.groupActivitiesByProcess();
-            /*  this.cam.enrichActivities(activities)
-                 .then((data) => {
-                     // we sort activities by BP, as much as we can; ordered alphabetically and when no partOf = end of list
-                     data.sort((a, b) => (a.partOf.length == 0) ?
-                         1 : (b.partOf.length == 0) ?
-                             -1 : (a.partOf[0].label < b.partOf[0].label) ?
-                                 -1 : 1)
-                     this.enrichedActivities = data;
-                     // console.log("GenesPanel:EnrichedActivities: ", this.enrichedActivities);
-                     this.groupedActivities = this.cam.groupActivitiesByProcess(this.enrichedActivities);
-                     // console.log("GenesPanel:GroupedActivities: ", this.groupedActivities);
-                 }) */
         }
     }
 
@@ -74,6 +61,7 @@ export class GenesPanel {
     }
 
     select(activity) {
+        this.clearHighlight()
         this.selectChanged.emit(activity);
     }
 
@@ -93,7 +81,7 @@ export class GenesPanel {
         if (this.previousElt) {
             this.previousElt.style("border-width", "1px")
             this.previousElt.style("border-color", "black")
-            // this.previousElt.style("background-color", "white")
+            this.previousElt.style("background-color", "white")
             this.previousElt = undefined;
         }
     }
@@ -157,7 +145,7 @@ export class GenesPanel {
         return (
             <div class="card gocam-process-card mb-5 gocam-activity-card__process">
                 <div class="card-header gocam-activity-card__process__list">
-                    <a href={process} class="a-gcv gocam-activity-card__process__list-name" target="_blank">{process}</a>
+                    {process}
                 </div>
                 <div class="card-body p-0 gocam-activity-card__process__activities">
                     {
@@ -172,12 +160,12 @@ export class GenesPanel {
 
     renderActivity(activity: Activity) {
         const nodes = activity.nodes.filter((node: ActivityNode) => {
-            return (node.displaySection.id === noctuaFormConfig.displaySection.fd.id &&
+            return (
                 node.type !== ActivityNodeType.GoMolecularFunction);
         });
 
         return (
-            <div class="card mb-2 gocam-activity-card" id={"gp_item_" + activity.id} onClick={() => this.select(activity)} onMouseOver={() => this.highlight(activity.id)} onMouseOut={() => this.clearHighlight()} >
+            <div class="card mb-2 gocam-activity-card" id={"gp_item_" + activity.id} onClick={() => this.select(activity)} >
                 <div class='card-header'>
                     {
                         activity.gpNode ?

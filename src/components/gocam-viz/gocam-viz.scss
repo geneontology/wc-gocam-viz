@@ -6,6 +6,10 @@ $gocam-width: 800px;
     @include deep-height(48px);
   }
 }
+
+.gocam-collapse-btn {
+  margin-right: 8px;
+}
 .gocam-viz {
   width: 100%;
   padding: 16px;
@@ -18,6 +22,11 @@ $gocam-width: 800px;
   width: 100%;
   height: 100%;
   //border: 1px solid #bdc9eb;
+}
+
+.active {
+  background-color: rgb(74, 74, 211) !important;
+  color: #eee;
 }
 
 .gocam-viz-loader {

@@ -29,10 +29,7 @@
 
   .gocam-process-card {
     .card-header {
-      a {
-        color: #fff;
-      }
-
+      color: #fff;
       background-color: #7a548d;
     }
   }
@@ -59,6 +56,20 @@
 
     .gocam-node-evidence {
       @include deep-width(30px);
+    }
+
+    &.card-active {
+      background-color: #af732a;
+      color: #eee;
+
+      .card-header,
+      .list-group-item {
+        color: #eee !important;
+        background-color: transparent !important;
+      }
+      a {
+        color: #eee !important;
+      }
     }
   }
 }

@@ -129,6 +129,8 @@ export class Activity extends SaeGraph<ActivityNode> {
         return '#efebe9'
       case ActivityType.molecule:
         return '#e0f2f1' //teal
+      case ActivityType.proteinComplex:
+        return '#DDDDDD' //teal
       default:
         return '#ebe3f9';
     }

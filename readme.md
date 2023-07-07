@@ -6,22 +6,18 @@ This web component allows to visualize GO-CAM from any website and create entity
 
 ## Usage
 
-NPM package: https://www.npmjs.com/package/@geneontology/wc-gocam-viz
+### Script tags
 
-In any HTML page:
-````
+For a simple, static website using `<script>` tag is a quick way to get started. For example:
+
+```html
 <html>
-
-
   <head>
     <script type="module" src="https://unpkg.com/@geneontology/wc-gocam-viz/dist/wc-gocam-viz/wc-gocam-viz.esm.js"></script>
     <script nomodule="" src="https://unpkg.com/@geneontology/wc-gocam-viz/dist/wc-gocam-viz/wc-gocam-viz.js"></script> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
-  
-
   <body>
-
     <wc-gocam-viz 
       id="gocam-1"
       gocam-id="568b0f9600000284"
@@ -31,13 +27,29 @@ In any HTML page:
       show-gene-product=true
       show-activity=false
     ></wc-gocam-viz>
-    
   </body>
 </html>
+```
 
+This will render a GO-CAM model highlighting the flow of regulations between
+genes/activities.
 
-````
+### NPM package
 
-This will render a GO-CAM model highlighting the flow of regulations between genes/activities
+To use the web component as part of a larger front-end application that has its
+own bundling process, first install the dependency:
 
-![GO-CAM example](Example.png)
+```shell
+npm install @geneontology/wc-gocam-viz
+```
+
+Then somewhere near the top level of your application you must define the custom
+components from this package:
+
+```js
+import { defineCustomElements } from '@geneontology/wc-gocam-viz/loader'
+
+defineCustomElements()
+```
+
+Now the `<wc-gocam-viz>` element can be used in your application's markup. 

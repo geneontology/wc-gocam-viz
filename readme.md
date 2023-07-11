@@ -8,7 +8,7 @@ This web component allows to visualize GO-CAM from any website and create entity
 
 ### Script tags
 
-For a simple, static website using `<script>` tag is a quick way to get started. For example:
+For a simple, static website using `<script>` tags is a quick way to get started. For example:
 
 ```html
 <html>
@@ -36,6 +36,8 @@ genes/activities.
 
 ### NPM package
 
+#### Installation
+
 To use the web component as part of a larger front-end application that has its
 own bundling process, first install the dependency:
 
@@ -43,7 +45,9 @@ own bundling process, first install the dependency:
 npm install @geneontology/wc-gocam-viz
 ```
 
-Then somewhere near the top level of your application you must define the custom
+#### Registering custom elements
+
+Somewhere near the top level of your application you must define the custom
 components from this package:
 
 ```js
@@ -53,3 +57,44 @@ defineCustomElements()
 ```
 
 Now the `<wc-gocam-viz>` element can be used in your application's markup. 
+
+#### Configuration for image assets
+
+The legend feature of the component requires image assets to be served by your
+application. These assets are distributed in the
+`node_modules/@geneontology/wc-gocam-viz/dist/wc-gocam-viz/assets` directory. If
+your applications uses a bundler you should configure it to automatically copy
+the files in that directory to an `assets` directory in the build ouput.
+
+A webpack configuration that uses the
+[CopyWebpackPlugin](https://webpack.js.org/plugins/copy-webpack-plugin/) to do
+this might look like:
+
+```js
+const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: 'main.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'node_modules/@geneontology/wc-gocam-viz/dist/wc-gocam-viz/assets'),
+          to: path.resolve(__dirname, 'dist/assets'),
+        },
+      ],
+    }),
+  ],
+};
+```
+
+For other bundlers, consider a similar configuration using one of the following plugins:
+
+* [rollup-plugin-copy](https://github.com/vladshcherbin/rollup-plugin-copy)
+* [vite-plugin-static-copy](https://github.com/sapphi-red/vite-plugin-static-copy)
+* [esbuild-plugin-copy](https://github.com/LinbuduLab/esbuild-plugins/tree/main/packages/esbuild-plugin-copy)

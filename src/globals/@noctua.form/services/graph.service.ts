@@ -33,6 +33,10 @@ export class NoctuaGraphService {
   getTermURL(id: string) {
     const self = this;
 
+    if (!id) {
+      return ""
+    }
+
     if (id.startsWith('ECO')) {
       return 'http://www.evidenceontology.org/term/' + id;
     } else if (id.startsWith('PMID')) {

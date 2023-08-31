@@ -904,8 +904,7 @@ export class GoCamViz {
                         Processes and Activities
                     </div>
                     <div class="panel-body">
-                      <pre>wc-genes-panel...</pre>
-                        {/*<wc-genes-panel id="gocam-viz-panel" class="" cam={this.cam} ref={el => this.genesPanel = el}></wc-genes-panel>*/}
+                        <wc-genes-panel id="gocam-viz-panel" class="" cam={this.cam} ref={el => this.genesPanel = el}></wc-genes-panel>
                     </div>
                 </div>
             </div>

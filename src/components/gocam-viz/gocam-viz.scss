@@ -1,93 +1,122 @@
-$gocam-width: 800px;
+.gocam-viz-wrapper {
+  display: flex;
+}
 
-.card-header {
-  &.gocam-h-md {
-    @include deep-height(48px);
+.panel {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.panel-header {
+  min-height: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.panel-body {
+  flex: 1 1 auto;
+}
+
+.viz-panel-header-buttons {
+  white-space: nowrap;
+
+  button {
+    color: #fff;
+    background-color: #0d6efd;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.2rem;
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid transparent;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+
+    &:focus, &:hover {
+      color: #fff;
+      background-color: #0b5ed7;
+      border-color: #0a58ca;
+    }
+
+    &:first-child {
+      margin-right: 8px;
+    }
   }
 }
 
-.gocam-collapse-btn {
-  margin-right: 8px;
-}
 .gocam-viz {
-  width: 100%;
   padding: 16px;
   height: $gocam-height;
-  width: 100%;
-  border: 1px solid #d1c4e9;
 }
-
-#gocam-viz-panel {
-  width: 100%;
-  height: 100%;
-  //border: 1px solid #bdc9eb;
-}
+//
+//#gocam-viz-panel {
+//  width: 100%;
+//  height: 100%;
+//  //border: 1px solid #bdc9eb;
+//}
 
 .active {
   background-color: rgb(74, 74, 211) !important;
   color: #eee;
 }
 
-.gocam-viz-loader {
-  width: $gocam-width;
-  height: $gocam-height;
-  background-color: rgba($color: #000000, $alpha: 0.1);
-  margin: auto;
-  font-size: 24px;
-  display: flex;
-  /* justify-content: center; */
-  align-items: center;
-}
-
-.pop-line {
-  line-height: 1.1rem;
-  text-decoration: none;
-}
-
-.open__in_noctua__label {
-  margin-left: 3rem;
-  background-color: rgb(74, 74, 211);
-  color: white;
-}
-
-.button-gcv {
-  background-color: rgb(74, 74, 211);
-  color: white;
-  padding: 0.2rem 0.6rem;
-}
-
-.control__panel {
-  position: relative;
-  width: $gocam-width;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-
 .gocam-legend-container {
-  .list-group,
-  .list-group-item {
-    border: none !important;
-  }
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+  padding: 4px;
+
   .gocam-legend-header {
-    padding: 5px;
+    padding: 4px;
     font-size: 16px;
     font-weight: bold;
     text-align: center;
   }
   .left {
-    .gocam-legend-key {
-      img {
-        height: 4px;
-      }
+    img {
+      height: 4px;
     }
   }
-  .gocam-legend-key {
-    img {
-      height: 20px;
-    }
+  img {
+    height: 20px;
   }
   .gocam-legend-value {
-    height: 20px;
+    display: inline-block;
+    height: 35px;
     padding-left: 8px;
+  }
+}
+
+.gocam-legend-section-container {
+  display: flex;
+}
+
+.gocam-legend-section {
+  flex: 1 1 auto;
+}
+
+@media (min-width: 992px) {
+  .viz-panel {
+    flex: 0 0 auto;
+    width: 66.66666667%;
+  }
+  .genes-panel {
+    flex: 0 0 auto;
+    width: 33.33333333%;
+  }
+  .panel-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
 }

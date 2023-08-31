@@ -1,34 +1,40 @@
-<html dir="ltr" lang="en">
+<html dir='ltr' lang='en'>
 
 
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script type="module" src="/build/wc-gocam-viz.esm.js"></script>
-  <script nomodule src="/build/wc-gocam-viz.js"></script>
+  <meta name='viewport' content='width=device-width, initial-scale=1' />
+  <script type='module' src='/build/wc-gocam-viz.esm.js'></script>
+  <script nomodule src='/build/wc-gocam-viz.js'></script>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel='stylesheet'
+        href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+  <title>wc-gocam-viz</title>
 </head>
 
 
 <body>
 
-  <label for="cars">Select Repository:</label>
+  <div style='max-width: 1200px; margin: 0 auto'>
+    <div style='margin-bottom: 1rem'>
+      <label for='goc-repository-select'>Select Repository:</label>
+      <select name='repository' id='goc-repository-select'>
+        <option value='prod'>Noctua Production</option>
+        <option value='dev'>Noctua Development(for developers only)</option>
+      </select>
+    </div>
 
-  <select name="repository" id="goc-repository-select">
-    <option value="prod">Noctua Production</option>
-    <option value="dev">Noctua Development(for developers onl;y)</option>
-  </select>
+    <!-- ACTUAL INTEGRATION OF THE GOCAM-VIZ COMPONENT ex gomodel:56d1143000000176 gomodel:6202e3b700000172 localgomodel:61f34dd300001044-->
+    <!--<wc-gocam-viz id="gocam-1" repository="local-dev" gocam-id="63bbb65600000000" show-go-cam-selector=true
+      show-has-input=true show-has-output=true show-gene-product=true show-activity=true show-isolated-activity=true>
+    </wc-gocam-viz>-->
 
-
-  <!-- ACTUAL INTEGRATION OF THE GOCAM-VIZ COMPONENT ex gomodel:56d1143000000176 gomodel:6202e3b700000172 localgomodel:61f34dd300001044-->
-  <!--<wc-gocam-viz id="gocam-1" repository="local-dev" gocam-id="63bbb65600000000" show-go-cam-selector=true
-    show-has-input=true show-has-output=true show-gene-product=true show-activity=true show-isolated-activity=true>
-  </wc-gocam-viz>-->
-
-  <wc-gocam-viz id="gocam-1" repository="dev" gocam-id="63868c2d00000073" show-go-cam-selector=true show-has-input=true
-    show-has-output=true show-gene-product=true show-activity=true show-isolated-activity=true>
-  </wc-gocam-viz>
-
+    <wc-gocam-viz id='gocam-1' repository='dev' gocam-id='63868c2d00000073'
+                  show-go-cam-selector='true'
+                  show-has-input='true'
+                  show-has-output='true' show-gene-product='true' show-activity='true'
+                  show-isolated-activity='true'>
+    </wc-gocam-viz>
+  </div>
 
   <!-- <wc-gocam-viz
       id="gocam-1"
@@ -46,11 +52,11 @@
   <!-- OPTIONAL: SPECIAL HANDLING OF EVENTS -->
   <script>
 
-    var repositorySelect = document.getElementById("goc-repository-select");
+    var repositorySelect = document.getElementById('goc-repository-select');
     repositorySelect.addEventListener('change', updateRepository);
 
     function updateRepository(e) {
-      var goCamViz = document.getElementById("gocam-1");
+      var goCamViz = document.getElementById('gocam-1');
       goCamViz.setAttribute('repository', e.target.value);
     }
 
@@ -60,10 +66,12 @@
     document.addEventListener('keydown', (key) => {
       if (key.code == 'Space') {
         key.preventDefault();
-        let viz = document.getElementById("gocam-1");
-        if (viz) { viz.resetView(); }
+        let viz = document.getElementById('gocam-1');
+        if (viz) {
+          viz.resetView();
+        }
       }
-    })
+    });
 
     /**
      * Listen to a mouse over event on an activity node

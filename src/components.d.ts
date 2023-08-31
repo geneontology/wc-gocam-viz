@@ -6,6 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Cam } from "./globals/@noctua.form";
+export { Cam } from "./globals/@noctua.form";
 export namespace Components {
     interface WcGenesPanel {
         /**

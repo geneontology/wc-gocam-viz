@@ -1,4 +1,6 @@
-@import './../../scss/panel';
+@import "../../scss/variables";
+@import "../../scss/mixins";
+@import '../../scss/panel';
 
 .genes-panel__list {
   scroll-behavior: smooth;

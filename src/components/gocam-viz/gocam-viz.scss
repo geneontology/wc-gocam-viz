@@ -1,3 +1,4 @@
+@import "../../scss/variables";
 @import "../../scss/panel";
 
 .gocam-viz-wrapper {
@@ -82,6 +83,10 @@
 
 .gocam-legend-section {
   flex: 1 1 auto;
+
+  img {
+    display: inline-block;
+  }
 }
 
 @media (min-width: 992px) {

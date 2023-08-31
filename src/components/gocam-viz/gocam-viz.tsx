@@ -922,7 +922,7 @@ export class GoCamViz {
                                 {legend[section].map((item) => {
                                     return (
                                         <div>
-                                            <img class="img-gcv" alt= {item.label} src={getAssetPath(`./assets/relation/${item.id}.png`)}></img>
+                                            <img alt= {item.label} src={getAssetPath(`./assets/relation/${item.id}.png`)}></img>
                                             <div class="gocam-legend-value">
                                                 {item.label}
                                             </div>

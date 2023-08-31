@@ -8,6 +8,9 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Cam } from "./globals/@noctua.form";
 export { Cam } from "./globals/@noctua.form";
 export namespace Components {
+    interface GoLoadingSpinner {
+        "message": string;
+    }
     interface WcGenesPanel {
         /**
           * BBOP Graph Handler -> GO-CAM Must be provided to build the side panel
@@ -59,6 +62,12 @@ export interface WcGocamVizCustomEvent<T> extends CustomEvent<T> {
     target: HTMLWcGocamVizElement;
 }
 declare global {
+    interface HTMLGoLoadingSpinnerElement extends Components.GoLoadingSpinner, HTMLStencilElement {
+    }
+    var HTMLGoLoadingSpinnerElement: {
+        prototype: HTMLGoLoadingSpinnerElement;
+        new (): HTMLGoLoadingSpinnerElement;
+    };
     interface HTMLWcGenesPanelElement extends Components.WcGenesPanel, HTMLStencilElement {
     }
     var HTMLWcGenesPanelElement: {
@@ -78,12 +87,16 @@ declare global {
         new (): HTMLWcGocamVizElement;
     };
     interface HTMLElementTagNameMap {
+        "go-loading-spinner": HTMLGoLoadingSpinnerElement;
         "wc-genes-panel": HTMLWcGenesPanelElement;
         "wc-gocam-selector": HTMLWcGocamSelectorElement;
         "wc-gocam-viz": HTMLWcGocamVizElement;
     }
 }
 declare namespace LocalJSX {
+    interface GoLoadingSpinner {
+        "message"?: string;
+    }
     interface WcGenesPanel {
         /**
           * BBOP Graph Handler -> GO-CAM Must be provided to build the side panel
@@ -117,6 +130,7 @@ declare namespace LocalJSX {
         "showLegend"?: boolean;
     }
     interface IntrinsicElements {
+        "go-loading-spinner": GoLoadingSpinner;
         "wc-genes-panel": WcGenesPanel;
         "wc-gocam-selector": WcGocamSelector;
         "wc-gocam-viz": WcGocamViz;
@@ -126,6 +140,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "go-loading-spinner": LocalJSX.GoLoadingSpinner & JSXBase.HTMLAttributes<HTMLGoLoadingSpinnerElement>;
             "wc-genes-panel": LocalJSX.WcGenesPanel & JSXBase.HTMLAttributes<HTMLWcGenesPanelElement>;
             "wc-gocam-selector": LocalJSX.WcGocamSelector & JSXBase.HTMLAttributes<HTMLWcGocamSelectorElement>;
             "wc-gocam-viz": LocalJSX.WcGocamViz & JSXBase.HTMLAttributes<HTMLWcGocamVizElement>;

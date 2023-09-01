@@ -8,28 +8,29 @@
         <script nomodule="" src="https://unpkg.com/@geneontology/wc-gocam-viz/dist/wc-gocam-viz/wc-gocam-viz.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
-    
-  
+
+
     <body>
-  
+
       <h1>GO-CAM visualization web component - Test Page</h1>
       <br>
-  
+
       <!-- ACTUAL INTEGRATION OF THE GOCAM-VIZ COMPONENT -->
-      <wc-gocam-viz 
+      <wc-gocam-viz
         id="gocam-1"
-        gocam-id="568b0f9600000284"
+        repository='dev'
+        gocam-id='568b0f9600000284'
         show-go-cam-selector=true
         show-has-input=false
         show-has-output=false
         show-gene-product=true
         show-activity=false
       ></wc-gocam-viz>
-  
-  
+
+
       <!-- OPTIONAL: SPECIAL HANDLING OF EVENTS -->
       <script>
-  
+
           /**
            * General Key listener, here to recenter the graph visualization
            */
@@ -40,22 +41,22 @@
               if(viz) { viz.resetView(); }
             }
           })
-  
+
           /**
            * Listen to a mouse over event on an activity node
            */
           document.addEventListener('nodeOver', function hideMenu(e, v) {
             let payload = e.detail;
           });
-  
+
           /**
            * Listen to a mouse out event from an activity node
            */
           document.addEventListener('nodeOut', function hideMenu(e, v) {
           });
-          
+
       </script>
-  
+
 
       <br>
       <div style="padding: 4rem; color: red">
@@ -66,10 +67,9 @@
         Source code is available on GitHub <a href="https://github.com/geneontology/wc-gocam-viz" target="blank">https://github.com/geneontology/wc-gocam-viz</a> and issues or suggestions can be posted either on GitHub or on the GO Help Desk <a href="http://help.geneontology.org/" target="blank">http://help.geneontology.org/</a>
 
         </div>
-      
+
       </div>
-  
+
     </body>
   </html>
-  
-  
+

@@ -793,7 +793,7 @@ export class GoCamViz {
     }
 
     onMouseClick(evt) {
-        const cardEl = document.getElementsByClassName('gocam-activity-card')
+        const cardEl = document.getElementsByClassName('gocam-activity')
         for (let i = 0; i < cardEl.length; i++) {
             cardEl[i].classList.remove('card-active')
         }

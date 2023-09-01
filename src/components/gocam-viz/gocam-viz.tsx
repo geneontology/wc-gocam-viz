@@ -95,9 +95,11 @@ export class GoCamViz {
     @Watch('repository')
     changeRepository(newValue, oldValue) {
         const isNotString = typeof newValue !== 'string';
-        if (isNotString) { throw new Error('repository: not string') };
+        if (isNotString) {
+          throw new Error('repository: not string');
+        }
         if (newValue !== oldValue) {
-            this.repository = newValue
+            this.loadGoCam(this.gocamId)
         }
     }
 

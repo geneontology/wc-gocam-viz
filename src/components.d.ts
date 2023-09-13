@@ -16,11 +16,11 @@ export namespace Components {
           * BBOP Graph Handler -> GO-CAM Must be provided to build the side panel
          */
         "cam": Cam;
+        "highlightActivity": (nodeId: any) => Promise<void>;
         /**
           * Passed by the parent to highlight & clear highlight nodes
          */
         "parentCy": any;
-        "scrollToActivity": (nodeId: any) => Promise<void>;
     }
     interface WcGocamSelector {
     }

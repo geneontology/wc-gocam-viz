@@ -6,11 +6,11 @@ import { Activity, ActivityNode, ActivityNodeType, Cam, Evidence, noctuaFormConf
 @Component({
     tag: 'wc-genes-panel',
     styleUrl: 'genes-panel.scss',
-    shadow: false,
+    shadow: true,
 })
 export class GenesPanel {
 
-    @Element() GenesPanel;
+    @Element() hostElement;
 
     @Event({ bubbles: true, composed: true }) selectChanged: EventEmitter;
 
@@ -52,11 +52,16 @@ export class GenesPanel {
 
 
     @Method()
-    async scrollToActivity(nodeId) {
-        const scrollList = document.getElementById("genes-panel__list");
-        const elt = document.getElementById("gp_item_" + nodeId);
+    async highlightActivity(nodeId) {
+        const scrollList = this.hostElement.shadowRoot.getElementById("genes-panel__list");
+        const elt = this.hostElement.shadowRoot.getElementById("gp_item_" + nodeId);
         if (scrollList && elt) {
-            scrollList.scroll(0, elt.offsetTop)
+            const cardEl = this.hostElement.shadowRoot.querySelectorAll('.gocam-activity')
+            for (let i = 0; i < cardEl.length; i++) {
+                cardEl[i].classList.remove('card-active')
+            }
+            elt.classList.add("card-active")
+            scrollList.scroll(0, elt.offsetTop - scrollList.offsetTop)
         }
     }
 

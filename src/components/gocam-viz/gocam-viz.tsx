@@ -1,8 +1,6 @@
 import { Component, Prop, Element, Event, EventEmitter, Watch, getAssetPath, h } from '@stencil/core';
 import { Listen, Method, State } from '@stencil/core';
 import cytoscape from 'cytoscape';
-import coseBilkent from 'cytoscape-cose-bilkent';
-import cola from 'cytoscape-cola';
 import dagre from 'cytoscape-dagre';
 import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globals/utils';
 import * as dbxrefs from "@geneontology/dbxrefs";
@@ -24,7 +22,7 @@ cytoscape.use(dagre);
 @Component({
     tag: 'wc-gocam-viz',
     styleUrl: 'gocam-viz.scss',
-    shadow: false,
+    shadow: true,
     assetsDirs: ['assets']
 })
 export class GoCamViz {
@@ -299,7 +297,7 @@ export class GoCamViz {
      */
     loadGoCam(gocamId) {
 
-        let viz = this.gocamviz.querySelector("#gocam-viz");
+        let viz = this.gocamviz.shadowRoot.querySelector("#gocam-viz");
         viz.innerHTML = ""
         if (!gocamId.startsWith("gomodel:")) {
             gocamId = "gomodel:" + gocamId;
@@ -488,7 +486,7 @@ export class GoCamViz {
 
     renderCytoscape(cam: Cam, elements, layout) {
 
-        let viz = this.gocamviz.querySelector("#gocam-viz");
+        let viz = this.gocamviz.shadowRoot.querySelector("#gocam-viz");
 
         // Creating the cytoscape component
         this.cy = cytoscape({
@@ -538,7 +536,7 @@ export class GoCamViz {
         // Binding mouse events
         // this.cy.on("mouseover", evt => this.onMouseOver(evt));
         // this.cy.on("mouseout", evt => this.onMouseOut(evt));
-        this.cy.on("click", evt => this.onMouseClick(evt));
+        this.cy.nodes().on("click", evt => this.onMouseClick(evt));
 
         // Events whenever the layout is changes, eg to remove modal
         this.cy.on("pan", evt => this.onLayoutChange(evt));
@@ -795,10 +793,6 @@ export class GoCamViz {
     }
 
     onMouseClick(evt) {
-        const cardEl = document.getElementsByClassName('gocam-activity')
-        for (let i = 0; i < cardEl.length; i++) {
-            cardEl[i].classList.remove('card-active')
-        }
         if (this.selectedEvent) {
             let entity_id = this.selectedEvent.target.id();
             if (entity_id.substr(0, 8) == "gomodel:") {
@@ -813,18 +807,7 @@ export class GoCamViz {
         }
 
         if (this.genesPanel) {
-
-            let scrollList = document.getElementById("genes-panel__list");
-            let elt2 = document.getElementById("gp_item_" + evt.target.id());
-            if (scrollList && elt2) {
-                //elt2.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
-                //scrollList.scroll(0, elt2.offsetTop - 220);
-                this.scrollDiv(scrollList, elt2)
-
-                elt2.classList.add("card-active")
-            }
-
-            // this.genesPanel.scrollToActivity(evt.target.id());
+            this.genesPanel.highlightActivity(evt.target.id());
         }
 
         this.nodeClick.emit(evt);

@@ -3,6 +3,7 @@
 
 .gocam-viz-wrapper {
   display: flex;
+  align-items: flex-start;
 }
 
 .viz-panel-header-buttons {
@@ -39,13 +40,8 @@
 .gocam-viz {
   padding: 16px;
   height: $gocam-height;
+  box-sizing: border-box;
 }
-//
-//#gocam-viz-panel {
-//  width: 100%;
-//  height: 100%;
-//  //border: 1px solid #bdc9eb;
-//}
 
 .active {
   background-color: rgb(74, 74, 211) !important;
@@ -54,7 +50,7 @@
 
 .gocam-legend-container {
   border-top: 1px solid rgba(0, 0, 0, 0.125);
-  padding: 4px;
+  padding: 4px 16px;
 
   .gocam-legend-header {
     padding: 4px;

@@ -6,11 +6,11 @@ import { Activity, ActivityNode, ActivityNodeType, Cam, Evidence, noctuaFormConf
 @Component({
     tag: 'wc-genes-panel',
     styleUrl: 'genes-panel.scss',
-    shadow: false,
+    shadow: true,
 })
 export class GenesPanel {
 
-    @Element() GenesPanel;
+    @Element() hostElement;
 
     @Event({ bubbles: true, composed: true }) selectChanged: EventEmitter;
 
@@ -52,11 +52,16 @@ export class GenesPanel {
 
 
     @Method()
-    async scrollToActivity(nodeId) {
-        const scrollList = document.getElementById("genes-panel__list");
-        const elt = document.getElementById("gp_item_" + nodeId);
+    async highlightActivity(nodeId) {
+        const scrollList = this.hostElement.shadowRoot.getElementById("genes-panel__list");
+        const elt = this.hostElement.shadowRoot.getElementById("gp_item_" + nodeId);
         if (scrollList && elt) {
-            scrollList.scroll(0, elt.offsetTop)
+            const cardEl = this.hostElement.shadowRoot.querySelectorAll('.gocam-activity')
+            for (let i = 0; i < cardEl.length; i++) {
+                cardEl[i].classList.remove('card-active')
+            }
+            elt.classList.add("card-active")
+            scrollList.scroll(0, elt.offsetTop - scrollList.offsetTop)
         }
     }
 
@@ -88,8 +93,8 @@ export class GenesPanel {
 
 
     highlightSelf(activityNode) {
-        if (!activityNode.classList.contains("gocam-activity-card:hover")) {
-            activityNode.classList.add("gocam-activity-card:hover");
+        if (!activityNode.classList.contains("gocam-activity:hover")) {
+            activityNode.classList.add("gocam-activity:hover");
         }
     }
 
@@ -99,10 +104,10 @@ export class GenesPanel {
      */
     renderGeneReferences(gp) {
         return (
-            <span class='reference-list'>
+            <span>
                 {
                     gp.evidences.map(evidence => {
-                        return <a class='a-gcv reference-article far fa-newspaper' href={evidence.url} target='_blank' title={"Source: " + evidence.source + "\nEvidence: " + evidence.evidences.map(ev => ev.label).join(",")}></a>
+                        return <a class='far fa-newspaper' href={evidence.url} target='_blank' title={"Source: " + evidence.source + "\nEvidence: " + evidence.evidences.map(ev => ev.label).join(",")}></a>
                     })
                 }
             </span>
@@ -115,10 +120,10 @@ export class GenesPanel {
      */
     renderReferences(evidences: Evidence[]) {
         return (
-            <span class='reference-list'>
+            <span>
                 {
                     evidences.map(evidence => {
-                        return <a class='a-gcv reference-article far fa-newspaper' href={evidence.evidence.url} target='_blank'
+                        return <a class='far fa-newspaper' href={evidence.evidence.url} target='_blank'
                             title={"Source: " + evidence.reference + "\nEvidence: " + evidence.evidence.label}>E</a>
                     })
                 }
@@ -130,24 +135,24 @@ export class GenesPanel {
         let label = gp.taxonLabel;
         // no label present for taxon
         if (!label) {
-            return <a class='a-gcv gocam-activity-card__title__gp__taxon' href={gp.taxonURL} target='_blank'></a>;
+            return <a href={gp.taxonURL} target='_blank'></a>;
         }
         // otherwise parse and show it
         if (label.includes(" ")) {
             let split = label.split(" ");
             label = split[0].substring(0, 1) + "." + split[1];
         }
-        return <a class='a-gcv gocam-activity-card__title__gp__taxon' href={gp.taxonURL} target='_blank'>{label}</a>;
+        return <a href={gp.taxonURL} target='_blank'>{label}</a>;
     }
 
     renderProcess(process) {
 
         return (
-            <div class="card gocam-process-card mb-5 gocam-activity-card__process">
-                <div class="card-header gocam-activity-card__process__list">
+            <div class="panel gocam-process">
+                <div class="panel-header">
                     {process}
                 </div>
-                <div class="card-body p-0 gocam-activity-card__process__activities">
+                <div class="panel-body">
                     {
                         this.groupedActivities[process].map(activity => {
                             return this.renderActivity(activity);
@@ -165,28 +170,26 @@ export class GenesPanel {
         });
 
         return (
-            <div class="card mb-2 gocam-activity-card" id={"gp_item_" + activity.id} onClick={() => this.select(activity)} >
-                <div class='card-header'>
+            <div class="panel gocam-activity" id={"gp_item_" + activity.id} onClick={() => this.select(activity)} >
+                <div class='panel-header'>
                     {
-                        activity.gpNode ?
-                            <a class='a-gcv gocam-activity-card__title__gp' href={activity.gpNode?.term.url} target='_blank'>{activity.gpNode?.term.label}</a>
-                            : ""
+                        activity.gpNode &&
+                            <a href={activity.gpNode?.term.url} target='_blank'>{activity.gpNode?.term.label}</a>
                     }
                 </div>
-                {activity.mfNode ?
-                    <div class='card-body'>
-                        <a class='a-gcv block-right' href={activity.mfNode?.term.url} target='_blank'>
+                {activity.mfNode &&
+                    <div class='panel-body'>
+                        <a href={activity.mfNode?.term.url} target='_blank'>
                             {activity.mfNode?.term.label}
                         </a>
-                        <ul class="list-group list-group-flush">
-
+                        <ul>
                             {nodes.map((node: ActivityNode) => {
                                 return (
-                                    <li class="list-group-item d-flex">
-                                        <div class="gocam-node-relation d-flex align-items-center">
-                                            <a class='' target='_blank' href="">{node.predicate?.edge.label}</a>
+                                    <li>
+                                        <div class="gocam-node-relation">
+                                            <a target='_blank' href="">{node.predicate?.edge.label}</a>
                                         </div>
-                                        <div class="flex-grow-1 gocam-node-term">
+                                        <div class="gocam-node-term">
                                             <a class='col' target='_blank' href={node.term.url}>{node.term.label}</a>
                                         </div>
                                         <div class="gocam-node-evidence">
@@ -197,7 +200,7 @@ export class GenesPanel {
                             })}
                         </ul>
                     </div>
-                    : ""}
+                }
             </div>
         )
     }

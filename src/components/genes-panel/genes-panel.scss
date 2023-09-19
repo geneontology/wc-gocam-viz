@@ -1,48 +1,62 @@
-@import './../../scss/core';
+@import "../../scss/variables";
+@import "../../scss/mixins";
+@import '../../scss/panel';
+
 .genes-panel__list {
   scroll-behavior: smooth;
   padding: 0;
   width: 100%;
   height: $gocam-height;
-  // line-height: 1.5;
+  box-sizing: border-box;
   overflow-y: scroll;
   border: 1px solid #bdc9eb;
-
-  .list-group-item {
-    padding: 3px 0;
-  }
 
   a {
     color: #000;
     text-decoration: none;
   }
 
-  .card {
+  .gocam-process {
     border: none;
-    .card-header {
-      background-color: transparent;
-    }
-    .card-body {
-      padding: 8px;
-    }
-  }
+    margin-bottom: 3rem;
 
-  .gocam-process-card {
-    .card-header {
+    .panel-header {
       color: #fff;
       background-color: #7a548d;
     }
   }
 
-  .gocam-activity-card {
-    border-bottom: 3px solid #d1b6df;
-    .card-header {
+  .gocam-activity {
+    border-style: solid;
+    border-color: #d1b6df;
+    border-width: 0 0 3px 0;
+    margin-bottom: 0.5rem;
+
+    .panel-header {
       font-weight: bold;
       a {
         font-size: 18px;
         color: #333;
       }
-      background-color: #fff;
+      background-color: transparent;
+    }
+
+    ul {
+      padding-left: 0;
+      margin-bottom: 0;
+    }
+
+    li {
+      padding: 3px 0;
+      border-style: solid;
+      border-color: rgba(0, 0, 0, 0.125);
+      border-width: 0 0 1px;
+      display: flex;
+      align-items: center;
+    }
+
+    .panel-body {
+      padding: 0.5rem 1rem;
     }
 
     .gocam-node-relation {
@@ -52,6 +66,7 @@
 
     .gocam-node-term {
       font-size: 12px;
+      flex-grow: 1;
     }
 
     .gocam-node-evidence {

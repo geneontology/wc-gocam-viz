@@ -1,8 +1,6 @@
 import { Component, Prop, Element, Event, EventEmitter, Watch, getAssetPath, h } from '@stencil/core';
 import { Listen, Method, State } from '@stencil/core';
 import cytoscape from 'cytoscape';
-import coseBilkent from 'cytoscape-cose-bilkent';
-import cola from 'cytoscape-cola';
 import dagre from 'cytoscape-dagre';
 import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globals/utils';
 import * as dbxrefs from "@geneontology/dbxrefs";
@@ -24,7 +22,7 @@ cytoscape.use(dagre);
 @Component({
     tag: 'wc-gocam-viz',
     styleUrl: 'gocam-viz.scss',
-    shadow: false,
+    shadow: true,
     assetsDirs: ['assets']
 })
 export class GoCamViz {
@@ -95,9 +93,11 @@ export class GoCamViz {
     @Watch('repository')
     changeRepository(newValue, oldValue) {
         const isNotString = typeof newValue !== 'string';
-        if (isNotString) { throw new Error('repository: not string') };
+        if (isNotString) {
+          throw new Error('repository: not string');
+        }
         if (newValue !== oldValue) {
-            this.repository = newValue
+            this.loadGoCam(this.gocamId)
         }
     }
 
@@ -192,7 +192,7 @@ export class GoCamViz {
             numIter: 2500,
             nodeRepulsion: 45000,
             // coolingFactor: 0.9,
-            // minTemp: 1.0            
+            // minTemp: 1.0
             tile: true, // tile disconnected nodes
             fit: true
         },
@@ -282,7 +282,7 @@ export class GoCamViz {
         cytoscape.use(dagre);
     }
 
-    /** 
+    /**
      * Init the GO dbxrefs.yaml, in order to build URL meta
     */
     initDBXrefs() {
@@ -292,12 +292,12 @@ export class GoCamViz {
     }
 
     /**
-     * Will request the gocam from the bbop manager; if manager approves, will trigger renderGoCam 
+     * Will request the gocam from the bbop manager; if manager approves, will trigger renderGoCam
      * @param gocamId valid gocam id gomodel:xxx
      */
     loadGoCam(gocamId) {
 
-        let viz = this.gocamviz.querySelector("#gocam-viz");
+        let viz = this.gocamviz.shadowRoot.querySelector("#gocam-viz");
         viz.innerHTML = ""
         if (!gocamId.startsWith("gomodel:")) {
             gocamId = "gomodel:" + gocamId;
@@ -486,7 +486,7 @@ export class GoCamViz {
 
     renderCytoscape(cam: Cam, elements, layout) {
 
-        let viz = this.gocamviz.querySelector("#gocam-viz");
+        let viz = this.gocamviz.shadowRoot.querySelector("#gocam-viz");
 
         // Creating the cytoscape component
         this.cy = cytoscape({
@@ -536,7 +536,7 @@ export class GoCamViz {
         // Binding mouse events
         // this.cy.on("mouseover", evt => this.onMouseOver(evt));
         // this.cy.on("mouseout", evt => this.onMouseOut(evt));
-        this.cy.on("click", evt => this.onMouseClick(evt));
+        this.cy.nodes().on("click", evt => this.onMouseClick(evt));
 
         // Events whenever the layout is changes, eg to remove modal
         this.cy.on("pan", evt => this.onLayoutChange(evt));
@@ -549,7 +549,7 @@ export class GoCamViz {
         }
     }
 
-    /** 
+    /**
      * Called when cytoscape.ready is called
     */
     finishRendering() {
@@ -586,7 +586,7 @@ export class GoCamViz {
 
     /**
      * If desired, this can render a pop up with information about the gene & its activity
-     * @param evt 
+     * @param evt
      */
     showPopup(evt) {
         if (evt && evt.target && evt.target.id) {
@@ -698,7 +698,7 @@ export class GoCamViz {
     }
 
 
-    /** 
+    /**
      * Center the cytoscape graph to fit the whole graph
     */
     @Method()
@@ -793,10 +793,6 @@ export class GoCamViz {
     }
 
     onMouseClick(evt) {
-        const cardEl = document.getElementsByClassName('gocam-activity-card')
-        for (let i = 0; i < cardEl.length; i++) {
-            cardEl[i].classList.remove('card-active')
-        }
         if (this.selectedEvent) {
             let entity_id = this.selectedEvent.target.id();
             if (entity_id.substr(0, 8) == "gomodel:") {
@@ -811,18 +807,7 @@ export class GoCamViz {
         }
 
         if (this.genesPanel) {
-
-            let scrollList = document.getElementById("genes-panel__list");
-            let elt2 = document.getElementById("gp_item_" + evt.target.id());
-            if (scrollList && elt2) {
-                //elt2.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
-                //scrollList.scroll(0, elt2.offsetTop - 220);
-                this.scrollDiv(scrollList, elt2)
-
-                elt2.classList.add("card-active")
-            }
-
-            // this.genesPanel.scrollToActivity(evt.target.id());
+            this.genesPanel.highlightActivity(evt.target.id());
         }
 
         this.nodeClick.emit(evt);
@@ -845,7 +830,7 @@ export class GoCamViz {
         this.layoutChange.emit(evt);
     }
 
-    /** 
+    /**
      * Before the component is rendered (executed once)
      * https://stenciljs.com/docs/component-lifecycle
     */
@@ -854,7 +839,7 @@ export class GoCamViz {
         this.initCytoscape();
     }
 
-    /** 
+    /**
      * Once the component has loaded (executed once)
      * https://stenciljs.com/docs/component-lifecycle
     */
@@ -862,98 +847,79 @@ export class GoCamViz {
         this.loadGoCam(this.gocamId);
     }
 
-    /** 
+    /**
      * Method to open the current gocam model into noctua
     */
     openInNoctua() {
         window.open(this.noctuaGraphURL[this.repository] + this.currentGraph.id(), "_blank");
     }
 
-    /** 
+    /**
      * Main render method; any change to a @Prop or @State triggers this
     */
     render() {
-
-        let classes = this.loading ? "gocam-hidden" : "container";
 
         if (this.genesPanel && !this.genesPanel.parentCy) {
             this.genesPanel.parentCy = this.cy;
         }
 
-        return [
-
-            this.loading ? this.error ? "" : <div class="gocam-viz-loader d-flex flex-column justify-content-center">
-                <div class="">
-                    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-                </div>
-                <div class="">
-                    Loading GO-CAM {this.gocamId}
-                </div>
-            </div> : "",
-
-            <div id="gocam-viz-container" class={classes}>
-                <div class="row align-items-start">
-                    <div class="card col col-lg-8 p-0">
-                        <div class="d-flex card-header gocam-card-header-md">
-                            <h6 class="flex-grow-1">
-                                {this.cam?.title}
-                            </h6>
-                            <button class='float-end btn btn-primary btn-sm gocam-collapse-btn' onClick={() => this.toggleComplex()}>
+        return (
+            <div class="gocam-viz-wrapper">
+                <div class="panel viz-panel">
+                    <div class="panel-header">
+                        <div>{this.cam?.title}</div>
+                        <div class="viz-panel-header-buttons">
+                            <button onClick={() => this.toggleComplex()}>
                                 {this.expandComplex ? 'Collapse Protein Complexes' : 'Expand Protein Complexes'}
                             </button>
-                            <button class='float-end btn btn-primary btn-sm' onClick={() => this.resetView()}>Reset View</button>
-                        </div>
-                        <div class="card-body p-0">
-                            <div id="gocam-viz" class="gocam-viz"></div>
-                            {this.renderLegend()}
+                            <button onClick={() => this.resetView()}>Reset View</button>
                         </div>
                     </div>
-                    <div class="card col col-lg-4 p-0">
-                        <div class="card-header gocam-h-md">
-                            Processes and Activities
+                    <div class="panel-body">
+                        <div id="gocam-viz" class="gocam-viz">
+                          { this.loading &&
+                              <go-loading-spinner message={`Loading GO-CAM ${this.gocamId}`}></go-loading-spinner>
+                          }
                         </div>
-                        <div class="card-body p-0">
-                            <wc-genes-panel id="gocam-viz-panel" class="" cam={this.cam} ref={el => this.genesPanel = el}></wc-genes-panel>
-                        </div>
+                        {this.showLegend && this.renderLegend()}
                     </div>
                 </div>
-            </div >,
-
-
-        ];
-
+                <div class="panel genes-panel">
+                    <div class="panel-header">
+                        Processes and Activities
+                    </div>
+                    <div class="panel-body">
+                        <wc-genes-panel id="gocam-viz-panel" class="" cam={this.cam} ref={el => this.genesPanel = el}></wc-genes-panel>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     renderLegend() {
-        return this.showLegend ?
-            <div class="container gocam-legend-container">
-                <div class="row align-items-center">
-                    <div class="gocam-legend-header">Relation Types</div>
-                </div>
-                <div class="row align-items-start">
+        return (
+            <div class="gocam-legend-container">
+                <div class="gocam-legend-header">Relation Types</div>
+                <div class="gocam-legend-section-container">
                     {Object.keys(legend).map((section) => {
-                        return <div class={'card col col-lg-4 p-0 ' + section}>
-                            <ul class="list-group list-group-flush">
+                        return (
+                            <div class={'gocam-legend-section ' + section}>
                                 {legend[section].map((item) => {
                                     return (
-                                        <li class="list-group-item d-flex">
-                                            <div class="gocam-legend-key">
-                                                <img class="img-gcv" src={getAssetPath(`./assets/relation/${item.id}.png`)}></img>
-                                            </div>
-                                            <div class="flex-grow-1 gocam-legend-value">
+                                        <div>
+                                            <img alt= {item.label} src={getAssetPath(`./assets/relation/${item.id}.png`)}></img>
+                                            <div class="gocam-legend-value">
                                                 {item.label}
                                             </div>
-
-                                        </li>
+                                        </div>
                                     )
                                 })}
-                            </ul>
-                        </div>
+                            </div>
+                        )
                     })}
                 </div>
             </div>
-            : ""
-
+        )
     }
 
 }

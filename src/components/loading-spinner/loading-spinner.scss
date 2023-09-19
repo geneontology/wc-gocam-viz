@@ -1,0 +1,38 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+
+  &::after {
+    content: '';
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-width: 8px;
+    border-style: solid;
+    border-radius: 50%;
+    border-color: #703770 #703770 #703770 transparent;
+    animation: ring-frames 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes ring-frames {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

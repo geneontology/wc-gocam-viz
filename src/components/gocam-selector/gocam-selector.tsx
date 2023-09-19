@@ -5,14 +5,14 @@ import { State } from '@stencil/core';
 @Component({
     tag: 'wc-gocam-selector',
     styleUrl: 'gocam-selector.css',
-    shadow: false,
+    shadow: true,
 })
 export class GoCamSelector {
 
     @Element() GoCamSelector;
 
     @Event({ bubbles: true, composed: true }) selectGOCAM: EventEmitter;
-    
+
     url = "https://geneontology-public.s3.amazonaws.com/gocams.json";
 
     list = [
@@ -39,7 +39,7 @@ export class GoCamSelector {
         "http://model.geneontology.org/5ce58dde00001215",
         "http://model.geneontology.org/59dc728000000555",
         "http://model.geneontology.org/57c82fad00000695",
-        
+
         // Other MF - causal - MF
         "http://model.geneontology.org/5e72450500003881",
         "http://model.geneontology.org/5c4605cc00003261",

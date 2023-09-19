@@ -1,0 +1,11 @@
+@mixin deep-width($number) {
+  width: $number;
+  min-width: $number;
+  max-width: $number;
+}
+
+@mixin deep-height($number) {
+  height: $number;
+  min-height: $number;
+  max-height: $number;
+}

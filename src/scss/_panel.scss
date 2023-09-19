@@ -1,0 +1,31 @@
+.panel {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.panel-header {
+  box-sizing: border-box;
+  min-height: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.panel-body {
+  flex: 1 1 auto;
+}
+
+@media (min-width: 992px) {
+  .panel-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

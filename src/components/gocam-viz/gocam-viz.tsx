@@ -1,4 +1,4 @@
-import { Component, Prop, Element, Event, EventEmitter, Watch, getAssetPath, h } from '@stencil/core';
+import { Component, Host, Prop, Element, Event, EventEmitter, Watch, getAssetPath, h } from '@stencil/core';
 import { Listen, Method, State } from '@stencil/core';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
@@ -29,6 +29,7 @@ export class GoCamViz {
 
     @Element() gocamviz;
     genesPanel: HTMLWcGenesPanelElement;
+    graphDiv: HTMLDivElement;
 
     /**
      * ID of the gocam to be shown in this widget. Look for the watcher below that will load
@@ -296,9 +297,7 @@ export class GoCamViz {
      * @param gocamId valid gocam id gomodel:xxx
      */
     loadGoCam(gocamId) {
-
-        let viz = this.gocamviz.shadowRoot.querySelector("#gocam-viz");
-        viz.innerHTML = ""
+        this.graphDiv.innerHTML = ""
         if (!gocamId.startsWith("gomodel:")) {
             gocamId = "gomodel:" + gocamId;
         }
@@ -485,12 +484,9 @@ export class GoCamViz {
 
 
     renderCytoscape(cam: Cam, elements, layout) {
-
-        let viz = this.gocamviz.shadowRoot.querySelector("#gocam-viz");
-
         // Creating the cytoscape component
         this.cy = cytoscape({
-            container: viz,
+            container: this.graphDiv,
             elements: elements,
             layout: this.layout_opts[layout],
             style: [
@@ -864,11 +860,11 @@ export class GoCamViz {
         }
 
         return (
-            <div class="gocam-viz-wrapper">
-                <div class="panel viz-panel">
+            <Host>
+                <div class="panel w-8" part="gocam-panel">
                     <div class="panel-header">
                         <div>{this.cam?.title}</div>
-                        <div class="viz-panel-header-buttons">
+                        <div class="gocam-panel-header-buttons">
                             <button onClick={() => this.toggleComplex()}>
                                 {this.expandComplex ? 'Collapse Protein Complexes' : 'Expand Protein Complexes'}
                             </button>
@@ -876,7 +872,7 @@ export class GoCamViz {
                         </div>
                     </div>
                     <div class="panel-body">
-                        <div id="gocam-viz" class="gocam-viz">
+                        <div class="gocam-graph" part="gocam-graph" ref={(el) => this.graphDiv = el}>
                           { this.loading &&
                               <go-loading-spinner message={`Loading GO-CAM ${this.gocamId}`}></go-loading-spinner>
                           }
@@ -884,7 +880,8 @@ export class GoCamViz {
                         {this.showLegend && this.renderLegend()}
                     </div>
                 </div>
-                <div class="panel genes-panel">
+
+                <div class="panel w-4" part="activities-panel">
                     <div class="panel-header">
                         Processes and Activities
                     </div>
@@ -892,7 +889,7 @@ export class GoCamViz {
                         <wc-genes-panel id="gocam-viz-panel" class="" cam={this.cam} ref={el => this.genesPanel = el}></wc-genes-panel>
                     </div>
                 </div>
-            </div>
+            </Host>
         );
     }
 

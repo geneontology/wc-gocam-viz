@@ -1,51 +1,76 @@
 @import "../../scss/variables";
 @import "../../scss/panel";
 
-.gocam-viz-wrapper {
+:host {
+  --button-backgroud-color: none;
+  --button-hover-background-color: none;
+  --button-text-color: inherit;
+  --button-border-radius: 0.2rem;
+  --button-border-width: 0;
+  --button-border-color: none;
+
+  --panel-border-width: 0;
+  --panel-border-color: rgba(0, 0, 0, 0.125);
+  --panel-header-background: none;
+  --panel-header-border-width: 0;
+  --panel-header-border-color: var(--panel-border-color);
+
+  --graph-height: 800px;
+  --graph-padding: 0;
+
   display: flex;
   align-items: flex-start;
 }
 
-.viz-panel-header-buttons {
+.panel {
+  border-color: var(--panel-border-color);
+  border-style: solid;
+  border-width: var(--panel-border-width);
+}
+
+.panel-header {
+  background: var(--panel-header-background);
+  border-color: var(--panel-header-border-color);
+  border-style: solid;
+  border-width: var(--panel-header-border-width);
+  min-height: 48px;
+}
+
+.gocam-panel-header-buttons {
   white-space: nowrap;
+}
 
-  button {
-    color: #fff;
-    background-color: #0d6efd;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-    border-radius: 0.2rem;
-    display: inline-block;
-    font-weight: 400;
-    line-height: 1.5;
-    text-align: center;
-    text-decoration: none;
-    border: 1px solid transparent;
-    vertical-align: middle;
-    cursor: pointer;
-    user-select: none;
+button {
+  color: var(--button-text-color);
+  background-color: var(--button-backgroud-color);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: var(--button-border-radius);
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  border-width: var(--button-border-width);
+  border-style: solid;
+  border-color: var(--button-border-color);
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
 
-    &:focus, &:hover {
-      color: #fff;
-      background-color: #0b5ed7;
-      border-color: #0a58ca;
-    }
+  &:focus, &:hover {
+    background-color: var(--button-hover-background-color)
+  }
 
-    &:first-child {
-      margin-right: 8px;
-    }
+  &:first-child {
+    margin-right: 8px;
   }
 }
 
-.gocam-viz {
-  padding: 16px;
-  height: $gocam-height;
+.gocam-graph {
+  padding: var(--graph-padding);
+  height: var(--graph-height);
   box-sizing: border-box;
-}
-
-.active {
-  background-color: rgb(74, 74, 211) !important;
-  color: #eee;
 }
 
 .gocam-legend-container {
@@ -82,18 +107,5 @@
 
   img {
     display: inline-block;
-  }
-}
-
-@media (min-width: 992px) {
-  .panel {
-    &.viz-panel {
-    flex: 0 0 auto;
-    width: 66.66666667%;
-    }
-    &.genes-panel {
-      flex: 0 0 auto;
-      width: 33.33333333%;
-    }
   }
 }

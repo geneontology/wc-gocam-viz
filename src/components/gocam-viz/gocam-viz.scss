@@ -18,6 +18,10 @@
   --graph-height: 800px;
   --graph-padding: 0;
 
+  --legend-border-width: 0;
+  --legend-border-color: var(--panel-border-color);
+  --legend-padding: 0;
+
   display: flex;
   align-items: flex-start;
 }
@@ -73,39 +77,8 @@ button {
   box-sizing: border-box;
 }
 
-.gocam-legend-container {
-  border-top: 1px solid rgba(0, 0, 0, 0.125);
-  padding: 4px 16px;
-
-  .gocam-legend-header {
-    padding: 4px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-  }
-  .left {
-    img {
-      height: 4px;
-    }
-  }
-  img {
-    height: 20px;
-  }
-  .gocam-legend-value {
-    display: inline-block;
-    height: 35px;
-    padding-left: 8px;
-  }
-}
-
-.gocam-legend-section-container {
-  display: flex;
-}
-
-.gocam-legend-section {
-  flex: 1 1 auto;
-
-  img {
-    display: inline-block;
-  }
+wc-gocam-legend {
+  --border-width: var(--legend-border-width);
+  --border-color: var(--legend-border-color);
+  --padding: var(--legend-padding);
 }

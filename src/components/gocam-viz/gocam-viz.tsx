@@ -877,7 +877,9 @@ export class GoCamViz {
                               <go-loading-spinner message={`Loading GO-CAM ${this.gocamId}`}></go-loading-spinner>
                           }
                         </div>
-                        {this.showLegend && this.renderLegend()}
+                        {this.showLegend && (
+                          <wc-gocam-legend exportparts="header : legend-header, section : legend-section" />
+                        )}
                     </div>
                 </div>
 
@@ -892,31 +894,4 @@ export class GoCamViz {
             </Host>
         );
     }
-
-    renderLegend() {
-        return (
-            <div class="gocam-legend-container">
-                <div class="gocam-legend-header">Relation Types</div>
-                <div class="gocam-legend-section-container">
-                    {Object.keys(legend).map((section) => {
-                        return (
-                            <div class={'gocam-legend-section ' + section}>
-                                {legend[section].map((item) => {
-                                    return (
-                                        <div>
-                                            <img alt= {item.label} src={getAssetPath(`./assets/relation/${item.id}.png`)}></img>
-                                            <div class="gocam-legend-value">
-                                                {item.label}
-                                            </div>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
-        )
-    }
-
 }

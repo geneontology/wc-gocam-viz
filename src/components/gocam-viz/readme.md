@@ -57,17 +57,28 @@ Type: `Promise<void>`
 
 
 
+## Shadow Parts
+
+| Part                 | Description |
+| -------------------- | ----------- |
+| `"activities-panel"` |             |
+| `"gocam-graph"`      |             |
+| `"gocam-panel"`      |             |
+
+
 ## Dependencies
 
 ### Depends on
 
 - [go-loading-spinner](../loading-spinner)
+- [wc-gocam-legend](../gocam-legend)
 - [wc-genes-panel](../genes-panel)
 
 ### Graph
 ```mermaid
 graph TD;
   wc-gocam-viz --> go-loading-spinner
+  wc-gocam-viz --> wc-gocam-legend
   wc-gocam-viz --> wc-genes-panel
   style wc-gocam-viz fill:#f9f,stroke:#333,stroke-width:4px
 ```

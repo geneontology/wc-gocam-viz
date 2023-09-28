@@ -22,7 +22,7 @@
 
 ## Methods
 
-### `scrollToActivity(nodeId: any) => Promise<void>`
+### `highlightActivity(nodeId: any) => Promise<void>`
 
 
 

@@ -1,0 +1,41 @@
+:host {
+  --border-width: 0;
+  --border-color: rgba(0, 0, 0, 0.125);
+  --padding: 0;
+
+  display: block;
+  border-width: var(--border-width);
+  border-style: solid;
+  border-color: var(--border-color);
+  padding: var(--padding);
+}
+
+.header {
+  margin-bottom: 8px;
+}
+
+.sections {
+  display: flex;
+}
+
+.section {
+  flex: 1 1 auto;
+}
+
+img {
+  display: inline-block;
+  max-height: 20px;
+  max-width: 60px;
+  object-fit: scale-down;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.item-label {
+  display: inline-block;
+  margin-left: 8px;
+}

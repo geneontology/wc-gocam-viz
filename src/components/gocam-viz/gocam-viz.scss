@@ -86,7 +86,7 @@
   --button-background-hover: none;
   --button-background: none;
   --button-border-color: none;
-  --button-border-radius: 0.2rem;
+  --button-border-radius: 0.2em;
   --button-border-width: 0;
   --button-color: inherit;
 
@@ -108,7 +108,7 @@
   @include standard-var-declarations(activity,
     $border-color: var(--border-color),
     $border-width: 0 0 1px 0,
-    $padding: 0.25rem 0
+    $padding: 0.25em 0
   );
   --activity-background-active: #f0f0f0;
   --activity-color-active: black;
@@ -138,7 +138,7 @@
   border-width: var(--panel-header-border-width);
   color: var(--panel-header-color);
   padding: var(--panel-header-padding);
-  min-height: 48px;
+  min-height: 3em;
   font-weight: var(--panel-header-font-weight);
 }
 
@@ -149,8 +149,8 @@
 button {
   color: var(--button-color);
   background-color: var(--button-background);
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
+  padding: 0.3em 0.6em;
+  font-size: 0.875em;
   border-radius: var(--button-border-radius);
   display: inline-block;
   font-weight: 400;
@@ -169,7 +169,7 @@ button {
   }
 
   &:first-child {
-    margin-right: 8px;
+    margin-right: 0.5em;
   }
 }
 

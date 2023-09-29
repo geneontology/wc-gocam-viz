@@ -1,6 +1,17 @@
 @import "../../scss/mixins";
 
 :host {
+  /**
+   * @prop --border-width: Border width of the legend
+   * @prop --border-color: Border color of the legend
+   * @prop --padding: Padding of the legend
+   * @prop --header-background: Background of the header
+   * @prop --header-border-color: Border color of the header
+   * @prop --header-border-width: Border width of the header
+   * @prop --header-color: Text color of the header
+   * @prop --header-padding: Padding of the header
+   * @prop --header-font-weight: Text font weight of the header
+   */
   --border-width: 0;
   --border-color: rgba(0, 0, 0, 0.125);
   --padding: 0;

@@ -2,7 +2,12 @@ import { Component, Prop, Element, Event, EventEmitter, Watch, h, Method } from 
 import { State } from '@stencil/core';
 import { Activity, ActivityNode, ActivityNodeType, Cam, Evidence, noctuaFormConfig } from '../../globals/@noctua.form';
 
-
+/**
+ * @part process - Process containers
+ * @part activity - Activity containers
+ * @part gene-product - Gene product labels
+ * @part function-label - Molecular function labels
+ */
 @Component({
     tag: 'wc-genes-panel',
     styleUrl: 'genes-panel.scss',

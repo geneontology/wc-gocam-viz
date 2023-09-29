@@ -7,10 +7,25 @@
 
 ## Shadow Parts
 
-| Part        | Description |
-| ----------- | ----------- |
-| `"header"`  |             |
-| `"section"` |             |
+| Part        | Description             |
+| ----------- | ----------------------- |
+| `"header"`  | The header              |
+| `"section"` | Group of legend entries |
+
+
+## CSS Custom Properties
+
+| Name                    | Description                    |
+| ----------------------- | ------------------------------ |
+| `--border-color`        | Border color of the legend     |
+| `--border-width`        | Border width of the legend     |
+| `--header-background`   | Background of the header       |
+| `--header-border-color` | Border color of the header     |
+| `--header-border-width` | Border width of the header     |
+| `--header-color`        | Text color of the header       |
+| `--header-font-weight`  | Text font weight of the header |
+| `--header-padding`      | Padding of the header          |
+| `--padding`             | Padding of the legend          |
 
 
 ## Dependencies

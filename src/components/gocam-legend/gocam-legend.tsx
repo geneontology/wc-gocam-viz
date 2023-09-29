@@ -1,6 +1,10 @@
 import { Component, Host, h, getAssetPath } from '@stencil/core';
 import { legend } from '../../globals/constants';
 
+/**
+ * @part header - The header
+ * @part section - Group of legend entries
+ */
 @Component({
   tag: 'wc-gocam-legend',
   styleUrl: 'gocam-legend.scss',

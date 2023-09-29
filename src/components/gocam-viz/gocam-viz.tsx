@@ -18,7 +18,12 @@ import { legend } from '../../globals/constants';
 
 cytoscape.use(dagre);
 
-
+/**
+ * @part gocam-panel - The panel containing the GO-CAM graph and legend
+ * @part gocam-title - The GO-CAM title
+ * @part gocam-graph - The GO-CAM graph container
+ * @part activities-panel - The panel containing the process and activities list
+ */
 @Component({
     tag: 'wc-gocam-viz',
     styleUrl: 'gocam-viz.scss',

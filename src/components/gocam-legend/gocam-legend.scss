@@ -1,7 +1,11 @@
+@import "../../scss/mixins";
+
 :host {
   --border-width: 0;
   --border-color: rgba(0, 0, 0, 0.125);
   --padding: 0;
+
+  @include standard-var-declarations(header, $default-border-color: var(--border-color));
 
   display: block;
   border-width: var(--border-width);
@@ -11,6 +15,7 @@
 }
 
 .header {
+  @include standard-var-styles(header);
   margin-bottom: 8px;
 }
 

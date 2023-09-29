@@ -863,7 +863,7 @@ export class GoCamViz {
             <Host>
                 <div class="panel w-8" part="gocam-panel">
                     <div class="panel-header">
-                        <div>{this.cam?.title}</div>
+                        <div part="gocam-title">{this.cam?.title}</div>
                         <div class="gocam-panel-header-buttons">
                             <button onClick={() => this.toggleComplex()}>
                                 {this.expandComplex ? 'Collapse Protein Complexes' : 'Expand Protein Complexes'}

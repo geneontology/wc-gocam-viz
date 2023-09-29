@@ -9,6 +9,7 @@ import { legend } from '../../globals/constants';
   tag: 'wc-gocam-legend',
   styleUrl: 'gocam-legend.scss',
   shadow: true,
+  assetsDirs: ['assets'],
 })
 export class GocamLegend {
   render() {

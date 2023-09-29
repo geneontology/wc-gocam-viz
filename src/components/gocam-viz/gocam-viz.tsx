@@ -1,4 +1,4 @@
-import { Component, Host, Prop, Element, Event, EventEmitter, Watch, getAssetPath, h } from '@stencil/core';
+import { Component, Host, Prop, Element, Event, EventEmitter, Watch, h } from '@stencil/core';
 import { Listen, Method, State } from '@stencil/core';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
@@ -12,7 +12,6 @@ import {
     NoctuaGraphService,
     Triple
 } from '../../globals/@noctua.form';
-import { legend } from '../../globals/constants';
 
 
 
@@ -28,7 +27,6 @@ cytoscape.use(dagre);
     tag: 'wc-gocam-viz',
     styleUrl: 'gocam-viz.scss',
     shadow: true,
-    assetsDirs: ['assets']
 })
 export class GoCamViz {
 

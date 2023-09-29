@@ -34,7 +34,6 @@ a {
 
 .activity {
   @include standard-var-styles(activity);
-  margin-bottom: 0.5rem;
 
   &.active {
     background-color: var(--activity-active-background);
@@ -48,7 +47,6 @@ a {
 
 .activity:last-child {
   border-bottom: none;
-  margin-bottom: 0;
 }
 
 .gene-product {

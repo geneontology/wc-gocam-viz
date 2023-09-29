@@ -13,7 +13,8 @@
   --panel-border-width: 0;
   --panel-border-color: rgba(0, 0, 0, 0.125);
 
-  @include standard-var-declarations(panel-header, $default-border-color: var(--panel-border-color));
+  @include standard-var-declarations(panel-header, $border-color: var(--panel-border-color));
+  --panel-header-font-weight: 700;
 
   --graph-height: 800px;
   --graph-padding: 0;
@@ -21,23 +22,30 @@
   --legend-border-width: 0;
   --legend-border-color: var(--panel-border-color);
   --legend-padding: 0;
-  @include standard-var-declarations(legend-header, $default-border-color: var(--panel-border-color));
+  @include standard-var-declarations(legend-header, $border-color: var(--panel-border-color));
 
   --activities-panel-link-color: black;
 
-  @include standard-var-declarations(process, $default-border-color: var(--panel-border-color));
+  @include standard-var-declarations(process, $border-color: var(--panel-border-color));
 
-  @include standard-var-declarations(process-label, $default-border-color: var(--panel-border-color));
+  @include standard-var-declarations(process-label,
+    $border-color: var(--panel-border-color),
+    $border-width: 0 0 2px 0
+  );
 
-  @include standard-var-declarations(activity, $default-border-color: var(--panel-border-color));
+  @include standard-var-declarations(activity,
+    $border-color: var(--panel-border-color),
+    $border-width: 0 0 1px 0,
+    $padding: 0.25rem 0
+  );
   --activity-active-background: #f0f0f0;
   --activity-active-color: black;
 
-  @include standard-var-declarations(gene-product, $default-border-color: var(--panel-border-color));
+  @include standard-var-declarations(gene-product, $border-color: var(--panel-border-color));
 
-  @include standard-var-declarations(function-label, $default-border-color: var(--panel-border-color));
+  @include standard-var-declarations(function-label, $border-color: var(--panel-border-color));
 
-  @include standard-var-declarations(node, $default-border-color: var(--panel-border-color), $default-border-width: 0 0 1px 0);
+  @include standard-var-declarations(node, $border-color: var(--panel-border-color));
 
   --function-nodes-padding: 0;
 
@@ -59,6 +67,7 @@
   color: var(--panel-header-color);
   padding: var(--panel-header-padding);
   min-height: 48px;
+  font-weight: var(--panel-header-font-weight);
 }
 
 .gocam-panel-header-buttons {

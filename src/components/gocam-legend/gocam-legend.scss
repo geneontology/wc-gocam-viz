@@ -5,7 +5,8 @@
   --border-color: rgba(0, 0, 0, 0.125);
   --padding: 0;
 
-  @include standard-var-declarations(header, $default-border-color: var(--border-color));
+  @include standard-var-declarations(header, $border-color: var(--border-color));
+  --header-font-weight: 700;
 
   display: block;
   border-width: var(--border-width);
@@ -16,6 +17,7 @@
 
 .header {
   @include standard-var-styles(header);
+  font-weight: var(--header-font-weight);
   margin-bottom: 8px;
 }
 

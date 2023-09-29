@@ -1,5 +1,6 @@
 @import "../../scss/variables";
 @import "../../scss/panel";
+@import "../../scss/mixins";
 
 :host {
   --button-backgroud-color: none;
@@ -14,6 +15,7 @@
   --panel-header-background: none;
   --panel-header-border-width: 0;
   --panel-header-border-color: var(--panel-border-color);
+  --panel-header-padding: 0;
 
   --graph-height: 800px;
   --graph-padding: 0;
@@ -21,6 +23,24 @@
   --legend-border-width: 0;
   --legend-border-color: var(--panel-border-color);
   --legend-padding: 0;
+
+  --activities-panel-link-color: auto;
+
+  @include standard-var-declarations(process, $default-border-color: var(--panel-border-color));
+
+  @include standard-var-declarations(process-label, $default-border-color: var(--panel-border-color));
+
+  @include standard-var-declarations(activity, $default-border-color: var(--panel-border-color));
+  --activity-active-background: #f0f0f0;
+  --activity-active-color: black;
+
+  @include standard-var-declarations(gene-product, $default-border-color: var(--panel-border-color));
+
+  @include standard-var-declarations(function-label, $default-border-color: var(--panel-border-color));
+
+  @include standard-var-declarations(node, $default-border-color: var(--panel-border-color), $default-border-width: 0 0 1px 0);
+
+  --function-nodes-padding: 0;
 
   display: flex;
   align-items: flex-start;
@@ -37,6 +57,7 @@
   border-color: var(--panel-header-border-color);
   border-style: solid;
   border-width: var(--panel-header-border-width);
+  padding: var(--panel-header-padding);
   min-height: 48px;
 }
 
@@ -81,4 +102,9 @@ wc-gocam-legend {
   --border-width: var(--legend-border-width);
   --border-color: var(--legend-border-color);
   --padding: var(--legend-padding);
+}
+
+wc-genes-panel {
+  --height: var(--graph-height);
+  --link-color: var(--activities-panel-link-color);
 }

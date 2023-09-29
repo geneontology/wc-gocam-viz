@@ -2,89 +2,89 @@
 @import "../../scss/mixins";
 @import '../../scss/panel';
 
-.genes-panel__list {
+:host {
+  --height: auto;
+  --link-color: auto;
+
+  display: block;
   scroll-behavior: smooth;
-  padding: 0;
-  width: 100%;
-  height: $gocam-height;
+  height: var(--height);
   box-sizing: border-box;
   overflow-y: scroll;
-  border: 1px solid #bdc9eb;
+}
 
-  a {
-    color: #000;
-    text-decoration: none;
-  }
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
 
-  .gocam-process {
-    border: none;
-    margin-bottom: 3rem;
+.process {
+  @include standard-var-styles(process);
+  margin-bottom: 3rem;
+}
 
-    .panel-header {
-      color: #fff;
-      background-color: #7a548d;
+.process:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.process-label {
+  @include standard-var-styles(process-label)
+}
+
+.activity {
+  @include standard-var-styles(activity);
+  margin-bottom: 0.5rem;
+
+  &.active {
+    background-color: var(--activity-active-background);
+    color: var(--activity-active-color);
+
+    a {
+      color: var(--activity-active-color);
     }
   }
+}
 
-  .gocam-activity {
-    border-style: solid;
-    border-color: #d1b6df;
-    border-width: 0 0 3px 0;
-    margin-bottom: 0.5rem;
+.activity:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
 
-    .panel-header {
-      font-weight: bold;
-      a {
-        font-size: 18px;
-        color: #333;
-      }
-      background-color: transparent;
-    }
+.gene-product {
+  @include standard-var-styles(gene-product)
+}
 
-    ul {
-      padding-left: 0;
-      margin-bottom: 0;
-    }
+.function-label {
+  @include standard-var-styles(function-label)
+}
 
-    li {
-      padding: 3px 0;
-      border-style: solid;
-      border-color: rgba(0, 0, 0, 0.125);
-      border-width: 0 0 1px;
-      display: flex;
-      align-items: center;
-    }
+.function-nodes {
+  padding: var(--function-nodes-padding);
+}
 
-    .panel-body {
-      padding: 0.5rem 1rem;
-    }
+.node {
+  display: flex;
+  align-items: center;
+  margin-bottom: 3px;
+  @include standard-var-styles(node)
+}
 
-    .gocam-node-relation {
-      font-size: 10px;
-      @include deep-width(80px);
-    }
+.node:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
 
-    .gocam-node-term {
-      font-size: 12px;
-      flex-grow: 1;
-    }
+.node-relation {
+  font-size: 10px;
+  @include deep-width(80px);
+}
 
-    .gocam-node-evidence {
-      @include deep-width(30px);
-    }
+.node-term {
+  font-size: 12px;
+  flex-grow: 1;
+}
 
-    &.card-active {
-      background-color: #af732a;
-      color: #eee;
-
-      .card-header,
-      .list-group-item {
-        color: #eee !important;
-        background-color: transparent !important;
-      }
-      a {
-        color: #eee !important;
-      }
-    }
-  }
+.node-evidence {
+  @include deep-width(30px);
 }

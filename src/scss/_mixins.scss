@@ -9,3 +9,27 @@
   min-height: $number;
   max-height: $number;
 }
+
+@mixin standard-var-declarations(
+  $prefix,
+  $default-background: none,
+  $default-border-color: rgba(0, 0, 0, 0.125),
+  $default-border-width: 0,
+  $default-color: inherit,
+  $default-padding: 0
+) {
+  --#{$prefix}-background: #{$default-background};
+  --#{$prefix}-border-color: #{$default-border-color};
+  --#{$prefix}-border-width: #{$default-border-width};
+  --#{$prefix}-color: #{$default-color};
+  --#{$prefix}-padding: #{$default-padding};
+}
+
+@mixin standard-var-styles($prefix) {
+  background: var(--#{$prefix}-background, none);
+  border-color: var(--#{$prefix}-border-color, rgba(0, 0, 0, 0.125));
+  border-style: solid;
+  border-width: var(--#{$prefix}-border-width, 0);
+  color: var(--#{$prefix}-color, inherit);
+  padding: var(--#{$prefix}-padding, 0);
+}

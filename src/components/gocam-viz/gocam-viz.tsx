@@ -22,6 +22,12 @@ cytoscape.use(dagre);
  * @part gocam-title - The GO-CAM title
  * @part gocam-graph - The GO-CAM graph container
  * @part activities-panel - The panel containing the process and activities list
+ * @part process - A process group in the process and activities list
+ * @part activity - An activity in the process and activities list
+ * @part gene-product - A gene product name in process and activities list
+ * @part function-label - A function term name in process and activities list
+ * @part legend-header - The header of the legend
+ * @part legend-section - A group of entries in the legend
  */
 @Component({
     tag: 'wc-gocam-viz',

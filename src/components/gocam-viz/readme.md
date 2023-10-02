@@ -62,9 +62,15 @@ Type: `Promise<void>`
 | Part                 | Description                                          |
 | -------------------- | ---------------------------------------------------- |
 | `"activities-panel"` | The panel containing the process and activities list |
+| `"activity"`         | An activity in the process and activities list       |
+| `"function-label"`   | A function term name in process and activities list  |
+| `"gene-product"`     | A gene product name in process and activities list   |
 | `"gocam-graph"`      | The GO-CAM graph container                           |
 | `"gocam-panel"`      | The panel containing the GO-CAM graph and legend     |
 | `"gocam-title"`      | The GO-CAM title                                     |
+| `"legend-header"`    | The header of the legend                             |
+| `"legend-section"`   | A group of entries in the legend                     |
+| `"process"`          | A process group in the process and activities list   |
 
 
 ## CSS Custom Properties

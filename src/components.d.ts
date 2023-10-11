@@ -22,6 +22,8 @@ export namespace Components {
          */
         "parentCy": any;
     }
+    interface WcGocamLegend {
+    }
     interface WcGocamSelector {
     }
     interface WcGocamViz {
@@ -74,6 +76,12 @@ declare global {
         prototype: HTMLWcGenesPanelElement;
         new (): HTMLWcGenesPanelElement;
     };
+    interface HTMLWcGocamLegendElement extends Components.WcGocamLegend, HTMLStencilElement {
+    }
+    var HTMLWcGocamLegendElement: {
+        prototype: HTMLWcGocamLegendElement;
+        new (): HTMLWcGocamLegendElement;
+    };
     interface HTMLWcGocamSelectorElement extends Components.WcGocamSelector, HTMLStencilElement {
     }
     var HTMLWcGocamSelectorElement: {
@@ -89,6 +97,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "go-loading-spinner": HTMLGoLoadingSpinnerElement;
         "wc-genes-panel": HTMLWcGenesPanelElement;
+        "wc-gocam-legend": HTMLWcGocamLegendElement;
         "wc-gocam-selector": HTMLWcGocamSelectorElement;
         "wc-gocam-viz": HTMLWcGocamVizElement;
     }
@@ -107,6 +116,8 @@ declare namespace LocalJSX {
           * Passed by the parent to highlight & clear highlight nodes
          */
         "parentCy"?: any;
+    }
+    interface WcGocamLegend {
     }
     interface WcGocamSelector {
         "onSelectGOCAM"?: (event: WcGocamSelectorCustomEvent<any>) => void;
@@ -132,6 +143,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "go-loading-spinner": GoLoadingSpinner;
         "wc-genes-panel": WcGenesPanel;
+        "wc-gocam-legend": WcGocamLegend;
         "wc-gocam-selector": WcGocamSelector;
         "wc-gocam-viz": WcGocamViz;
     }
@@ -142,6 +154,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "go-loading-spinner": LocalJSX.GoLoadingSpinner & JSXBase.HTMLAttributes<HTMLGoLoadingSpinnerElement>;
             "wc-genes-panel": LocalJSX.WcGenesPanel & JSXBase.HTMLAttributes<HTMLWcGenesPanelElement>;
+            "wc-gocam-legend": LocalJSX.WcGocamLegend & JSXBase.HTMLAttributes<HTMLWcGocamLegendElement>;
             "wc-gocam-selector": LocalJSX.WcGocamSelector & JSXBase.HTMLAttributes<HTMLWcGocamSelectorElement>;
             "wc-gocam-viz": LocalJSX.WcGocamViz & JSXBase.HTMLAttributes<HTMLWcGocamVizElement>;
         }

@@ -9,18 +9,18 @@
 .ring {
   display: inline-block;
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 5em;
+  height: 5em;
 
   &::after {
     content: '';
     box-sizing: border-box;
     display: block;
     position: absolute;
-    width: 64px;
-    height: 64px;
-    margin: 8px;
-    border-width: 8px;
+    width: 4em;
+    height: 4em;
+    margin: 0.5em;
+    border-width: 0.5em;
     border-style: solid;
     border-radius: 50%;
     border-color: #703770 #703770 #703770 transparent;

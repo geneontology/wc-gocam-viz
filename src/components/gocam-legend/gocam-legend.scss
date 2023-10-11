@@ -1,0 +1,59 @@
+@import "../../scss/mixins";
+
+:host {
+  /**
+   * @prop --border-width: Border width of the legend
+   * @prop --border-color: Border color of the legend
+   * @prop --padding: Padding of the legend
+   * @prop --header-background: Background of the header
+   * @prop --header-border-color: Border color of the header
+   * @prop --header-border-width: Border width of the header
+   * @prop --header-color: Text color of the header
+   * @prop --header-padding: Padding of the header
+   * @prop --header-font-weight: Text font weight of the header
+   */
+  --border-width: 0;
+  --border-color: rgba(0, 0, 0, 0.125);
+  --padding: 0;
+
+  @include standard-var-declarations(header, $border-color: var(--border-color));
+  --header-font-weight: 700;
+
+  display: block;
+  border-width: var(--border-width);
+  border-style: solid;
+  border-color: var(--border-color);
+  padding: var(--padding);
+}
+
+.header {
+  @include standard-var-styles(header);
+  font-weight: var(--header-font-weight);
+  margin-bottom: 0.5em;
+}
+
+.sections {
+  display: flex;
+}
+
+.section {
+  flex: 1 1 auto;
+}
+
+img {
+  display: inline-block;
+  max-height: 1.25em;
+  max-width: 3.75em;
+  object-fit: scale-down;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.item-label {
+  display: inline-block;
+  margin-left: 0.5em;
+}

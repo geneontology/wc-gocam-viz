@@ -1,4 +1,4 @@
-import { Component, Prop, Element, Event, EventEmitter, Watch, getAssetPath, h } from '@stencil/core';
+import { Component, Host, Prop, Element, Event, EventEmitter, Watch, h } from '@stencil/core';
 import { Listen, Method, State } from '@stencil/core';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
@@ -12,23 +12,33 @@ import {
     NoctuaGraphService,
     Triple
 } from '../../globals/@noctua.form';
-import { legend } from '../../globals/constants';
 
 
 
 cytoscape.use(dagre);
 
-
+/**
+ * @part gocam-panel - The panel containing the GO-CAM graph and legend
+ * @part gocam-title - The GO-CAM title
+ * @part gocam-graph - The GO-CAM graph container
+ * @part activities-panel - The panel containing the process and activities list
+ * @part process - A process group in the process and activities list
+ * @part activity - An activity in the process and activities list
+ * @part gene-product - A gene product name in process and activities list
+ * @part function-label - A function term name in process and activities list
+ * @part legend-header - The header of the legend
+ * @part legend-section - A group of entries in the legend
+ */
 @Component({
     tag: 'wc-gocam-viz',
     styleUrl: 'gocam-viz.scss',
     shadow: true,
-    assetsDirs: ['assets']
 })
 export class GoCamViz {
 
     @Element() gocamviz;
     genesPanel: HTMLWcGenesPanelElement;
+    graphDiv: HTMLDivElement;
 
     /**
      * ID of the gocam to be shown in this widget. Look for the watcher below that will load
@@ -296,9 +306,7 @@ export class GoCamViz {
      * @param gocamId valid gocam id gomodel:xxx
      */
     loadGoCam(gocamId) {
-
-        let viz = this.gocamviz.shadowRoot.querySelector("#gocam-viz");
-        viz.innerHTML = ""
+        this.graphDiv.innerHTML = ""
         if (!gocamId.startsWith("gomodel:")) {
             gocamId = "gomodel:" + gocamId;
         }
@@ -485,12 +493,9 @@ export class GoCamViz {
 
 
     renderCytoscape(cam: Cam, elements, layout) {
-
-        let viz = this.gocamviz.shadowRoot.querySelector("#gocam-viz");
-
         // Creating the cytoscape component
         this.cy = cytoscape({
-            container: viz,
+            container: this.graphDiv,
             elements: elements,
             layout: this.layout_opts[layout],
             style: [
@@ -864,11 +869,11 @@ export class GoCamViz {
         }
 
         return (
-            <div class="gocam-viz-wrapper">
-                <div class="panel viz-panel">
+            <Host>
+                <div class="panel w-8" part="gocam-panel">
                     <div class="panel-header">
-                        <div>{this.cam?.title}</div>
-                        <div class="viz-panel-header-buttons">
+                        <div part="gocam-title">{this.cam?.title}</div>
+                        <div class="gocam-panel-header-buttons">
                             <button onClick={() => this.toggleComplex()}>
                                 {this.expandComplex ? 'Collapse Protein Complexes' : 'Expand Protein Complexes'}
                             </button>
@@ -876,50 +881,31 @@ export class GoCamViz {
                         </div>
                     </div>
                     <div class="panel-body">
-                        <div id="gocam-viz" class="gocam-viz">
+                        <div class="gocam-graph" part="gocam-graph" ref={(el) => this.graphDiv = el}>
                           { this.loading &&
                               <go-loading-spinner message={`Loading GO-CAM ${this.gocamId}`}></go-loading-spinner>
                           }
                         </div>
-                        {this.showLegend && this.renderLegend()}
+                        {this.showLegend && (
+                          <wc-gocam-legend exportparts="header : legend-header, section : legend-section" />
+                        )}
                     </div>
                 </div>
-                <div class="panel genes-panel">
+
+                <div class="panel w-4" part="activities-panel">
                     <div class="panel-header">
                         Processes and Activities
                     </div>
                     <div class="panel-body">
-                        <wc-genes-panel id="gocam-viz-panel" class="" cam={this.cam} ref={el => this.genesPanel = el}></wc-genes-panel>
+                        <wc-genes-panel
+                          cam={this.cam}
+                          exportparts="process, activity, gene-product, function-label"
+                          ref={el => this.genesPanel = el}
+                        >
+                        </wc-genes-panel>
                     </div>
                 </div>
-            </div>
+            </Host>
         );
     }
-
-    renderLegend() {
-        return (
-            <div class="gocam-legend-container">
-                <div class="gocam-legend-header">Relation Types</div>
-                <div class="gocam-legend-section-container">
-                    {Object.keys(legend).map((section) => {
-                        return (
-                            <div class={'gocam-legend-section ' + section}>
-                                {legend[section].map((item) => {
-                                    return (
-                                        <div>
-                                            <img alt= {item.label} src={getAssetPath(`./assets/relation/${item.id}.png`)}></img>
-                                            <div class="gocam-legend-value">
-                                                {item.label}
-                                            </div>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
-        )
-    }
-
 }

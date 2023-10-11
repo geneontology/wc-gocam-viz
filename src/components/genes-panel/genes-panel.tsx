@@ -2,7 +2,12 @@ import { Component, Prop, Element, Event, EventEmitter, Watch, h, Method } from 
 import { State } from '@stencil/core';
 import { Activity, ActivityNode, ActivityNodeType, Cam, Evidence, noctuaFormConfig } from '../../globals/@noctua.form';
 
-
+/**
+ * @part process - Process containers
+ * @part activity - Activity containers
+ * @part gene-product - Gene product labels
+ * @part function-label - Molecular function labels
+ */
 @Component({
     tag: 'wc-genes-panel',
     styleUrl: 'genes-panel.scss',
@@ -53,15 +58,14 @@ export class GenesPanel {
 
     @Method()
     async highlightActivity(nodeId) {
-        const scrollList = this.hostElement.shadowRoot.getElementById("genes-panel__list");
         const elt = this.hostElement.shadowRoot.getElementById("gp_item_" + nodeId);
-        if (scrollList && elt) {
-            const cardEl = this.hostElement.shadowRoot.querySelectorAll('.gocam-activity')
+        if (this.hostElement && elt) {
+            const cardEl = this.hostElement.shadowRoot.querySelectorAll('.activity')
             for (let i = 0; i < cardEl.length; i++) {
-                cardEl[i].classList.remove('card-active')
+                cardEl[i].classList.remove('active')
             }
-            elt.classList.add("card-active")
-            scrollList.scroll(0, elt.offsetTop - scrollList.offsetTop)
+            elt.classList.add("active")
+            this.hostElement.scroll(0, elt.offsetTop - this.hostElement.offsetTop)
         }
     }
 
@@ -148,11 +152,11 @@ export class GenesPanel {
     renderProcess(process) {
 
         return (
-            <div class="panel gocam-process">
-                <div class="panel-header">
+            <div class="process" part="process">
+                <div class="process-label">
                     {process}
                 </div>
-                <div class="panel-body">
+                <div class="process-activities">
                     {
                         this.groupedActivities[process].map(activity => {
                             return this.renderActivity(activity);
@@ -164,41 +168,42 @@ export class GenesPanel {
     }
 
     renderActivity(activity: Activity) {
-        const nodes = activity.nodes.filter((node: ActivityNode) => {
-            return (
-                node.type !== ActivityNodeType.GoMolecularFunction);
-        });
+        const nodes = activity.nodes.filter((node: ActivityNode) => (
+            node.type !== ActivityNodeType.GoMolecularFunction)
+        );
 
         return (
-            <div class="panel gocam-activity" id={"gp_item_" + activity.id} onClick={() => this.select(activity)} >
-                <div class='panel-header'>
+            <div class="activity" id={"gp_item_" + activity.id} onClick={() => this.select(activity)} part="activity" >
+                <div class='gene-product' part="gene-product">
                     {
                         activity.gpNode &&
                             <a href={activity.gpNode?.term.url} target='_blank'>{activity.gpNode?.term.label}</a>
                     }
                 </div>
                 {activity.mfNode &&
-                    <div class='panel-body'>
-                        <a href={activity.mfNode?.term.url} target='_blank'>
-                            {activity.mfNode?.term.label}
-                        </a>
-                        <ul>
+                    <div class='function'>
+                        <div class='function-label' part="function-label">
+                            <a href={activity.mfNode?.term.url} target='_blank'>
+                                {activity.mfNode?.term.label}
+                            </a>
+                        </div>
+                        <div class="function-nodes">
                             {nodes.map((node: ActivityNode) => {
                                 return (
-                                    <li>
-                                        <div class="gocam-node-relation">
+                                    <div class='node'>
+                                        <div class="node-relation">
                                             <a target='_blank' href="">{node.predicate?.edge.label}</a>
                                         </div>
-                                        <div class="gocam-node-term">
-                                            <a class='col' target='_blank' href={node.term.url}>{node.term.label}</a>
+                                        <div class="node-term">
+                                            <a target='_blank' href={node.term.url}>{node.term.label}</a>
                                         </div>
-                                        <div class="gocam-node-evidence">
+                                        <div class="node-evidence">
                                             {this.renderReferences(node.predicate.evidence)}
                                         </div>
-                                    </li>
+                                    </div>
                                 )
                             })}
-                        </ul>
+                        </div>
                     </div>
                 }
             </div>
@@ -207,17 +212,13 @@ export class GenesPanel {
 
     render() {
         if (!this.cam || !this.groupedActivities) {
-            return "";
+            return null;
         }
 
         return (
-            <div class="genes-panel__list" id="genes-panel__list">
-                {
-                    Object.keys(this.groupedActivities).map((process) => {
-                        return this.renderProcess(process);
-                    })
-                }
-            </div>
+            Object.keys(this.groupedActivities).map((process) => {
+                return this.renderProcess(process);
+            })
         )
 
     }

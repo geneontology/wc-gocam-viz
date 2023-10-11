@@ -1,99 +1,195 @@
-@import "../../scss/variables";
 @import "../../scss/panel";
+@import "../../scss/mixins";
 
-.gocam-viz-wrapper {
+:host {
+  /**
+   * @prop --border-color: Default color of various borders used in the widget
+   *
+   * @prop --panel-border-width: Border width of the main panels of the widget
+   * @prop --panel-border-color: Border color of the main panels of the widget
+   *
+   * @prop --panel-header-background: Background of main panel headers
+   * @prop --panel-header-border-color: Border color of main panel headers
+   * @prop --panel-header-border-width: Border width of main panel headers
+   * @prop --panel-header-color: Text color of main panel headers
+   * @prop --panel-header-font-weight: Text font weight of main panel headers
+   * @prop --panel-header-padding: Padding of main panel headers
+   *
+   * @prop --button-background: Background of buttons in widget
+   * @prop --button-background-hover: Background of buttons in widget on hover
+   * @prop --button-color: Text color of button text in widget
+   * @prop --button-border-radius: Border radius of buttons in widget
+   * @prop --button-border-width: Border width of buttons in widget
+   * @prop --button-border-color: Border color of buttons in widget
+   *
+   * @prop --graph-height: Height of GO-CAM graph container
+   * @prop --graph-padding: Padding of GO-CAM graph container
+   *
+   * @prop --legend-border-color: Border color of legend container
+   * @prop --legend-border-width: Border width of legend container
+   * @prop --legend-padding: Padding of legend container
+   *
+   * @prop --legend-header-background: Background of legend header
+   * @prop --legend-header-border-color: Border color of legend header
+   * @prop --legend-header-border-width: Border width of legend header
+   * @prop --legend-header-color: Text color of legend header
+   * @prop --legend-header-padding: Padding of legend header
+   *
+   * @prop --process-background: Background of process containers in processes and activities panel
+   * @prop --process-border-color: Border color of process containers in processes and activities panel
+   * @prop --process-border-width: Border width of process containers in processes and activities panel
+   * @prop --process-color: Text color of process containers in processes and activities panel
+   * @prop --process-padding: Padding of process containers in processes and activities panel
+   *
+   * @prop --process-label-background: Background of process labels in processes and activities panel
+   * @prop --process-label-border-color: Border color of process labels in processes and activities panel
+   * @prop --process-label-border-width: Border width of process labels in processes and activities panel
+   * @prop --process-label-color: Text color of process labels in processes and activities panel
+   * @prop --process-label-padding: Padding of process labels in processes and activities panel
+   *
+   * @prop --activity-background: Background of activity containers in processes and activities panel
+   * @prop --activity-background-active: Background of activity containers in processes and activities panel when highlighted
+   * @prop --activity-border-color: Border color of activity containers in processes and activities panel
+   * @prop --activity-border-width: Border width of activity containers in processes and activities panel
+   * @prop --activity-color: Text color of activity containers in processes and activities panel
+   * @prop --activity-color-active: Text color of activity containers in processes and activities panel when highlighted
+   * @prop --activity-padding: Padding of activity containers in processes and activities panel
+   *
+   * @prop --gene-product-background: Background of gene product labels in processes and activities panel
+   * @prop --gene-product-border-color: Border color of gene product labels in processes and activities panel
+   * @prop --gene-product-border-width: Border width of gene product labels in processes and activities panel
+   * @prop --gene-product-color: Text color of gene product labels in processes and activities panel
+   * @prop --gene-product-padding: Padding of gene product labels in processes and activities panel
+   *
+   * @prop --function-label-background: Background of molecular function term labels in processes and activities panel
+   * @prop --function-label-border-color: Border color of molecular function term labels in processes and activities panel
+   * @prop --function-label-border-width: Border width of molecular function term labels in processes and activities panel
+   * @prop --function-label-color: Text color of molecular function term labels in processes and activities panel
+   * @prop --function-label-padding: Padding of molecular function term labels in processes and activities panel
+   *
+   * @prop --node-background: Background of related node info in processes and activities panel
+   * @prop --node-border-color: Border color of related node info in processes and activities panel
+   * @prop --node-border-width: Border width of related node info in processes and activities panel
+   * @prop --node-color: Text color of related node info in processes and activities panel
+   * @prop --node-padding: Padding of related node info in processes and activities panel
+   *
+   * @prop --function-nodes-padding: Padding of related nodes container in processes and activities panel
+   */
+  --border-color: rgba(0, 0, 0, 0.125);
+
+  --panel-border-width: 0;
+  --panel-border-color: var(--border-color);
+
+  @include standard-var-declarations(panel-header, $border-color: var(--border-color));
+  --panel-header-font-weight: 700;
+
+  --button-background-hover: none;
+  --button-background: none;
+  --button-border-color: none;
+  --button-border-radius: 0.2em;
+  --button-border-width: 0;
+  --button-color: inherit;
+
+  --graph-height: 800px;
+  --graph-padding: 0;
+
+  --legend-border-width: 0;
+  --legend-border-color: var(--border-color);
+  --legend-padding: 0;
+  @include standard-var-declarations(legend-header, $border-color: var(--border-color));
+
+  @include standard-var-declarations(process, $border-color: var(--border-color));
+
+  @include standard-var-declarations(process-label,
+    $border-color: var(--border-color),
+    $border-width: 0 0 2px 0
+  );
+
+  @include standard-var-declarations(activity,
+    $border-color: var(--border-color),
+    $border-width: 0 0 1px 0,
+    $padding: 0.25em 0
+  );
+  --activity-background-active: #f0f0f0;
+  --activity-color-active: black;
+
+  @include standard-var-declarations(gene-product, $border-color: var(--border-color));
+
+  @include standard-var-declarations(function-label, $border-color: var(--border-color));
+
+  @include standard-var-declarations(node, $border-color: var(--border-color));
+
+  --function-nodes-padding: 0;
+
   display: flex;
   align-items: flex-start;
 }
 
-.viz-panel-header-buttons {
+.panel {
+  border-color: var(--panel-border-color);
+  border-style: solid;
+  border-width: var(--panel-border-width);
+}
+
+.panel-header {
+  background: var(--panel-header-background);
+  border-color: var(--panel-header-border-color);
+  border-style: solid;
+  border-width: var(--panel-header-border-width);
+  color: var(--panel-header-color);
+  padding: var(--panel-header-padding);
+  min-height: 3em;
+  font-weight: var(--panel-header-font-weight);
+}
+
+.gocam-panel-header-buttons {
   white-space: nowrap;
+}
 
-  button {
-    color: #fff;
-    background-color: #0d6efd;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-    border-radius: 0.2rem;
-    display: inline-block;
-    font-weight: 400;
-    line-height: 1.5;
-    text-align: center;
-    text-decoration: none;
-    border: 1px solid transparent;
-    vertical-align: middle;
-    cursor: pointer;
-    user-select: none;
+button {
+  color: var(--button-color);
+  background-color: var(--button-background);
+  padding: 0.3em 0.6em;
+  font-size: 0.875em;
+  border-radius: var(--button-border-radius);
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  border-width: var(--button-border-width);
+  border-style: solid;
+  border-color: var(--button-border-color);
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
 
-    &:focus, &:hover {
-      color: #fff;
-      background-color: #0b5ed7;
-      border-color: #0a58ca;
-    }
+  &:focus, &:hover {
+    background-color: var(--button-background-hover)
+  }
 
-    &:first-child {
-      margin-right: 8px;
-    }
+  &:first-child {
+    margin-right: 0.5em;
   }
 }
 
-.gocam-viz {
-  padding: 16px;
-  height: $gocam-height;
+.gocam-graph {
+  padding: var(--graph-padding);
+  height: var(--graph-height);
   box-sizing: border-box;
 }
 
-.active {
-  background-color: rgb(74, 74, 211) !important;
-  color: #eee;
+wc-gocam-legend {
+  --border-width: var(--legend-border-width);
+  --border-color: var(--legend-border-color);
+  --padding: var(--legend-padding);
+  --header-background: var(--legend-header-background);
+  --header-border-color: var(--legend-header-border-color);
+  --header-border-width: var(--legend-header-border-width);
+  --header-color: var(--legend-header-color);
+  --header-padding: var(--legend-header-padding);
 }
 
-.gocam-legend-container {
-  border-top: 1px solid rgba(0, 0, 0, 0.125);
-  padding: 4px 16px;
-
-  .gocam-legend-header {
-    padding: 4px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-  }
-  .left {
-    img {
-      height: 4px;
-    }
-  }
-  img {
-    height: 20px;
-  }
-  .gocam-legend-value {
-    display: inline-block;
-    height: 35px;
-    padding-left: 8px;
-  }
-}
-
-.gocam-legend-section-container {
-  display: flex;
-}
-
-.gocam-legend-section {
-  flex: 1 1 auto;
-
-  img {
-    display: inline-block;
-  }
-}
-
-@media (min-width: 992px) {
-  .panel {
-    &.viz-panel {
-    flex: 0 0 auto;
-    width: 66.66666667%;
-    }
-    &.genes-panel {
-      flex: 0 0 auto;
-      width: 33.33333333%;
-    }
-  }
+wc-genes-panel {
+  --height: var(--graph-height);
 }

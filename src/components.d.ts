@@ -28,13 +28,13 @@ export namespace Components {
     }
     interface WcGocamViz {
         /**
-          * ID of the gocam to be shown in this widget. Look for the watcher below that will load the GO-CAM upon a change of this variable
+          * The url used to fetch GO-CAM graphs. Any occurrence of %ID in the string will be replaced by the GO-CAM ID.
+         */
+        "apiUrl": string;
+        /**
+          * ID of the GO-CAM to be shown in this widget. Look for the watcher below that will load the GO-CAM upon a change of this variable
          */
         "gocamId": string;
-        /**
-          * Used to connect to a barista instance. By default, always access production (prod) server prod = http://barista.berkeleybop.org dev  = http://barista-dev.berkeleybop.org
-         */
-        "repository": string;
         /**
           * Center the cytoscape graph to fit the whole graph
          */
@@ -124,17 +124,17 @@ declare namespace LocalJSX {
     }
     interface WcGocamViz {
         /**
-          * ID of the gocam to be shown in this widget. Look for the watcher below that will load the GO-CAM upon a change of this variable
+          * The url used to fetch GO-CAM graphs. Any occurrence of %ID in the string will be replaced by the GO-CAM ID.
+         */
+        "apiUrl"?: string;
+        /**
+          * ID of the GO-CAM to be shown in this widget. Look for the watcher below that will load the GO-CAM upon a change of this variable
          */
         "gocamId"?: string;
         "onLayoutChange"?: (event: WcGocamVizCustomEvent<any>) => void;
         "onNodeClick"?: (event: WcGocamVizCustomEvent<any>) => void;
         "onNodeOut"?: (event: WcGocamVizCustomEvent<any>) => void;
         "onNodeOver"?: (event: WcGocamVizCustomEvent<any>) => void;
-        /**
-          * Used to connect to a barista instance. By default, always access production (prod) server prod = http://barista.berkeleybop.org dev  = http://barista-dev.berkeleybop.org
-         */
-        "repository"?: string;
         /**
           * Show/hide default legend
          */

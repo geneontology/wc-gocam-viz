@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property     | Attribute     | Description                                                                                                                                                               | Type      | Default     |
-| ------------ | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------- |
-| `gocamId`    | `gocam-id`    | ID of the gocam to be shown in this widget. Look for the watcher below that will load the GO-CAM upon a change of this variable                                           | `string`  | `undefined` |
-| `repository` | `repository`  | Used to connect to a barista instance. By default, always access production (prod) server prod = http://barista.berkeleybop.org dev  = http://barista-dev.berkeleybop.org | `string`  | `'release'` |
-| `showLegend` | `show-legend` | Show/hide default legend                                                                                                                                                  | `boolean` | `true`      |
+| Property     | Attribute     | Description                                                                                                                      | Type      | Default                                        |
+| ------------ | ------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------------------------------------------- |
+| `apiUrl`     | `api-url`     | The url used to fetch GO-CAM graphs. Any occurrence of %ID in the string will be replaced by the GO-CAM ID.                      | `string`  | `"https://api.geneontology.xyz/gocam/%ID/raw"` |
+| `gocamId`    | `gocam-id`    | ID of the GO-CAM to be shown in this widget. Look for the watcher below that will load the GO-CAM upon a change of this variable | `string`  | `undefined`                                    |
+| `showLegend` | `show-legend` | Show/hide default legend                                                                                                         | `boolean` | `true`                                         |
 
 
 ## Events

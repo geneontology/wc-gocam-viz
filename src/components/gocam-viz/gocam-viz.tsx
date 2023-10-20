@@ -17,6 +17,8 @@ import {
 
 cytoscape.use(dagre);
 
+const GOMODEL_PREFIX = "gomodel:"
+
 /**
  * @part gocam-panel - The panel containing the GO-CAM graph and legend
  * @part gocam-title - The GO-CAM title
@@ -50,7 +52,7 @@ export class GoCamViz {
      * The url used to fetch GO-CAM graphs. Any occurrence of %ID in the string will be replaced
      * by the GO-CAM ID.
      */
-    @Prop() apiUrl: string = "https://api.geneontology.xyz/gocam/%ID/raw";
+    @Prop() apiUrl: string = "https://api.geneontology.org/api/go-cam/%ID";
 
     /**
      * Show/hide default legend
@@ -277,20 +279,19 @@ export class GoCamViz {
 
     /**
      * Will request the gocam from the bbop manager; if manager approves, will trigger renderGoCam
-     * @param gocamId valid gocam id gomodel:xxx
      */
     loadGoCam() {
         this.graphDiv.innerHTML = ""
-
-        let gocamCurie = this.gocamId;
-        if (!gocamCurie.startsWith("gomodel:")) {
-            gocamCurie = "gomodel:" + gocamCurie;
-        }
         this.loading = true;
         this.error = false;
         this.cam = undefined;
 
+        let gocamCurie = this.gocamId;
+        if (!gocamCurie.startsWith(GOMODEL_PREFIX)) {
+            gocamCurie = GOMODEL_PREFIX + gocamCurie;
+        }
         const url = this.apiUrl.replace('%ID', gocamCurie);
+
         fetch(url).then(data => {
             return data.json();
         }).catch(err => {
@@ -575,7 +576,7 @@ export class GoCamViz {
 
             //this.cam.enrichActivity(activity);
 
-            if (entity_id.substr(0, 8) == "gomodel:") {
+            if (entity_id.startsWith(GOMODEL_PREFIX)) {
                 let data = evt.target.data();
                 let node = this.currentGraph.get_node(entity_id);
                 let labels = [];
@@ -757,7 +758,7 @@ export class GoCamViz {
         }
         if (evt && evt.target && evt.target.id) {
             let entity_id = evt.target.id();
-            if (entity_id.substr(0, 8) == "gomodel:") {
+            if (entity_id.startsWith(GOMODEL_PREFIX)) {
                 this.nodeOut.emit(evt);
             }
         }
@@ -767,7 +768,7 @@ export class GoCamViz {
     onMouseClick(evt) {
         if (this.selectedEvent) {
             let entity_id = this.selectedEvent.target.id();
-            if (entity_id.substr(0, 8) == "gomodel:") {
+            if (entity_id.startsWith(GOMODEL_PREFIX)) {
                 this.nodeOut.emit(this.selectedEvent);
             }
             this.selectedEvent = undefined;
@@ -788,7 +789,7 @@ export class GoCamViz {
     onLayoutChange(evt) {
         if (this.selectedEvent) {
             let entity_id = this.selectedEvent.target.id();
-            if (entity_id.substr(0, 8) == "gomodel:") {
+            if (entity_id.startsWith(GOMODEL_PREFIX)) {
                 this.nodeOut.emit(this.selectedEvent);
             }
             this.selectedEvent = undefined;

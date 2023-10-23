@@ -17,6 +17,8 @@ import {
 
 cytoscape.use(dagre);
 
+const GOMODEL_PREFIX = "gomodel:"
+
 /**
  * @part gocam-panel - The panel containing the GO-CAM graph and legend
  * @part gocam-title - The GO-CAM title
@@ -41,10 +43,16 @@ export class GoCamViz {
     graphDiv: HTMLDivElement;
 
     /**
-     * ID of the gocam to be shown in this widget. Look for the watcher below that will load
+     * ID of the GO-CAM to be shown in this widget. Look for the watcher below that will load
      * the GO-CAM upon a change of this variable
      */
     @Prop() gocamId: string;
+
+    /**
+     * The url used to fetch GO-CAM graphs. Any occurrence of %ID in the string will be replaced
+     * by the GO-CAM ID.
+     */
+    @Prop() apiUrl: string = "https://api.geneontology.org/api/go-cam/%ID";
 
     /**
      * Show/hide default legend
@@ -71,27 +79,6 @@ export class GoCamViz {
     dbXrefsReady = false;       // check if dbxrefs is initialized
 
     /**
-     * Base URL used to fetch gocam as bbop graph
-     */
-    apiUrl = "https://api.geneontology.xyz/gocam/";
-    devBaristaUrl = 'http://barista-dev.berkeleybop.org/search/stored?id=';
-    localDevBaristaUrl = 'http://localhost:3400/search/stored?id=';
-    productionBaristaUrl = 'http://barista.berkeleybop.org/search/stored?id=';
-
-    noctuaGraphURL = {
-        prod: "http://noctua.geneontology.org/editor/graph/",
-        dev: "http://noctua-dev.berkeleybop.org/editor/graph/",
-        release: "http://noctua.geneontology.org/editor/graph/",
-    };
-
-    /**
-     * Used to connect to a barista instance. By default, always access production (prod) server
-     * prod = http://barista.berkeleybop.org
-     * dev  = http://barista-dev.berkeleybop.org
-     */
-    @Prop() repository: string = 'release';
-
-    /**
      * This state is updated whenever loading a new graph, in order to trigger a new rendering of genes-panel
      */
     @State() cam: Cam;
@@ -99,18 +86,6 @@ export class GoCamViz {
     @State() title: string;
 
     @State() expandComplex = false;
-
-    @Watch('repository')
-    changeRepository(newValue, oldValue) {
-        const isNotString = typeof newValue !== 'string';
-        if (isNotString) {
-          throw new Error('repository: not string');
-        }
-        if (newValue !== oldValue) {
-            this.loadGoCam(this.gocamId)
-        }
-    }
-
 
     // Variables for handling click and mouse over
     selectedNode = undefined;
@@ -269,15 +244,16 @@ export class GoCamViz {
     selectGOCAM(event: CustomEvent) {
         if (event.detail) {
             let data = event.detail;
-            this.gocamId = data.id; // this trigger the gocamIdChanged below
+            this.gocamId = data.id; // this trigger the watchGoCamIdAndApiUrl below
         }
     }
 
-    // If the gocam id is changed, update the current graph to the new gocam
+    // If the GO-CAM ID or API URL is changed, update the current graph to the new gocam
     @Watch('gocamId')
-    gocamIdChanged(newValue, oldValue) {
-        if (newValue != oldValue) {
-            this.loadGoCam(newValue);
+    @Watch('apiUrl')
+    watchGoCamIdAndApiUrl(newValue: string, oldValue: string, propName: string) {
+        if (newValue !== oldValue) {
+            this.loadGoCam();
         }
     }
 
@@ -303,34 +279,26 @@ export class GoCamViz {
 
     /**
      * Will request the gocam from the bbop manager; if manager approves, will trigger renderGoCam
-     * @param gocamId valid gocam id gomodel:xxx
      */
-    loadGoCam(gocamId) {
+    loadGoCam() {
         this.graphDiv.innerHTML = ""
-        if (!gocamId.startsWith("gomodel:")) {
-            gocamId = "gomodel:" + gocamId;
-        }
         this.loading = true;
         this.error = false;
         this.cam = undefined;
-        let url = ''
 
-        if (this.repository === 'prod') {
-            url = this.productionBaristaUrl + gocamId;
-        } else if (this.repository === 'dev') {
-            url = this.devBaristaUrl + gocamId;
-        } else if (this.repository === 'local-dev') {
-            url = this.localDevBaristaUrl + gocamId;
-        } else if (this.repository === 'release') {
-            url = this.apiUrl + gocamId + "/raw"
+        let gocamCurie = this.gocamId;
+        if (!gocamCurie.startsWith(GOMODEL_PREFIX)) {
+            gocamCurie = GOMODEL_PREFIX + gocamCurie;
         }
+        const url = this.apiUrl.replace('%ID', gocamCurie);
 
         fetch(url).then(data => {
             return data.json();
         }).catch(err => {
             console.error("Error while fetching gocam ", url);
         }).then(graph => {
-            let model = (this.repository === 'release') ? graph : graph.activeModel;
+
+            let model = graph.activeModel ?? graph;
             if (model) {
                 this.cam = this.graphService.getCam(model)
                 this.currentGraph = this.cam.graph;
@@ -608,7 +576,7 @@ export class GoCamViz {
 
             //this.cam.enrichActivity(activity);
 
-            if (entity_id.substr(0, 8) == "gomodel:") {
+            if (entity_id.startsWith(GOMODEL_PREFIX)) {
                 let data = evt.target.data();
                 let node = this.currentGraph.get_node(entity_id);
                 let labels = [];
@@ -790,7 +758,7 @@ export class GoCamViz {
         }
         if (evt && evt.target && evt.target.id) {
             let entity_id = evt.target.id();
-            if (entity_id.substr(0, 8) == "gomodel:") {
+            if (entity_id.startsWith(GOMODEL_PREFIX)) {
                 this.nodeOut.emit(evt);
             }
         }
@@ -800,7 +768,7 @@ export class GoCamViz {
     onMouseClick(evt) {
         if (this.selectedEvent) {
             let entity_id = this.selectedEvent.target.id();
-            if (entity_id.substr(0, 8) == "gomodel:") {
+            if (entity_id.startsWith(GOMODEL_PREFIX)) {
                 this.nodeOut.emit(this.selectedEvent);
             }
             this.selectedEvent = undefined;
@@ -821,7 +789,7 @@ export class GoCamViz {
     onLayoutChange(evt) {
         if (this.selectedEvent) {
             let entity_id = this.selectedEvent.target.id();
-            if (entity_id.substr(0, 8) == "gomodel:") {
+            if (entity_id.startsWith(GOMODEL_PREFIX)) {
                 this.nodeOut.emit(this.selectedEvent);
             }
             this.selectedEvent = undefined;
@@ -849,14 +817,7 @@ export class GoCamViz {
      * https://stenciljs.com/docs/component-lifecycle
     */
     componentDidLoad() {
-        this.loadGoCam(this.gocamId);
-    }
-
-    /**
-     * Method to open the current gocam model into noctua
-    */
-    openInNoctua() {
-        window.open(this.noctuaGraphURL[this.repository] + this.currentGraph.id(), "_blank");
+        this.loadGoCam();
     }
 
     /**

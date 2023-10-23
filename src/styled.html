@@ -57,14 +57,6 @@
 <body>
 
   <div style='max-width: 1200px; margin: 0 auto'>
-    <div style='margin-bottom: 1rem'>
-      <label for='goc-repository-select'>Select Repository:</label>
-      <select name='repository' id='goc-repository-select'>
-        <option value='prod'>Noctua Production</option>
-        <option value='dev'>Noctua Development(for developers only)</option>
-      </select>
-    </div>
-
     <wc-gocam-viz
       id='gocam-1'
       gocam-id='568b0f9600000284'
@@ -82,15 +74,6 @@
 
   <!-- OPTIONAL: SPECIAL HANDLING OF EVENTS -->
   <script>
-
-    var repositorySelect = document.getElementById('goc-repository-select');
-    repositorySelect.addEventListener('change', updateRepository);
-
-    function updateRepository(e) {
-      var goCamViz = document.getElementById('gocam-1');
-      goCamViz.setAttribute('repository', e.target.value);
-    }
-
     /**
      * General Key listener, here to recenter the graph visualization
      */

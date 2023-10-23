@@ -16,19 +16,6 @@
 <body>
 
   <div style='max-width: 1200px; margin: 0 auto'>
-    <div style='margin-bottom: 1rem'>
-      <label for='goc-repository-select'>Select Repository:</label>
-      <select name='repository' id='goc-repository-select'>
-        <option value='prod'>Noctua Production</option>
-        <option value='dev'>Noctua Development(for developers only)</option>
-      </select>
-    </div>
-
-    <!-- ACTUAL INTEGRATION OF THE GOCAM-VIZ COMPONENT ex gomodel:56d1143000000176 gomodel:6202e3b700000172 localgomodel:61f34dd300001044-->
-    <!--<wc-gocam-viz id="gocam-1" repository="local-dev" gocam-id="63bbb65600000000" show-go-cam-selector=true
-      show-has-input=true show-has-output=true show-gene-product=true show-activity=true show-isolated-activity=true>
-    </wc-gocam-viz>-->
-
     <wc-gocam-viz
       id='gocam-1'
       gocam-id='568b0f9600000284'
@@ -43,30 +30,8 @@
     </wc-gocam-viz>
   </div>
 
-  <!-- <wc-gocam-viz
-      id="gocam-1"
-      repository="dev"
-      gocam-id="gomodel:YEAST-SALV-PYRMID-DNTP"
-      show-go-cam-selector=true
-      show-has-input=false
-      show-has-output=false
-      show-gene-product=true
-      show-activity=false
-      show-isolated-activity=true
-    ></wc-gocam-viz> -->
-
-
   <!-- OPTIONAL: SPECIAL HANDLING OF EVENTS -->
   <script>
-
-    var repositorySelect = document.getElementById('goc-repository-select');
-    repositorySelect.addEventListener('change', updateRepository);
-
-    function updateRepository(e) {
-      var goCamViz = document.getElementById('gocam-1');
-      goCamViz.setAttribute('repository', e.target.value);
-    }
-
     /**
      * General Key listener, here to recenter the graph visualization
      */

@@ -32,7 +32,7 @@ export namespace Components {
          */
         "apiUrl": string;
         /**
-          * ID of the GO-CAM to be shown in this widget. Look for the watcher below that will load the GO-CAM upon a change of this variable
+          * ID of the GO-CAM to be shown in this widget. If provided, the GO-CAM will automatically be fetched using this ID and the value of the `api-url` prop. If omitted, data will not automatically be fetched, but can be provided via the `setModelData` method. This may be useful if the host page already has the GO-CAM data.
          */
         "gocamId": string;
         /**
@@ -44,6 +44,11 @@ export namespace Components {
           * @param shouldAF set to true if you want a mouse scroll to be captured by the component
          */
         "setAutoFocus": (shouldAF: any) => Promise<void>;
+        /**
+          * Manually supply GO-CAM data to be rendered. This will overwrite any data previously fetched using the gocamId and apiUrl props, if they were provided.
+          * @param model GO-CAM object
+         */
+        "setModelData": (model: any) => Promise<void>;
         /**
           * Show/hide default legend
          */
@@ -128,7 +133,7 @@ declare namespace LocalJSX {
          */
         "apiUrl"?: string;
         /**
-          * ID of the GO-CAM to be shown in this widget. Look for the watcher below that will load the GO-CAM upon a change of this variable
+          * ID of the GO-CAM to be shown in this widget. If provided, the GO-CAM will automatically be fetched using this ID and the value of the `api-url` prop. If omitted, data will not automatically be fetched, but can be provided via the `setModelData` method. This may be useful if the host page already has the GO-CAM data.
          */
         "gocamId"?: string;
         "onLayoutChange"?: (event: WcGocamVizCustomEvent<any>) => void;

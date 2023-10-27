@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property     | Attribute     | Description                                                                                                                      | Type      | Default                                         |
-| ------------ | ------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------------------------------------------- |
-| `apiUrl`     | `api-url`     | The url used to fetch GO-CAM graphs. Any occurrence of %ID in the string will be replaced by the GO-CAM ID.                      | `string`  | `"https://api.geneontology.org/api/go-cam/%ID"` |
-| `gocamId`    | `gocam-id`    | ID of the GO-CAM to be shown in this widget. Look for the watcher below that will load the GO-CAM upon a change of this variable | `string`  | `undefined`                                     |
-| `showLegend` | `show-legend` | Show/hide default legend                                                                                                         | `boolean` | `true`                                          |
+| Property     | Attribute     | Description                                                                                                                                                                                                                                                                                                                   | Type      | Default                                         |
+| ------------ | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------------------------------------------- |
+| `apiUrl`     | `api-url`     | The url used to fetch GO-CAM graphs. Any occurrence of %ID in the string will be replaced by the GO-CAM ID.                                                                                                                                                                                                                   | `string`  | `"https://api.geneontology.org/api/go-cam/%ID"` |
+| `gocamId`    | `gocam-id`    | ID of the GO-CAM to be shown in this widget. If provided, the GO-CAM will automatically be fetched using this ID and the value of the `api-url` prop. If omitted, data will not automatically be fetched, but can be provided via the `setModelData` method. This may be useful if the host page already has the GO-CAM data. | `string`  | `undefined`                                     |
+| `showLegend` | `show-legend` | Show/hide default legend                                                                                                                                                                                                                                                                                                      | `boolean` | `true`                                          |
 
 
 ## Events
@@ -39,6 +39,17 @@ Type: `Promise<void>`
 ### `setAutoFocus(shouldAF: any) => Promise<void>`
 
 Define if the GO-CAM viz should capture the mouse scroll
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `setModelData(model: any) => Promise<void>`
+
+Manually supply GO-CAM data to be rendered. This will overwrite any data previously
+fetched using the gocamId and apiUrl props, if they were provided.
 
 #### Returns
 

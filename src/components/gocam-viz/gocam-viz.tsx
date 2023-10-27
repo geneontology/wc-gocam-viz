@@ -43,8 +43,10 @@ export class GoCamViz {
     graphDiv: HTMLDivElement;
 
     /**
-     * ID of the GO-CAM to be shown in this widget. Look for the watcher below that will load
-     * the GO-CAM upon a change of this variable
+     * ID of the GO-CAM to be shown in this widget. If provided, the GO-CAM will automatically
+     * be fetched using this ID and the value of the `api-url` prop. If omitted, data will
+     * not automatically be fetched, but can be provided via the `setModelData` method. This may
+     * be useful if the host page already has the GO-CAM data.
      */
     @Prop() gocamId: string;
 
@@ -271,16 +273,19 @@ export class GoCamViz {
     /**
      * Init the GO dbxrefs.yaml, in order to build URL meta
     */
-    initDBXrefs() {
-        dbxrefs.init(() => {
-            this.dbXrefsReady = true;
-        })
+    async initDBXrefs() {
+        await dbxrefs.init();
+        this.dbXrefsReady = true;
     }
 
     /**
      * Will request the gocam from the bbop manager; if manager approves, will trigger renderGoCam
      */
     loadGoCam() {
+        if (!this.gocamId || !this.apiUrl) {
+            return
+        }
+
         this.graphDiv.innerHTML = ""
         this.loading = true;
         this.error = false;
@@ -297,12 +302,9 @@ export class GoCamViz {
         }).catch(err => {
             console.error("Error while fetching gocam ", url);
         }).then(graph => {
-
             let model = graph.activeModel ?? graph;
             if (model) {
-                this.cam = this.graphService.getCam(model)
-                this.currentGraph = this.cam.graph;
-                this.renderGoCam(this.cam, this.expandComplex);
+                this.setModelData(model);
             }
         })
     }
@@ -697,6 +699,19 @@ export class GoCamViz {
         this.cy.userZoomingEnabled(shouldAF);
     }
 
+    /**
+     * Manually supply GO-CAM data to be rendered. This will overwrite any data previously
+     * fetched using the gocamId and apiUrl props, if they were provided.
+     *
+     * @param model GO-CAM object
+     */
+    @Method()
+    async setModelData(model) {
+        this.cam = this.graphService.getCam(model)
+        this.currentGraph = this.cam.graph;
+        this.renderGoCam(this.cam, this.expandComplex);
+    }
+
     isAutoFocusing() {
         return this.cy.userZoomingEnabled;
     }
@@ -807,8 +822,8 @@ export class GoCamViz {
      * Before the component is rendered (executed once)
      * https://stenciljs.com/docs/component-lifecycle
     */
-    componentWillLoad() {
-        this.initDBXrefs();
+    async componentWillLoad() {
+        await this.initDBXrefs();
         this.initCytoscape();
     }
 

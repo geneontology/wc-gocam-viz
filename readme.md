@@ -21,11 +21,6 @@ For a simple, static website using `<script>` tags is a quick way to get started
     <wc-gocam-viz 
       id="gocam-1"
       gocam-id="568b0f9600000284"
-      show-go-cam-selector=true
-      show-has-input=false
-      show-has-output=false
-      show-gene-product=true
-      show-activity=false
     ></wc-gocam-viz>
   </body>
 </html>

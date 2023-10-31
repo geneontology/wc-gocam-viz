@@ -4,7 +4,6 @@ import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globals/utils';
 import * as dbxrefs from "@geneontology/dbxrefs";
-import '@geneontology/wc-light-modal';
 import {
     Activity, ActivityType, Cam,
     ActivityNodeType,

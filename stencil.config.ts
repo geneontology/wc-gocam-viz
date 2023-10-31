@@ -32,4 +32,7 @@ export const config: Config = {
       ]
     },
   ],
+  extras: {
+    enableImportInjection: true
+  }
 };

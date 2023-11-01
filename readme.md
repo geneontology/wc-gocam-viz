@@ -93,3 +93,20 @@ For other bundlers, consider a similar configuration using one of the following 
 * [rollup-plugin-copy](https://github.com/vladshcherbin/rollup-plugin-copy)
 * [vite-plugin-static-copy](https://github.com/sapphi-red/vite-plugin-static-copy)
 * [esbuild-plugin-copy](https://github.com/LinbuduLab/esbuild-plugins/tree/main/packages/esbuild-plugin-copy)
+
+By default, images will be requested at a location relative to the current page's URL. For example, if the legend component is on the page at `http://example.com`, then the image requests will be to `http://example.com/assets/...`. If your application is able to serve the image files from a top-level `assets` route (as in the above example), then no additional configuration is needed.
+
+However, in the following scenarios some extra configuration is needed:
+
+* You have a multi-page app and the legend component might be hosted on a page like `http://example.com/path/to/page`
+* Your application requires static assets to be served from a non-root path. For example, you need to serve the images from, say, `http://example.com/static/assets/...`
+
+In these scenarios, pass the `window` object and an options object with the `resourceUrl` key to `defineCustomElements()`. Note that the `resourceUrl` value can be absolute (starting with a `/`) or relative (in which case it will be relative to the current document's `baseURI`). In either case the value should include a trailing slash.
+
+```javascript
+import { defineCustomElements } from '@geneontology/wc-gocam-viz/loader'
+
+defineCustomElements(window, {
+  resourcesUrl: '/static/'
+});
+```

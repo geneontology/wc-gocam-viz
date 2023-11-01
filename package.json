@@ -23,7 +23,6 @@
   },
   "dependencies": {
     "@geneontology/dbxrefs": "^1.0.16",
-    "@geneontology/wc-light-modal": "0.0.7",
     "@stencil/core": "^4.1.0",
     "bbop-graph-noctua": "0.0.35",
     "cytoscape": "^3.16.1",

@@ -121,8 +121,8 @@
 .node-term {
   font-size: 0.75em;
   flex-grow: 1;
+  flex-shrink: 1;
 }
 
 .node-evidence {
-  @include deep-width(2em);
 }

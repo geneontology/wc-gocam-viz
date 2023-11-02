@@ -1,3 +1,4 @@
+import image from '@rollup/plugin-image';
 import { Config } from '@stencil/core';
 import nodePolyfills from 'rollup-plugin-node-polyfills';
 import { sass } from '@stencil/sass';
@@ -5,7 +6,8 @@ import { sass } from '@stencil/sass';
 export const config: Config = {
   namespace: 'wc-gocam-viz',
   plugins: [
-    sass()
+    sass(),
+    image(),
   ],
   rollupPlugins: {
     after: [

@@ -34,6 +34,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@rollup/plugin-image": "^3.0.3",
     "@stencil/sass": "^3.0.5",
     "rollup-plugin-node-polyfills": "^0.2.1"
   },

@@ -177,6 +177,7 @@ button {
   padding: var(--graph-padding);
   height: var(--graph-height);
   box-sizing: border-box;
+  position: relative;
 }
 
 wc-gocam-legend {

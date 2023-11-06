@@ -528,7 +528,6 @@ export class GoCamViz {
     */
     finishRendering() {
         console.log("Rendering of the GO-CAM complete");
-        // tableElement.innerHTML = "<wc-spinner spinner-style='default' spinner-color='blue'></wc-spinner>"
     }
 
 
@@ -832,6 +831,26 @@ export class GoCamViz {
     */
     componentDidLoad() {
         this.loadGoCam();
+
+        // Cytoscape's renderer initialization code includes a step where it walks up the DOM
+        // tree from the cytoscape container (this.graphDiv here) following `parentNode`
+        // attributes and attaches event listeners to each element is passes[1]. It assumes that
+        // it can reach the HTML document root doing this. However, that's not a valid
+        // assumption when the cytoscape container is in a shadow DOM host (this.gocamviz here).
+        // From the outside, the host's `parentNode` attribute is null. Someone reported a
+        // different issue to cytoscape that also involves hosting it in a shadow DOM element,
+        // but it didn't get much traction[2]. So here we help cytoscape out by setting up the event
+        // listeners that it won't be able to reach.
+        // [1] https://github.com/cytoscape/cytoscape.js/blob/3.16.x/src/extensions/renderer/base/load-listeners.js#L326-L342
+        // [2] https://github.com/cytoscape/cytoscape.js/issues/3133
+        let element: Node = this.gocamviz;
+        const invalidateCoordsCache = () => this.cy.renderer().invalidateContainerClientCoordsCache();
+        while (element != null) {
+          element.addEventListener('transitionend', invalidateCoordsCache);
+          element.addEventListener('animationend', invalidateCoordsCache);
+          element.addEventListener('scroll', invalidateCoordsCache);
+          element = element.parentNode;
+        }
     }
 
     /**
@@ -862,7 +881,7 @@ export class GoCamViz {
                           }
                         </div>
                         {this.showLegend && (
-                          <wc-gocam-legend exportparts="header : legend-header, section : legend-section" />
+                            <wc-gocam-legend exportparts="header : legend-header, section : legend-section" />
                         )}
                     </div>
                 </div>

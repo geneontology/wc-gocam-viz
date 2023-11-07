@@ -363,8 +363,6 @@ export class GoCamViz {
         const label = activity.gpNode?.term.label || activity.label || '';
         const geneShorthand = this.configService.getGeneShorthand(label)
 
-        console.log(geneShorthand)
-
         const el = {
             group: "nodes",
             data: {
@@ -527,7 +525,6 @@ export class GoCamViz {
      * Called when cytoscape.ready is called
     */
     finishRendering() {
-        console.log("Rendering of the GO-CAM complete");
     }
 
 

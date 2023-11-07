@@ -240,8 +240,6 @@ export class GraphHandler {
             for (let key of Object.keys(biocontext)) {
                 biocontext[key] = Array.from(biocontext[key]);
             }
-
-            console.log(biocontext);
         }
 
 
@@ -423,7 +421,6 @@ export class GraphHandler {
 
             // console.log("edge: ", edge);
             if (!this.RO_CAUSAL.hasOwnProperty(edge.predicate_id())) {
-                console.log("is not a causal");
                 continue;
             }
 
@@ -807,7 +804,7 @@ export class GraphHandler {
             case "instance_of":
                 return { lineStyle: "solid", glyph: null, label: "activity", color: '#FFFAFA' };
         }
-        console.log("No glyph found for relation '" + relation + "'");
+        console.warn("No glyph found for relation '" + relation + "'");
         return { glyph: null, label: relation, color: "black" };
     }
 

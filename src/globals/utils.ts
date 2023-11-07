@@ -107,7 +107,7 @@ export function glyph(relation) {
             return { lineStyle: "solid", glyph: "circle-triangle", label: "directly provides input for", color: '#add8e6', width: smallSize };
     
     }
-    console.log("No glyph found for relation '" + relation + "'");
+    console.warn("No glyph found for relation '" + relation + "'");
     return { glyph: null, label: relation, color: "black" };
 }
 

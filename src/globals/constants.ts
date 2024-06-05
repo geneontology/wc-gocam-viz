@@ -19,6 +19,9 @@ export const legend = {
       id: 'negative_regulation',
       label: 'Negative Regulation'
     }, {
+      id: 'provides_input_for',
+      label: 'Provides Input For'
+    }, {
       id: 'neutral',
       label: 'Unknown/Neutral'
     }

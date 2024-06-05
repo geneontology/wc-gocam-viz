@@ -1,4 +1,4 @@
-@import "../../scss/mixins";
+@import '../../scss/mixins';
 
 :host {
   /**
@@ -28,6 +28,7 @@
 
 .header {
   @include standard-var-styles(header);
+  text-align: center;
   font-weight: var(--header-font-weight);
   margin-bottom: 0.5em;
 }
@@ -43,6 +44,7 @@
 img {
   display: inline-block;
   max-height: 1.25em;
+  min-width: 3.5em;
   max-width: 3.75em;
   object-fit: scale-down;
 }

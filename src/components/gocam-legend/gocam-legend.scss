@@ -28,7 +28,6 @@
 
 .header {
   @include standard-var-styles(header);
-  text-align: center;
   font-weight: var(--header-font-weight);
   margin-bottom: 0.5em;
 }

@@ -841,7 +841,7 @@ export class GoCamViz {
         // [1] https://github.com/cytoscape/cytoscape.js/blob/3.16.x/src/extensions/renderer/base/load-listeners.js#L326-L342
         // [2] https://github.com/cytoscape/cytoscape.js/issues/3133
         let element: Node = this.gocamviz;
-        const invalidateCoordsCache = () => this.cy.renderer().invalidateContainerClientCoordsCache();
+        const invalidateCoordsCache = () => this.cy?.renderer().invalidateContainerClientCoordsCache();
         while (element != null) {
           element.addEventListener('transitionend', invalidateCoordsCache);
           element.addEventListener('animationend', invalidateCoordsCache);

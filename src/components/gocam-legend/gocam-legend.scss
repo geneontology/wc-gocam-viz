@@ -1,4 +1,4 @@
-@import "../../scss/mixins";
+@import '../../scss/mixins';
 
 :host {
   /**
@@ -43,6 +43,7 @@
 img {
   display: inline-block;
   max-height: 1.25em;
+  min-width: 3.5em;
   max-width: 3.75em;
   object-fit: scale-down;
 }

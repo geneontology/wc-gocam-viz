@@ -80,23 +80,6 @@ export class Predicate {
     return false;
   }
 
-  removeEvidence(index) {
-    const self = this;
-
-    if (index === 0 && self.evidence.length === 1) {
-      self.evidence[0].clearValues();
-    } else {
-      self.evidence.splice(index, 1);
-    }
-  }
-
-  resetEvidence() {
-    const self = this;
-
-    self.evidence = [self.evidence[0]];
-    self.evidence[0].clearValues();
-  }
-
   getEvidenceById(id) {
     const self = this;
 

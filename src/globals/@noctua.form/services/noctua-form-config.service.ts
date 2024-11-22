@@ -214,6 +214,10 @@ export class NoctuaFormConfigService {
     };
   }
 
+  isAllowedEdge(id: string) {
+    return noctuaFormConfig.allowedPathwayViewerEdges.some(e => e.id === id);
+  }
+
   generateSpeciesList() {
     const result = new Set<string>()
     taxonDataset.forEach(taxon => {

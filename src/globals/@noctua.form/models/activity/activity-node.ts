@@ -208,11 +208,6 @@ export class ActivityNode implements ActivityNodeDisplay {
     return found;
   }
 
-  clearValues() {
-    this.term.id = null;
-    this.term.label = null;
-    this.predicate.resetEvidence();
-  }
 
   copyValues(node: ActivityNode) {
     this.uuid = node.uuid;
@@ -238,90 +233,6 @@ export class ActivityNode implements ActivityNodeDisplay {
       if (this.nodeGroup.isComplement && this.treeLevel > 0) {
         result = false;
       }
-    }
-
-    return result;
-  }
-
-  reviewTermChanges(stat: CamStats, modifiedStats: CamStats): boolean {
-    const self = this;
-    let modified = false;
-
-    if (self.term.modified) {
-      if (self.type === ActivityNodeType.GoMolecularEntity) {
-        modifiedStats.gpsCount++;
-        stat.gpsCount++;
-      } else {
-        modifiedStats.termsCount++;
-        stat.termsCount++;
-      }
-
-      modified = true;
-    }
-
-    each(self.predicate.evidence, (evidence: Evidence, key) => {
-      const evidenceModified = evidence.reviewEvidenceChanges(stat, modifiedStats);
-      modified = modified || evidenceModified;
-    });
-
-    modifiedStats.updateTotal();
-    return modified;
-  }
-
-  checkStored(oldNode: ActivityNode) {
-    const self = this;
-
-    if (oldNode && self.term.id !== oldNode.term.id) {
-      self.term.termHistory.unshift(new Entity(oldNode.term.id, oldNode.term.label));
-      self.term.modified = true;
-    }
-
-    each(self.predicate.evidence, (evidence: Evidence, key) => {
-      const oldEvidence = oldNode?.predicate.getEvidenceById(evidence.uuid)
-      evidence.checkStored(oldEvidence)
-    });
-  }
-
-  addPendingChanges(oldNode: ActivityNode) {
-    const self = this;
-
-    if (self.term.id !== oldNode.term.id) {
-      self.pendingEntityChanges = new PendingChange(self.uuid, oldNode.term, self.term);
-    }
-
-    if (self.predicate.edge.id !== oldNode.predicate.edge.id) {
-      self.pendingRelationChanges = new PendingChange(self.uuid, oldNode.predicate.edge, self.predicate.edge);
-    }
-
-    each(self.predicate.evidence, (evidence: Evidence, key) => {
-      const oldEvidence = oldNode.predicate.getEvidenceById(evidence.uuid)
-      evidence.addPendingChanges(oldEvidence);
-    });
-
-    //this is temporary swap back into old
-    //self.term = oldNode.term
-  }
-
-  enableSubmit(errors, validateEvidence = true) {
-    const self = this;
-    let result = true;
-
-    if (self.termRequired && !self.term.id) {
-      self.required = true;
-      const meta = {
-        aspect: self.label
-      };
-      const error = new ActivityError(ErrorLevel.error, ErrorType.general, `"${self.label}" is required`, meta);
-      errors.push(error);
-      result = false;
-    } else {
-      self.required = false;
-    }
-
-    if (!self.skipEvidenceCheck && self.hasValue() && validateEvidence) {
-      each(self.predicate.evidence, (evidence: Evidence, key) => {
-        result = evidence.enableSubmit(errors, self, key + 1) && result;
-      });
     }
 
     return result;

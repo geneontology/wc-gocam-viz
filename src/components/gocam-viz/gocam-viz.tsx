@@ -330,7 +330,7 @@ export class GoCamViz {
         });
 
         cam.causalRelations.forEach((triple: Triple<Activity>) => {
-            if (triple.predicate.visible && triple.isTripleComplete()) {
+            if (triple.predicate.visible && triple.isTripleComplete() && this.configService.isAllowedEdge(triple.predicate.edge.id)) {
                 const source = triple.predicate.isReverseLink ? triple.object : triple.subject;
                 const target = triple.predicate.isReverseLink ? triple.subject : triple.object;
                 let rglyph = glyph(triple.predicate.edge.id);
@@ -437,15 +437,13 @@ export class GoCamViz {
     createMolecule(activity: Activity) {
         const moleculeNode = activity.rootNode;
         const label = moleculeNode?.term.label || activity.label || '';
-
-        console.log("createMolecule", label)
         const geneShorthand = this.configService.getGeneShorthand(label) ?? label
 
         const el = {
             group: "nodes",
             data: {
                 id: activity.id,
-                label: label,
+                label: geneShorthand,
                 width: Math.max(115, geneShorthand.length * 11),
                 textwidth: Math.max(115, geneShorthand.length * 9),
                 // link: ??

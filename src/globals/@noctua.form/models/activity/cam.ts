@@ -253,17 +253,6 @@ export class Cam {
     return result;
   }
 
-  checkStored() {
-    const self = this;
-
-    each(self.activities, (activity: Activity) => {
-      each(activity.nodes, (node: ActivityNode) => {
-        // node.term.highlight = false;
-        const oldNode: ActivityNode = self.findNodeById(node.uuid, self.storedActivities)
-        node.checkStored(oldNode)
-      });
-    });
-  }
 
   applyFilter() {
     const self = this;
@@ -362,23 +351,6 @@ export class Cam {
         });
       });
     });
-  }
-
-  reviewCamChanges(stat: CamStats = new CamStats()): boolean {
-    const self = this;
-    let modified = false;
-
-    self.modifiedStats = new CamStats();
-
-    each(self.activities, (activity: Activity) => {
-      each(activity.nodes, (node: ActivityNode) => {
-        activity.modified = node.reviewTermChanges(stat, self.modifiedStats);
-        modified = modified || activity.modified;
-      });
-    });
-
-    self.modifiedStats.updateTotal();
-    return modified;
   }
 
   getNodesByType(type: ActivityNodeType): any[] {

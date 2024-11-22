@@ -30,20 +30,6 @@ const STYLES = {
 
 // Map of relations to their style configurations
 const RELATION_MAP = {
-    'instance_of': {
-        lineStyle: STYLES.LINE_STYLES.SOLID,
-        glyph: STYLES.GLYPHS.NONE,
-        label: 'activity',
-        color: STYLES.COLORS.WHITE,
-        width: STYLES.SIZES.DEFAULT
-    },
-    'annotation': {
-        lineStyle: STYLES.LINE_STYLES.SOLID,
-        glyph: STYLES.GLYPHS.DIAMOND,
-        label: 'annotation',
-        color: STYLES.COLORS.DARK_BLUE,
-        width: STYLES.SIZES.DEFAULT
-    },
     'RO:0002411': {
         lineStyle: STYLES.LINE_STYLES.DASHED,
         glyph: STYLES.GLYPHS.NONE,

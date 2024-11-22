@@ -8,7 +8,7 @@ export const legend = {
     },
     {
       id: 'indirect_regulation',
-      label: 'Indirect Regulation'
+      label: 'Indirect Regulation or Unknown Mechanism'
     }
   ],
   middle: [
@@ -28,8 +28,8 @@ export const legend = {
   ],
   right: [
     {
-      id: 'has_input',
-      label: 'Has Input'
+      id: 'input_of',
+      label: 'Input Of'
     }, {
       id: 'has_output',
       label: 'Has Output'

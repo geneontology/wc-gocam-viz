@@ -106,7 +106,7 @@ export class Activity extends SaeGraph<ActivityNode> {
   enabledByEdge: Triple<ActivityNode>
   bpPartOfEdge: Triple<ActivityNode>
 
-  private _backgroundColor = 'green'
+  private _backgroundColor = '#c8e6c9'
   private _presentation: any;
   private _id: string;
 
@@ -141,7 +141,7 @@ export class Activity extends SaeGraph<ActivityNode> {
       case ActivityType.bpOnly:
         return 'brown'
       case ActivityType.molecule:
-        return 'teal'
+        return '#b2dfdb'
       default:
         return this._backgroundColor;
     }

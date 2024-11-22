@@ -2,7 +2,7 @@ import { Component, Host, Prop, Element, Event, EventEmitter, Watch, h } from '@
 import { Listen, Method, State } from '@stencil/core';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import { glyph, _node_labels, annotate, _folded_stack_gather } from '../../globals/utils';
+import { glyph } from '../../globals/utils';
 import * as dbxrefs from "@geneontology/dbxrefs";
 import {
     Activity, ActivityType, Cam,
@@ -320,7 +320,7 @@ export class GoCamViz {
                 let el
                 if (activity.activityType === ActivityType.molecule) {
                     el = self.createMolecule(activity);
-                } if (activity.activityType === ActivityType.proteinComplex) {
+                } else if (activity.activityType === ActivityType.proteinComplex) {
                     el = self.createComplex(activity, expandComplex);
                 } else {
                     el = self.createNode(activity);
@@ -437,13 +437,15 @@ export class GoCamViz {
     createMolecule(activity: Activity) {
         const moleculeNode = activity.rootNode;
         const label = moleculeNode?.term.label || activity.label || '';
-        const geneShorthand = this.configService.getGeneShorthand(label)
+
+        console.log("createMolecule", label)
+        const geneShorthand = this.configService.getGeneShorthand(label) ?? label
 
         const el = {
             group: "nodes",
             data: {
                 id: activity.id,
-                label: geneShorthand,
+                label: label,
                 width: Math.max(115, geneShorthand.length * 11),
                 textwidth: Math.max(115, geneShorthand.length * 9),
                 // link: ??
@@ -553,120 +555,6 @@ export class GoCamViz {
             this.cy.center(sel);
         }
     }
-
-    /**
-     * If desired, this can render a pop up with information about the gene & its activity
-     * @param evt
-     */
-    showPopup(evt) {
-        if (evt && evt.target && evt.target.id) {
-            this.highlight(evt.target.id());
-            // evt.target.style("background-color", "#ebebeb")
-            // evt.target.style("border-width", "2px")
-            // evt.target.style("border-color", "black")
-            this.selectedNode = evt.target;
-            this.selectedEvent = evt;
-            let entity_id = evt.target.id();
-
-            const activity = this.cam.findActivityById(entity_id);
-            // console.log("graph handler: " , activity);
-
-            //this.cam.enrichActivity(activity);
-
-            if (entity_id.startsWith(GOMODEL_PREFIX)) {
-                let data = evt.target.data();
-                let node = this.currentGraph.get_node(entity_id);
-                let labels = [];
-                for (let ann of node.annotations()) {
-                    if (ann.key() == "rdfs:label") {
-                        labels.push(ann.value());
-                    }
-                }
-
-                // this concern the activity itself
-                let standardTypes = node.types();
-                let inferredTypes = node.get_unique_inferred_types();
-
-                // this will detect the associated biological context
-                let subgraph = node.subgraph();
-                let biocontext = {};
-                let hook_list = []
-                if (subgraph) {
-                    // Do it both ways--upstream and downstream.
-                    _folded_stack_gather(node, this.currentGraph, subgraph, 'standard', hook_list, biocontext, dbxrefs);
-                    _folded_stack_gather(node, this.currentGraph, subgraph, 'reverse', hook_list, biocontext, dbxrefs);
-                    // convert to array
-                    for (let key of Object.keys(biocontext)) {
-                        biocontext[key] = Array.from(biocontext[key]);
-                    }
-                }
-
-                let annotations = node.annotations();
-                let annotationMap = {};
-                for (let ann of annotations) {
-                    if (ann.key() == "evidence") {
-                        let cs = new Set();
-                        if (ann.key() in annotationMap) {
-                            cs = annotationMap[ann.key()]
-                        } else {
-                            annotationMap[ann.key()] = cs;
-                        }
-                        cs.add(ann.value());
-                    } else if (ann.key() == "rdfs:label") {
-                        let cs = new Set();
-                        if (ann.key() in annotationMap) {
-                            cs = annotationMap[ann.key()]
-                        } else {
-                            annotationMap[ann.key()] = cs;
-                        }
-                        cs.add(ann.value());
-                    } else if (ann.key() == "contributor") {
-                        let cs = new Set();
-                        if (ann.key() in annotationMap) {
-                            cs = annotationMap[ann.key()]
-                        } else {
-                            annotationMap[ann.key()] = cs;
-                        }
-                        cs.add(ann.value());
-                    } else if (ann.key() == "providedBy") {
-                        let cs = new Set();
-                        if (ann.key() in annotationMap) {
-                            cs = annotationMap[ann.key()]
-                        } else {
-                            annotationMap[ann.key()] = cs;
-                        }
-                        cs.add(ann.value());
-                    }
-                }
-                // convert to array
-                for (let key of Object.keys(annotationMap)) {
-                    annotationMap[key] = Array.from(annotationMap[key]);
-                }
-                // console.log("node annotations: ", annotationMap);
-
-                let id = data.link && data.link._class_id ? data.link.class_id() : undefined
-                let meta = annotate(id, dbxrefs);
-                meta.then(metaData => {
-                    let payload = {
-                        entityId: entity_id,
-                        id: id,
-                        uri: id ? "https://www.alliancegenome.org/gene/" + id : undefined,
-                        annotation: annotationMap,
-                        biocontext: biocontext,
-                        meta: metaData,
-                        label: data.label,
-                        data: data.link,
-                        standardTypes: standardTypes,
-                        inferredTypes: inferredTypes,
-                        x: evt.renderedPosition.x,
-                        y: evt.renderedPosition.y
-                    }
-                    this.nodeOver.emit(payload);
-                })
-            }
-        }
-    }
-
 
     /**
      * Center the cytoscape graph to fit the whole graph
@@ -843,10 +731,10 @@ export class GoCamViz {
         let element: Node = this.gocamviz;
         const invalidateCoordsCache = () => this.cy?.renderer().invalidateContainerClientCoordsCache();
         while (element != null) {
-          element.addEventListener('transitionend', invalidateCoordsCache);
-          element.addEventListener('animationend', invalidateCoordsCache);
-          element.addEventListener('scroll', invalidateCoordsCache);
-          element = element.parentNode;
+            element.addEventListener('transitionend', invalidateCoordsCache);
+            element.addEventListener('animationend', invalidateCoordsCache);
+            element.addEventListener('scroll', invalidateCoordsCache);
+            element = element.parentNode;
         }
     }
 
@@ -873,9 +761,9 @@ export class GoCamViz {
                     </div>
                     <div class="panel-body">
                         <div class="gocam-graph" part="gocam-graph" ref={(el) => this.graphDiv = el}>
-                          { this.loading &&
-                              <go-loading-spinner message={`Loading GO-CAM ${this.gocamId}`}></go-loading-spinner>
-                          }
+                            {this.loading &&
+                                <go-loading-spinner message={`Loading GO-CAM ${this.gocamId}`}></go-loading-spinner>
+                            }
                         </div>
                         {this.showLegend && (
                             <wc-gocam-legend exportparts="header : legend-header, section : legend-section" />
@@ -889,9 +777,9 @@ export class GoCamViz {
                     </div>
                     <div class="panel-body">
                         <wc-genes-panel
-                          cam={this.cam}
-                          exportparts="process, activity, gene-product, function-label"
-                          ref={el => this.genesPanel = el}
+                            cam={this.cam}
+                            exportparts="process, activity, gene-product, function-label"
+                            ref={el => this.genesPanel = el}
                         >
                         </wc-genes-panel>
                     </div>

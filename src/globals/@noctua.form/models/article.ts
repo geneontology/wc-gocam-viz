@@ -1,4 +1,4 @@
-import { EntityType } from "./activity/entity";
+import { EntityType } from "./activity";
 
 export class Article {
   entityType = EntityType.ARTICLE

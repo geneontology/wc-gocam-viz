@@ -2,6 +2,7 @@ export {
     ActivityNode,
     ActivityNodeType,
     ActivityNodeDisplay,
+    GoCategory,
     compareNodeWeight
 } from './activity-node';
 export {
@@ -9,6 +10,7 @@ export {
     Activity,
     ActivityType,
     ActivityDisplayType,
+    ActivityState,
     ActivitySize,
     ActivityPosition,
     ActivityTreeNode,
@@ -16,13 +18,20 @@ export {
 } from './activity';
 export {
     Cam,
+    CamRebuildSignal,
+    CamOperation,
+    CamLoadingIndicator,
     CamStats,
+    CamQueryMatch,
+    ReloadType
 } from './cam';
 export { Evidence } from './evidence';
 export {
+    ConnectorState,
     ConnectorActivity,
     ConnectorType
 } from './connector-activity';
+export { EntityLookup } from './entity-lookup';
 export {
     EntityType,
     EntityBase,
@@ -30,9 +39,10 @@ export {
     _compareEntityWeight
 } from './entity';
 export { Predicate } from './predicate';
-export { Triple } from './triple';
-export { Rule } from './rules/rule';
-export { ConnectorRule } from './rules/connector-rule';
+export { Triple, TriplePair } from './triple';
+export { ConnectorRule } from './connector-rule';
+export { PendingChange } from './pending-change';
 export { CamSummary, TermsSummary } from './summary';
 
 
+export * from './parser';

@@ -24,6 +24,15 @@ export class Contributor {
     get groups() {
         return this._groups;
     }
+
+    static fromResponse(response) {
+        const user = new Contributor()
+        user.orcid = response.uri;
+        user.name = response.nickname;
+        user.groups = response.groups;
+
+        return user;
+    }
 }
 
 export function compareContributor(a: Contributor, b: Contributor): number {

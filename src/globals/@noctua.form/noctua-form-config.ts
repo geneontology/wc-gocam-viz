@@ -1,4 +1,17 @@
 import { Entity } from './models/activity/entity';
+import vpeJson from './data/vpe-decision.json'
+import allEdges from './data/all-edges.json';
+
+export interface SAEdgeDefinition {
+  gpToTermPredicate: string;
+  mfToTermPredicate?: string;
+  mfNodeRequired: boolean;
+  gpToTermReverse?: boolean;
+}
+
+export type SAConfigEdgeMap = {
+  [key: string]: SAEdgeDefinition;
+};
 
 const edge = {
   placeholder: {
@@ -73,6 +86,14 @@ const edge = {
     id: 'RO:0004046',
     label: 'causally upstream of or within, negative effect',
   },
+  constitutivelyUpstreamOf: {
+    id: 'RO:0012009',
+    label: 'constitutively upstream of',
+  },
+  contributesTo: {
+    "id": "RO:0002326",
+    "label": "contributes to",
+  },
   directlyProvidesInput: {
     id: 'RO:0002413',
     label: 'directly provides input for'
@@ -101,6 +122,14 @@ const edge = {
     id: 'RO:0002630',
     label: 'directly negatively regulates'
   },
+  indirectlyPositivelyRegulates: {
+    id: 'RO:0002407',
+    label: 'indirectly positively regulates'
+  },
+  indirectlyNegativelyRegulates: {
+    id: 'RO:0002409',
+    label: 'indirectly negatively regulates'
+  },
   isSmallMoleculeRegulator: {
     id: 'RO:0012004',
     label: 'is small molecule regulator'
@@ -113,8 +142,146 @@ const edge = {
     id: 'RO:0012006',
     label: 'is small molecule inhibitor'
   },
+  removesInputFor: {
+    id: 'RO:0012010',
+    label: 'removes input for'
+  },
 }
 
+const inverseEdge = {
+  enables: {
+    "id": "RO:0002327",
+    "label": "enables",
+  },
+  isActiveIn: {
+    id: 'RO:0002432',
+    label: 'is active in'
+  },
+  involvedIn: {
+    "id": "RO:0002331",
+    "label": "involved in",
+  },
+  locatedIn: {
+    id: 'RO:0001025',
+    label: 'located in'
+  },
+  contributesTo: {
+    "id": "RO:0002326",
+    "label": "contributes to",
+  },
+
+  actsUpstreamOf: {
+    "id": "RO:0002263",
+    "label": "acts upstream of",
+  },
+  actsUpstreamOfOrWithin: {
+    "id": "RO:0002264",
+    "label": "acts upstream of or within",
+  },
+
+  actsUpstreamOfOrWithinPositive: {
+    "id": "RO:0004032",
+    "label": "acts upstream of or within, positive effect",
+  },
+  actsUpstreamOfOrWithinNegative: {
+    "id": "RO:0004033",
+    "label": "acts upstream of or within, negative effect",
+  },
+  actsUpstreamOfPositive: {
+    "id": "RO:0004034",
+    "label": "acts upstream of, positive effect",
+  },
+  actsUpstreamOfNegative: {
+    "id": "RO:0004035",
+    "label": "acts upstream of, negative effect",
+  },
+};
+
+const rootNode = {
+  mf: {
+    'id': 'GO:0003674',
+    'label': 'molecular_function',
+    'aspect': 'F'
+  },
+  bp: {
+    'id': 'GO:0008150',
+    'label': 'biological_process',
+    'aspect': 'P'
+  },
+  cc: {
+    'id': 'GO:0005575',
+    'label': 'cellular_component',
+    'aspect': 'C'
+  },
+  complex: {
+    'id': 'GO:0032991',
+    'label': 'protein_containing_complex',
+    'aspect': 'PCC'
+  }
+}
+
+const simpleAnnotationEdgeConfig: SAConfigEdgeMap = {
+  [inverseEdge.enables.id]: {
+    gpToTermPredicate: edge.enabledBy.id,
+    gpToTermReverse: true,
+    mfNodeRequired: false
+  },
+  [inverseEdge.involvedIn.id]: {
+    gpToTermPredicate: edge.enabledBy.id,
+    mfToTermPredicate: edge.partOf.id,
+    mfNodeRequired: true
+  },
+  [inverseEdge.isActiveIn.id]: {
+    gpToTermPredicate: edge.isActiveIn.id,
+    mfNodeRequired: false,
+    gpToTermReverse: false
+  },
+  [inverseEdge.actsUpstreamOf.id]: {
+    gpToTermPredicate: edge.enabledBy.id,
+    mfToTermPredicate: edge.causallyUpstreamOf.id,
+    mfNodeRequired: true
+  },
+  [inverseEdge.actsUpstreamOfOrWithin.id]: {
+    gpToTermPredicate: edge.enabledBy.id,
+    mfToTermPredicate: edge.causallyUpstreamOfOrWithin.id,
+    mfNodeRequired: true
+  },
+  [inverseEdge.actsUpstreamOfOrWithinPositive.id]: {
+    gpToTermPredicate: edge.enabledBy.id,
+    mfToTermPredicate: edge.causallyUpstreamOfOrWithinPositiveEffect.id,
+    mfNodeRequired: true
+  },
+  [inverseEdge.actsUpstreamOfOrWithinNegative.id]: {
+    gpToTermPredicate: edge.enabledBy.id,
+    mfToTermPredicate: edge.causallyUpstreamOfOrWithinNegativeEffect.id,
+    mfNodeRequired: true
+  },
+  [inverseEdge.actsUpstreamOfPositive.id]: {
+    gpToTermPredicate: edge.enabledBy.id,
+    mfToTermPredicate: edge.causallyUpstreamOfPositiveEffect.id,
+    mfNodeRequired: true
+  },
+  [inverseEdge.actsUpstreamOfNegative.id]: {
+    gpToTermPredicate: edge.enabledBy.id,
+    mfToTermPredicate: edge.causallyUpstreamOfNegativeEffect.id,
+    mfNodeRequired: true
+  },
+  [inverseEdge.contributesTo.id]: {
+    gpToTermPredicate: edge.contributesTo.id,
+    mfNodeRequired: false,
+    gpToTermReverse: false
+  },
+  [inverseEdge.locatedIn.id]: {
+    gpToTermPredicate: edge.locatedIn.id,
+    mfNodeRequired: false,
+    gpToTermReverse: false
+  },
+  [edge.partOf.id]: {
+    gpToTermPredicate: edge.partOf.id,
+    mfNodeRequired: false,
+    gpToTermReverse: false
+  }
+};
 
 
 export const noctuaFormConfig = {
@@ -124,21 +291,9 @@ export const noctuaFormConfig = {
         'id': 'gp',
         'label': 'Gene Product (default)'
       },
-      'mf': {
-        'id': 'mf',
-        'label': 'Molecular Function'
-      },
-      'bp': {
-        'id': 'bp',
-        'label': 'Biological Process'
-      },
-      'cc': {
-        'id': 'cc',
-        'label': 'Cellular Component'
-      },
       'date': {
         'id': 'date',
-        'label': 'Activity Date'
+        'label': 'Annotation Date'
       }
     }
   },
@@ -148,13 +303,13 @@ export const noctuaFormConfig = {
         'id': 'preview',
         'label': 'Preview'
       },
-      'activity': {
+      'simple': {
         'id': 'activity',
-        'label': 'Default'
+        'label': 'Simple view'
       },
       'detailed': {
         'id': 'detailed',
-        'label': 'Detailed'
+        'label': 'Default'
       },
     }
   },
@@ -226,23 +381,6 @@ export const noctuaFormConfig = {
       }
     }
   },
-  'causalEffect': {
-    'options': {
-      'positive': {
-        'name': 'positive',
-        'label': 'Positive',
-      },
-      'neutral': {
-        'name': 'neutral',
-        'label': 'Unknown/neutral',
-      },
-      'negative': {
-        'name': 'negative',
-        'label': 'Negative',
-      },
-
-    }
-  },
   'findReplaceCategory': {
     'options': {
       'term': {
@@ -259,51 +397,12 @@ export const noctuaFormConfig = {
       },
     }
   },
-  'directness': {
-    'options': {
-      'known': {
-        'name': 'known',
-        'label': 'Direct',
-      },
-      'unknown': {
-        'name': 'unknown',
-        'label': 'Indirect/Unknown',
-      },
-      'chemicalProduct': {
-        'name': 'chemicalProduct',
-        'label': 'Product',
-        'description': 'The activity creates the molecule as a reaction product'
-      }
-    }
-  },
-  'activityRelationship': {
-    'options': {
-      'regulation': {
-        'name': 'regulation',
-        'label': 'Regulation',
-        'description': 'The upstream activity regulates the downstream activity',
-      },
-      'outputInput': {
-        'name': 'outputInput',
-        'label': 'Output-Input',
-        'description': 'The molecular output produced by the upstream activity is the molecular input of the downstream activity'
-      },
-    }
-  },
-  'chemicalRelationship': {
-    'options': {
-      'chemicalRegulates': {
-        'name': 'chemicalRegulates',
-        'label': 'Regulation',
-        'description': 'The chemical regulates the activity'
-      },
-      'chemicalSubstrate': {
-        'name': 'chemicalSubstrate',
-        'label': 'Substrate',
-        'description': 'The chemical is the substrate that the activity acts upon'
-      },
-    }
-  },
+  'decisionTree': vpeJson.decisionTree,
+  'directness': vpeJson.definitions.directness,
+  'effectDirection': vpeJson.definitions.effectDirection,
+  'activityRelationship': vpeJson.definitions.activityRelationship,
+  'activityMoleculeRelationship': vpeJson.definitions.activityMoleculeRelationship,
+  'moleculeActivityRelationship': vpeJson.definitions.moleculeActivityRelationship,
   'displaySection': {
     'gp': {
       id: 'gp',
@@ -342,6 +441,8 @@ export const noctuaFormConfig = {
     }
   },
   edge: edge,
+  inverseEdge: inverseEdge,
+  allEdges: allEdges,
   evidenceAutoPopulate: {
     nd: {
       evidence: {
@@ -351,30 +452,28 @@ export const noctuaFormConfig = {
       reference: 'GO_REF:0000015'
     }
   },
-  rootNode: {
-    mf: {
-      'id': 'GO:0003674',
-      'label': 'molecular_function',
-      'aspect': 'F'
-    },
-    bp: {
-      'id': 'GO:0008150',
-      'label': 'biological_process',
-      'aspect': 'P'
-    },
-    cc: {
-      'id': 'GO:0005575',
-      'label': 'cellular_component',
-      'aspect': 'C'
-    }
-  },
+  rootNode: rootNode,
+
+
+  bpOnlyCausalEdges: [
+    Entity.createEntity(edge.causallyUpstreamOfNegativeEffect),
+    Entity.createEntity(edge.causallyUpstreamOf),
+    Entity.createEntity(edge.causallyUpstreamOfPositiveEffect),
+    Entity.createEntity(edge.causallyUpstreamOfOrWithinNegativeEffect),
+    Entity.createEntity(edge.causallyUpstreamOfOrWithinPositiveEffect),
+    Entity.createEntity(edge.causallyUpstreamOfOrWithin),
+  ],
+
 
 
   // This array is arrange for matrice decison tree for causal edge 0-8 index, don't rearrange
   causalEdges: [
+    Entity.createEntity(edge.constitutivelyUpstreamOf),
     Entity.createEntity(edge.directlyNegativelyRegulates),
     Entity.createEntity(edge.directlyRegulates),
     Entity.createEntity(edge.directlyPositivelyRegulates),
+    Entity.createEntity(edge.indirectlyNegativelyRegulates),
+    Entity.createEntity(edge.indirectlyPositivelyRegulates),
     Entity.createEntity(edge.negativelyRegulates),
     Entity.createEntity(edge.regulates),
     Entity.createEntity(edge.positivelyRegulates),
@@ -385,6 +484,7 @@ export const noctuaFormConfig = {
     Entity.createEntity(edge.causallyUpstreamOfOrWithinPositiveEffect),
     Entity.createEntity(edge.causallyUpstreamOfOrWithin),
     Entity.createEntity(edge.directlyProvidesInput),
+    Entity.createEntity(edge.removesInputFor),
   ],
 
   moleculeEdges: [
@@ -401,4 +501,33 @@ export const noctuaFormConfig = {
     Entity.createEntity(edge.occursIn),
   ],
 
+  mfToTermEdges: [
+    edge.partOf.id,
+    edge.occursIn.id,
+    edge.causallyUpstreamOf.id,
+    edge.causallyUpstreamOfOrWithin.id,
+    edge.causallyUpstreamOfOrWithinPositiveEffect.id,
+    edge.causallyUpstreamOfOrWithinNegativeEffect.id,
+    edge.causallyUpstreamOfPositiveEffect.id,
+    edge.causallyUpstreamOfNegativeEffect.id,
+  ],
+
+  ccOnlyEdges: [
+    edge.locatedIn.id,
+    edge.isActiveIn.id,
+    edge.partOf.id,
+    edge.contributesTo.id,
+  ],
+
+  edgePriority: [
+    edge.enabledBy.id,
+    edge.partOf.id,
+    edge.occursIn.id,
+    edge.hasInput.id,
+    edge.hasOutput.id
+  ],
+
+  simpleAnnotationEdgeConfig: simpleAnnotationEdgeConfig
+
 };
+

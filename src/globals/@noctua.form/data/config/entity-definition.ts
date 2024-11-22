@@ -1,11 +1,21 @@
 import {
-    ActivityNode,
     ActivityNodeType,
-    ActivityNodeDisplay,
-    GoCategory,
-    categoryToClosure
+    GoCategory
 } from './../../models/activity/activity-node';
-import { Predicate } from './../../models/activity/predicate';
+
+
+export const ObsoleteTerm = {
+    id: null,
+    category: 'true',
+    categoryType: 'is_obsolete',
+} as GoCategory;
+
+export const GPProteinContainingComplex = {
+    id: ActivityNodeType.GoProteinContainingComplex,
+    category: 'GO:0032991',
+    categoryType: 'isa_closure',
+    suffix: `OR NOT idspace:"GO"`,
+} as GoCategory;
 
 export const GoProteinContainingComplex = {
     id: ActivityNodeType.GoProteinContainingComplex,
@@ -18,6 +28,12 @@ export const GoCellularComponent = {
     category: 'GO:0005575',
     categoryType: 'isa_closure',
     suffix: `OR NOT ${GoProteinContainingComplex.categoryType}:"${GoProteinContainingComplex.category}"`,
+} as GoCategory;
+
+export const GoRootCellularComponent = {
+    id: ActivityNodeType.GoCellularComponent,
+    category: 'GO:0005575',
+    categoryType: 'isa_closure',
 } as GoCategory;
 
 export const GoAllCellularComponent = {
@@ -97,16 +113,3 @@ export const UberonStage = {
     category: 'UBERON:0000105',
     categoryType: 'isa_closure',
 } as GoCategory;
-
-export const generateBaseTerm = (goCategories: GoCategory[], override: Partial<ActivityNodeDisplay> = {}): ActivityNode => {
-    const activityNode = new ActivityNode();
-    const predicate = new Predicate(null);
-
-    activityNode.predicate = predicate;
-
-
-    activityNode.overrideValues(override);
-
-    return activityNode;
-};
-

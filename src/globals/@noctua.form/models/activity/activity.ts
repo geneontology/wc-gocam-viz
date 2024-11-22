@@ -12,9 +12,9 @@ import * as ShapeDescription from './../../data/config/shape-definition';
 import { each, filter, find, orderBy } from 'lodash';
 import { NoctuaFormUtils } from './../../utils/noctua-form-utils';
 import { TermsSummary } from './summary';
+import { format, isAfter, isValid, parse } from 'date-fns';
 
 
-import moment from 'moment';
 
 export enum ActivityState {
   creation = 1,
@@ -59,7 +59,7 @@ export class ActivityPosition {
 export class Activity extends SaeGraph<ActivityNode> {
   gp;
   label: string;
-  date: moment.Moment;
+  date: Date;
 
   validateEvidence = true;
 
@@ -230,34 +230,43 @@ export class Activity extends SaeGraph<ActivityNode> {
   }
 
   updateDate() {
-    const self = this;
     const rootNode = this.rootNode;
 
     if (!rootNode) return;
 
-    self.date = (moment as any)(rootNode.date, 'YYYY-MM-DD')
+    try {
+      const initialDate = parse(rootNode.date, 'yyyy-MM-dd', new Date());
+      if (!isValid(initialDate)) throw new Error('Invalid root date');
+      this.date = initialDate;
 
-
-    self.nodes.forEach((node: ActivityNode) => {
-      const nodeDate = (moment as any)(node.date, 'YYYY-MM-DD')
-
-      if (nodeDate > self.date) {
-        self.date = nodeDate
-      }
-    });
-
-    each(self.edges, (triple: Triple<ActivityNode>) => {
-      each(triple.predicate.evidence, (evidence: Evidence) => {
-
-        const evidenceDate = (moment as any)(evidence.date, 'YYYY-MM-DD')
-
-        if (evidenceDate > self.date) {
-          self.date = evidenceDate
+      this.nodes.forEach((node: ActivityNode) => {
+        try {
+          const nodeDate = parse(node.date, 'yyyy-MM-dd', new Date());
+          if (isValid(nodeDate) && isAfter(nodeDate, this.date)) {
+            this.date = nodeDate;
+          }
+        } catch (e) {
+          console.warn('Invalid node date:', node.date);
         }
-      })
-    });
+      });
 
-    this.formattedDate = self.date.format('ll');
+      Object.values(this.edges).forEach((triple: Triple<ActivityNode>) => {
+        triple.predicate.evidence.forEach((evidence: Evidence) => {
+          try {
+            const evidenceDate = parse(evidence.date, 'yyyy-MM-dd', new Date());
+            if (isValid(evidenceDate) && isAfter(evidenceDate, this.date)) {
+              this.date = evidenceDate;
+            }
+          } catch (e) {
+            console.warn('Invalid evidence date:', evidence.date);
+          }
+        });
+      });
+
+      this.formattedDate = format(this.date, 'MMM d, yyyy');
+    } catch (e) {
+      console.error('Error updating dates:', e);
+    }
   }
 
   updateSummary() {

@@ -11,7 +11,8 @@ import { Evidence } from './../models/activity/evidence';
 import { Predicate } from './../models/activity/predicate';
 import { Triple } from './../models/activity/triple';
 import { TermsSummary } from './../models/activity/summary';
-import moment from 'moment';
+import { format } from 'date-fns'
+import { enUS } from 'date-fns/locale'
 import { graph as bbopGraph } from 'bbop-graph-noctua';
 import * as dbxrefs from "@geneontology/dbxrefs";
 
@@ -259,9 +260,8 @@ export class NoctuaGraphService {
         const groupAnnotations = annotationNode.get_annotations_by_key('providedBy');
 
         const date = self.getNodeDate(annotationNode);
-        const formattedDate = (moment as any)(date, 'YYYY-MM-DD')
         evidence.date = date
-        evidence.formattedDate = formattedDate.format('ll');
+        evidence.formattedDate = format(new Date(date), 'MMM d, yyyy', { locale: enUS })
 
         if (sources.length > 0) {
           const sorted = sources.sort(self._compareSources)

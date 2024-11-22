@@ -495,6 +495,28 @@ export const noctuaFormConfig = {
     Entity.createEntity(edge.isSmallMoleculeRegulator),
   ],
 
+  allowedPathwayViewerEdges: [
+    Entity.createEntity(edge.causallyUpstreamOf),
+    Entity.createEntity(edge.causallyUpstreamOfNegativeEffect),
+    Entity.createEntity(edge.causallyUpstreamOfPositiveEffect),
+    Entity.createEntity(edge.constitutivelyUpstreamOf),
+    Entity.createEntity(edge.directlyNegativelyRegulates),
+    Entity.createEntity(edge.directlyPositivelyRegulates),
+    Entity.createEntity(edge.directlyRegulates),
+    Entity.createEntity(edge.hasInput),
+    Entity.createEntity(edge.hasOutput),
+    Entity.createEntity(edge.indirectlyNegativelyRegulates),
+    Entity.createEntity(edge.indirectlyPositivelyRegulates),
+    Entity.createEntity(edge.positivelyRegulates),
+    Entity.createEntity(edge.directlyProvidesInput),
+    Entity.createEntity(edge.regulates),
+    Entity.createEntity(edge.removesInputFor),
+    Entity.createEntity(edge.isSmallMoleculeActivator),
+    Entity.createEntity(edge.isSmallMoleculeActivator),
+    Entity.createEntity(edge.isSmallMoleculeInhibitor)
+
+  ],
+
   defaultGraphDisplayEdges: [
     Entity.createEntity(edge.hasInput),
     Entity.createEntity(edge.partOf),

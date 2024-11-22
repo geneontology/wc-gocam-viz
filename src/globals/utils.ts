@@ -1,9 +1,6 @@
 const STYLES = {
     SIZES: {
-        DEFAULT: 9,
-        SMALL: 4,
-        INDIRECT: 6,
-        DIRECT: 9
+        DEFAULT: 5 // Maybe more later
     },
     COLORS: {
         BLUE: '#6495ED',
@@ -52,70 +49,70 @@ const RELATION_MAP = {
         glyph: STYLES.GLYPHS.NONE,
         label: 'causally upstream of',
         color: STYLES.COLORS.DARK_BLUE,
-        width: STYLES.SIZES.INDIRECT
+        width: STYLES.SIZES.DEFAULT
     },
     'RO:0002304': {
         lineStyle: STYLES.LINE_STYLES.DASHED,
         glyph: STYLES.GLYPHS.NONE,
         label: 'causally upstream of, positive effect',
         color: STYLES.COLORS.GREEN,
-        width: STYLES.SIZES.INDIRECT
+        width: STYLES.SIZES.DEFAULT
     },
     'RO:0002305': {
         lineStyle: STYLES.LINE_STYLES.DASHED,
         glyph: STYLES.GLYPHS.NONE,
         label: 'causally upstream of, negative effect',
         color: STYLES.COLORS.RED,
-        width: STYLES.SIZES.INDIRECT
+        width: STYLES.SIZES.DEFAULT
     },
     'RO:0002418': {
         lineStyle: STYLES.LINE_STYLES.DASHED,
         glyph: STYLES.GLYPHS.NONE,
         label: 'causally upstream of or within',
         color: STYLES.COLORS.DARK_BLUE,
-        width: STYLES.SIZES.INDIRECT
+        width: STYLES.SIZES.DEFAULT
     },
     'RO:0012009': {
         lineStyle: STYLES.LINE_STYLES.DASHED,
         glyph: STYLES.GLYPHS.CIRCLE,
         label: 'constitutively upstream of',
         color: STYLES.COLORS.GREEN,
-        width: STYLES.SIZES.INDIRECT
+        width: STYLES.SIZES.DEFAULT
     },
     'RO:0002406': {
         lineStyle: STYLES.LINE_STYLES.SOLID,
         glyph: STYLES.GLYPHS.TRIANGLE,
         label: 'directly activates',
         color: STYLES.COLORS.GREEN,
-        width: STYLES.SIZES.DIRECT
+        width: STYLES.SIZES.DEFAULT
     },
     'RO:0002408': {
         lineStyle: STYLES.LINE_STYLES.SOLID,
         glyph: STYLES.GLYPHS.TEE,
         label: 'directly inhibits',
         color: STYLES.COLORS.RED,
-        width: STYLES.SIZES.DIRECT
+        width: STYLES.SIZES.DEFAULT
     },
     'RO:0002630': {
         lineStyle: STYLES.LINE_STYLES.SOLID,
         glyph: STYLES.GLYPHS.TEE,
         label: 'directly negatively regulates',
         color: STYLES.COLORS.RED,
-        width: STYLES.SIZES.DIRECT
+        width: STYLES.SIZES.DEFAULT
     },
     'RO:0002629': {
         lineStyle: STYLES.LINE_STYLES.SOLID,
         glyph: STYLES.GLYPHS.TRIANGLE,
         label: 'directly positively regulates',
         color: STYLES.COLORS.GREEN,
-        width: STYLES.SIZES.DIRECT
+        width: STYLES.SIZES.DEFAULT
     },
     'RO:0002413': {
         lineStyle: STYLES.LINE_STYLES.SOLID,
         glyph: STYLES.GLYPHS.CIRCLE_TRIANGLE,
         label: 'directly provides input for',
         color: STYLES.COLORS.LIGHT_BLUE,
-        width: STYLES.SIZES.SMALL
+        width: STYLES.SIZES.DEFAULT
     },
     'BFO:0000051': {
         lineStyle: STYLES.LINE_STYLES.SOLID,
@@ -143,35 +140,35 @@ const RELATION_MAP = {
         glyph: STYLES.GLYPHS.TEE,
         label: 'is small molecule activator',
         color: STYLES.COLORS.RED,
-        width: STYLES.SIZES.DIRECT
+        width: STYLES.SIZES.DEFAULT
     },
     'RO:0012004': {
         lineStyle: STYLES.LINE_STYLES.SOLID,
         glyph: STYLES.GLYPHS.TRIANGLE,
         label: 'is small molecule regulator',
         color: STYLES.COLORS.GREEN,
-        width: STYLES.SIZES.DIRECT
+        width: STYLES.SIZES.DEFAULT
     },
     'RO:0002212': {
         lineStyle: STYLES.LINE_STYLES.DASHED,
         glyph: STYLES.GLYPHS.TEE,
         label: 'negatively regulates',
         color: STYLES.COLORS.RED,
-        width: STYLES.SIZES.INDIRECT
+        width: STYLES.SIZES.DEFAULT
     },
     'RO:0002213': {
         lineStyle: STYLES.LINE_STYLES.DASHED,
         glyph: STYLES.GLYPHS.TRIANGLE,
         label: 'positively regulates',
         color: STYLES.COLORS.GREEN,
-        width: STYLES.SIZES.INDIRECT
+        width: STYLES.SIZES.DEFAULT
     },
     'RO:0002211': {
         lineStyle: STYLES.LINE_STYLES.DASHED,
         glyph: STYLES.GLYPHS.NONE,
         label: 'regulates',
         color: STYLES.COLORS.DARK_SLATE,
-        width: STYLES.SIZES.INDIRECT
+        width: STYLES.SIZES.DEFAULT
     }
 };
 
@@ -185,7 +182,7 @@ export function glyph(relation) {
     const config = RELATION_MAP[relation];
     if (!config) {
         console.warn(`No glyph found for relation '${relation}'`);
-        return { glyph: STYLES.GLYPHS.NONE, label: relation, color: STYLES.COLORS.WHITE };
+        return { glyph: STYLES.GLYPHS.NONE, label: relation, color: STYLES.COLORS.GREY };
     }
 
     return config;

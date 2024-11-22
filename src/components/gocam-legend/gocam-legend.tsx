@@ -7,7 +7,7 @@ import positive_regulation from './assets/relation/positive_regulation.png';
 import negative_regulation from './assets/relation/negative_regulation.png';
 import provides_input_for from './assets/relation/provides_input_for.png';
 import neutral from './assets/relation/neutral.png';
-import has_input from './assets/relation/has_input.png';
+import input_of from './assets/relation/input_of.png';
 import has_output from './assets/relation/has_output.png';
 
 // Stencil's Assets feature[1] makes client applications jump through a lot of hoops[2] in order
@@ -25,7 +25,7 @@ const IMAGE_DATA = {
   negative_regulation,
   provides_input_for,
   neutral,
-  has_input,
+  input_of,
   has_output
 };
 

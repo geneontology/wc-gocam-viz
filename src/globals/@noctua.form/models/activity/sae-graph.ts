@@ -14,6 +14,7 @@ import {
   findNode,
   getNodes,
   getEdges,
+  addGraph,
 } from './noctua-form-graph';
 import { each, find, flatten } from 'lodash';
 

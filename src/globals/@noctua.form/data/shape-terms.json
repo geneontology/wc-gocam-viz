@@ -1,0 +1,862 @@
+[
+  {
+    "id": "CHEBI:33695",
+    "label": "information biomacromolecule",
+    "definition": "",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "CHEBI:36080",
+    "label": "protein",
+    "definition": "A biological macromolecule minimally consisting of one polypeptide chain synthesized at the ribosome.",
+    "comment": "",
+    "synonyms": [
+      "proteins"
+    ]
+  },
+  {
+    "id": "GO:0032991",
+    "label": "protein-containing complex",
+    "definition": "A stable assembly of two or more macromolecules, i.e. proteins, nucleic acids, carbohydrates or lipids, in which at least one component is a protein and the constituent parts function together.",
+    "comment": "A protein complex in this context is meant as a stable set of interacting proteins which can be co-purified by an acceptable method, and where the complex has been shown to exist as an isolated, functional unit in vivo. Acceptable experimental methods include stringent protein purification followed by detection of protein interaction. The following methods should be considered non-acceptable: simple immunoprecipitation, pull-down experiments from cell extracts without further purification, colocalization and 2-hybrid screening. Interactions that should not be captured as protein complexes include: 1) enzyme/substrate, receptor/ligand or any similar transient interactions, unless these are a critical part of the complex assembly or are required e.g. for the receptor to be functional; 2) proteins associated in a pull-down/co-immunoprecipitation assay with no functional link or any evidence that this is a defined biological entity rather than a loose-affinity complex; 3) any complex where the only evidence is based on genetic interaction data; 4) partial complexes, where some subunits (e.g. transmembrane ones) cannot be expressed as recombinant proteins and are excluded from experiments (in this case, independent evidence is necessary to find out the composition of the full complex, if known). Interactions that may be captured as protein complexes include: 1) enzyme/substrate or receptor/ligand if the complex can only assemble and become functional in the presence of both classes of subunits; 2) complexes where one of the members has not been shown to be physically linked to the other(s), but is a homologue of, and has the same functionality as, a protein that has been experimentally demonstrated to form a complex with the other member(s); 3) complexes whose existence is accepted based on localization and pharmacological studies, but for which experimental evidence is not yet available for the complex as a whole.",
+    "synonyms": [
+      "macromolecular complex@",
+      "@macromolecule complex@",
+      "@protein containing complex"
+    ]
+  },
+  {
+    "id": "GO:0005575",
+    "label": "cellular_component",
+    "definition": "A location, relative to cellular compartments and structures, occupied by a macromolecular machine. There are three types of cellular components described in the gene ontology: (1) the cellular anatomical entity where a gene product carries out a molecular function (e.g., plasma membrane, cytoskeleton) or membrane-enclosed compartments (e.g., mitochondrion); (2) virion components, where viral proteins act, and (3) the stable macromolecular complexes of which gene product are parts (e.g., the clathrin complex).",
+    "comment": "Note that, in addition to forming the root of the cellular component ontology, this term is recommended for the annotation of gene products whose cellular component is unknown. When this term is used for annotation, it indicates that no information was available about the cellular component of the gene product annotated as of the date the annotation was made; the evidence code 'no data' (ND), is used to indicate this.",
+    "synonyms": [
+      "cell or subcellular entity@",
+      "@cellular component"
+    ]
+  },
+  {
+    "id": "GO:0008150",
+    "label": "biological_process",
+    "definition": "A process that emerges from two or more causally-connected macromolecular activities and has evolved to achieve a biological objective.",
+    "comment": "Note that, in addition to forming the root of the biological process ontology, this term is recommended for use for the annotation of gene products whose biological process is unknown. When this term is used for annotation, it indicates that no information was available about the biological process of the gene product annotated as of the date the annotation was made; the evidence code 'no data' (ND), is used to indicate this.",
+    "synonyms": [
+      "physiological process@",
+      "@biological process"
+    ]
+  },
+  {
+    "id": "GO:0048856",
+    "label": "anatomical structure development",
+    "definition": "The biological process whose specific outcome is the progression of an anatomical structure from an initial condition to its mature state. This process begins with the formation of the structure and ends with the mature structure, whatever form that may be including its natural destruction. An anatomical structure is any biological entity that occupies space and is distinguished from its surroundings. Anatomical structures can be macroscopic such as a carpel, or microscopic such as an acrosome.",
+    "comment": "",
+    "synonyms": [
+      "development of an anatomical structure"
+    ]
+  },
+  {
+    "id": "GO:0048646",
+    "label": "anatomical structure formation involved in morphogenesis",
+    "definition": "The developmental process pertaining to the initial formation of an anatomical structure from unspecified parts. This process begins with the specific processes that contribute to the appearance of the discrete structure and ends when the structural rudiment is recognizable. An anatomical structure is any biological entity that occupies space and is distinguished from its surroundings. Anatomical structures can be macroscopic such as a carpel, or microscopic such as an acrosome.",
+    "comment": "Note that, for example, the formation of a pseudopod in an amoeba would not be considered formation involved in morphogenesis because it would not be thought of as the formation of an anatomical structure that was part of the shaping of the amoeba during its development. The formation of an axon from a neuron would be considered the formation of an anatomical structure involved in morphogenesis because it contributes to the creation of the form of the neuron in a developmental sense.",
+    "synonyms": [
+      "formation of an anatomical structure involved in morphogenesis"
+    ]
+  },
+  {
+    "id": "GO:0009653",
+    "label": "anatomical structure morphogenesis",
+    "definition": "The process in which anatomical structures are generated and organized. Morphogenesis pertains to the creation of form.",
+    "comment": "",
+    "synonyms": [
+      "anatomical structure organization@",
+      "@morphogenesis"
+    ]
+  },
+  {
+    "id": "GO:0030154",
+    "label": "cell differentiation",
+    "definition": "The cellular developmental process in which a relatively unspecialized cell, e.g. embryonic or regenerative cell, acquires specialized structural and/or functional features that characterize a specific cell. Differentiation includes the processes involved in commitment of a cell to a specific fate and its subsequent development to the mature state.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "GO:0051301",
+    "label": "cell division",
+    "definition": "The process resulting in division and partitioning of components of a cell to form more cells; may or may not be accompanied by the physical separation of a cell into distinct, individually membrane-bounded daughter cells.",
+    "comment": "Note that this term differs from 'cytokinesis ; GO:0000910' in that cytokinesis does not include nuclear division.",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "GO:0045165",
+    "label": "cell fate commitment",
+    "definition": "The cellular developmental process by which a cell establishes the intrinsic character of a cell or tissue region irreversibly committing it to a particular fate.",
+    "comment": "Note that this term was 'cell fate determination' but the term name was changed to better match its existing definition and the child term 'cell fate determination; GO:0001709' was also created.",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "GO:0001709",
+    "label": "cell fate determination",
+    "definition": "The cellular developmental process involved in cell fate commitment that occurs after cell fate specification, in which a cell is irreversibly committed to a cellular developmental fate which is heritable on cell division.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "GO:0001708",
+    "label": "cell fate specification",
+    "definition": "The cellular developmental process involved in cell fate commitment in which the cell is designated to follow a developmental path, unless they receive extrinsic cues that direct an alternative fate.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "GO:0022607",
+    "label": "cellular component assembly",
+    "definition": "The aggregation, arrangement and bonding together of a cellular component.",
+    "comment": "",
+    "synonyms": [
+      "cell structure assembly@",
+      "@cellular component assembly at cellular level"
+    ]
+  },
+  {
+    "id": "GO:0022411",
+    "label": "cellular component disassembly",
+    "definition": "A cellular process that results in the breakdown of a cellular component.",
+    "comment": "Note that this term is in the subset of terms that should not be used for direct gene product annotation. Instead, select a child term or, if no appropriate child term exists, please request a new term. Direct annotations to this term may be amended during annotation QC.",
+    "synonyms": [
+      "cell structure disassembly@",
+      "@cellular component disassembly at cellular level"
+    ]
+  },
+  {
+    "id": "GO:0016043",
+    "label": "cellular component organization",
+    "definition": "A process that results in the assembly, arrangement of constituent parts, or disassembly of a cellular component.",
+    "comment": "",
+    "synonyms": [
+      "cell organisation@",
+      "@cellular component organisation at cellular level@",
+      "@cellular component organisation in other organism@",
+      "@cellular component organization at cellular level@",
+      "@cellular component organization in other organism"
+    ]
+  },
+  {
+    "id": "GO:0021700",
+    "label": "developmental maturation",
+    "definition": "A developmental process, independent of morphogenetic (shape) change, that is required for an anatomical structure, cell or cellular component to attain its fully functional state.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "GO:0040007",
+    "label": "growth",
+    "definition": "The increase in size or mass of an entire organism, a part of an organism or a cell.",
+    "comment": "See also the biological process term 'cell growth ; GO:0016049'.",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "GO:0051179",
+    "label": "localization",
+    "definition": "Any process in which a cell, a substance, or a cellular entity, such as a protein complex or organelle, is transported, tethered to or otherwise maintained in a specific location. In the case of substances, localization may also be achieved via selective degradation.",
+    "comment": "",
+    "synonyms": [
+      "establishment and maintenance of localization@",
+      "@establishment and maintenance of position@",
+      "@localisation"
+    ]
+  },
+  {
+    "id": "GO:0040011",
+    "label": "locomotion",
+    "definition": "Self-propelled movement of a cell or organism from one location to another.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "GO:0034367",
+    "label": "protein-containing complex remodeling",
+    "definition": "The acquisition, loss, or modification of macromolecules within a complex, resulting in the alteration of an existing complex.",
+    "comment": "",
+    "synonyms": [
+      "protein-containing complex remodelling"
+    ]
+  },
+  {
+    "id": "GO:0007389",
+    "label": "pattern specification process",
+    "definition": "Any developmental process that results in the creation of defined areas or spaces within an organism to which cells respond and eventually are instructed to differentiate.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "GO:0008152",
+    "label": "metabolic process",
+    "definition": "The chemical reactions and pathways, including anabolism and catabolism, by which living organisms transform chemical substances. Metabolic processes typically transform small molecules, but also include macromolecular processes such as DNA repair and replication, and protein synthesis and degradation.",
+    "comment": "Note that metabolic processes do not include single functions or processes such as protein-protein interactions, protein-nucleic acids, nor receptor-ligand interactions.",
+    "synonyms": [
+      "metabolism"
+    ]
+  },
+  {
+    "id": "GO:0006810",
+    "label": "transport",
+    "definition": "The directed movement of substances (such as macromolecules, small molecules, ions) or cellular components (such as complexes and organelles) into, out of or within a cell, or between cells, or within a multicellular organism by means of some agent such as a transporter or a transporter complex, a pore or a motor protein.",
+    "comment": "Note that this term should not be used for direct annotation. It should be possible to make a more specific annotation to one of the children of this term, for e.g. to transmembrane transport, to microtubule-based transport or to vesicle-mediated transport.",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "GO:0003674",
+    "label": "molecular_function",
+    "definition": "A molecular process that can be carried out by the action of a single macromolecular machine, usually via direct physical interactions with other molecular entities. Function in this sense denotes an action, or activity, that a gene product (or a complex) performs.",
+    "comment": "This is the same as GO molecular function",
+    "synonyms": [
+      "molecular function"
+    ]
+  },
+  {
+    "id": "GO:0005215",
+    "label": "transporter activity",
+    "definition": "Enables the directed movement of substances (such as macromolecules, small molecules, ions) into, out of or within a cell, or between cells.",
+    "comment": "Some transporters, such as certain members of the SLC family, are referred to as 'carriers'; however GO uses carrier with a different meaning: a carrier binds to and transports the substance (see GO:0140104 molecular carrier activity), whereas a transporter forms some pore that allows the passing of molecules.",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "CHEBI:24431",
+    "label": "chemical entity",
+    "definition": "A chemical entity is a physical entity of interest in chemistry including molecular entities, parts thereof, and chemical substances.",
+    "comment": "",
+    "synonyms": [
+      "chemical entity"
+    ]
+  },
+  {
+    "id": "ECO:0000000",
+    "label": "evidence",
+    "definition": "A type of information that is used to support an assertion.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "CARO:0000000",
+    "label": "anatomical entity",
+    "definition": "",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "CL:0000000",
+    "label": "cell",
+    "definition": "A material entity of anatomical origin (part of or deriving from an organism) that has as its parts a maximally connected cell compartment surrounded by a plasma membrane.",
+    "comment": "The definition of cell is intended to represent all cells, and thus a cell is defined as a material entity and not an anatomical structure, which implies that it is part of an organism (or the entirety of one).",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "NCBITaxon:1",
+    "label": "root",
+    "definition": "",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "GO:0044848",
+    "label": "biological phase",
+    "definition": "A distinct period or stage in a biological process or cycle.",
+    "comment": "Note that phases are is_a disjoint from other biological processes. happens_during relationships can operate between phases and other biological processes e.g. DNA replication happens_during S phase.",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "UBERON:0000105",
+    "label": "life cycle stage",
+    "definition": "A spatiotemporal region encompassing some part of the life cycle of an organism.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "PO:0009012",
+    "label": "plant structure development stage",
+    "definition": "A stage in the life of a plant structure (PO:0009011) during which the plant structure undergoes developmental processes.",
+    "comment": "",
+    "synonyms": [
+      "etapa de desarrollo de estructura vegetal (Spanish, exact)@",
+      "@plant growth and development stage (exact)"
+    ]
+  },
+  {
+    "id": "BFO:0000050",
+    "label": "part of",
+    "definition": "a core relation that holds between a part and its whole",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "BFO:0000051",
+    "label": "has part",
+    "definition": "a core relation that holds between a whole and its part",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "BFO:0000066",
+    "label": "occurs in",
+    "definition": "b occurs_in c =def b is a process and c is a material entity or immaterial entity& there exists a spatiotemporal region r and b occupies_spatiotemporal_region r.& forall(t) if b exists_at t then c exists_at t & there exist spatial regions s and s\u2019 where & b spatially_projects_onto s at t& c is occupies_spatial_region s\u2019 at t& s is a proper_continuant_part_of s\u2019 at t",
+    "comment": "Paraphrase of definition: a relation between a process and an independent continuant, in which the process takes place entirely within the independent continuant",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002220",
+    "label": "adjacent to",
+    "definition": "x adjacent to y if and only if x and y share a boundary.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002131",
+    "label": "overlaps",
+    "definition": "x overlaps y if and only if there exists some z such that x has part z and z part of y",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002490",
+    "label": "existence overlaps",
+    "definition": "x existence overlaps y if and only if either (a) the start of x is part of y or (b) the end of x is part of y. Formally: x existence starts and ends during y iff (\u03b1(x) >= \u03b1(y) & \u03b1(x) <= \u03c9(y)) OR (\u03c9(x) <= \u03c9(y) & \u03c9(x) >= \u03b1(y))",
+    "comment": "The relations here were created based on work originally by Fabian Neuhaus and David Osumi-Sutherland. The work has not yet been vetted and errors in definitions may have occurred during transcription.",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002491",
+    "label": "existence starts and ends during",
+    "definition": "x exists during y if and only if: 1) the time point at which x begins to exist is after or equal to the time point at which y begins and 2) the time point at which x ceases to exist is before or equal to the point at which y ends. Formally: x existence starts and ends during y iff \u03b1(x) >= \u03b1(y) & \u03b1(x) <= \u03c9(y) & \u03c9(x) <= \u03c9(y) & \u03c9(x) >= \u03b1(y)",
+    "comment": "The relations here were created based on work originally by Fabian Neuhaus and David Osumi-Sutherland. The work has not yet been vetted and errors in definitions may have occurred during transcription.",
+    "synonyms": [
+      "exists during"
+    ]
+  },
+  {
+    "id": "RO:0002333",
+    "label": "enabled by",
+    "definition": "inverse of enables",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002326",
+    "label": "contributes to",
+    "definition": "",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002233",
+    "label": "has input",
+    "definition": "p has input c iff: p is a process, c is a material entity, c is a participant in p, c is present at the start of p, and the state of c is modified during p.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002234",
+    "label": "has output",
+    "definition": "p has output c iff c is a participant in p, c is present at the end of p, and c is not present in the same state at the beginning of p.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0004009",
+    "label": "has primary input",
+    "definition": "p has primary input c if (a) p has input c and (b) the goal of process is to modify, consume, or transform c.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0004008",
+    "label": "has primary output",
+    "definition": "p has primary output c if (a) p has output c and (b) the goal of process is to modify, produce, or transform c.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002339",
+    "label": "has target end location",
+    "definition": "This relationship holds between p and l when p is a transport or localization process in which the outcome is to move some cargo c from a an initial location to some destination l.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002338",
+    "label": "has target start location",
+    "definition": "This relationship holds between p and l when p is a transport or localization process in which the outcome is to move some cargo c from some initial location l to some destination.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002313",
+    "label": "transports or maintains localization of",
+    "definition": "Holds between p and c when p is a localization process (localization covers maintenance of localization as well as its establishment)  and the outcome of this process is to regulate the localization of c.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002413",
+    "label": "provides input for",
+    "definition": "p provides input for q iff p is immediately causally upstream of q, and there exists some c such that p has_output c and q has_input c.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002629",
+    "label": "directly positively regulates",
+    "definition": "p directly positively regulates q iff p is immediately causally upstream of q, and p positively regulates q.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0012000",
+    "label": "has small molecule regulator",
+    "definition": "a relation between a process and a continuant, in which the process is regulated by the small molecule continuant",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0012001",
+    "label": "has small molecule activator",
+    "definition": "a relation between a process and a continuant, in which the process is activated by the small molecule continuant",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0012002",
+    "label": "has small molecule inhibitor",
+    "definition": "a relation between a process and a continuant, in which the process is inhibited by the small molecule continuant",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0012004",
+    "label": "is small molecule regulator of",
+    "definition": "a relation between a continuant and a process, in which the continuant is a small molecule that regulates the process",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0012005",
+    "label": "is small molecule activator of",
+    "definition": "a relation between a continuant and a process, in which the continuant is a small molecule that activates the process",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0012006",
+    "label": "is small molecule inhibitor of",
+    "definition": "a relation between a continuant and a process, in which the continuant is a small molecule that inhibits the process",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0001025",
+    "label": "located in",
+    "definition": "a relation between two independent continuants, the target and the location, in which the target is entirely within the location",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0001015",
+    "label": "location of",
+    "definition": "a relation between two independent continuants, the location and the target, in which the target is entirely within the location",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002432",
+    "label": "is active in",
+    "definition": "c executes activity in d if and only if c enables p and p occurs_in d.  Assuming no action at a distance by gene products, if a gene product enables (is capable of) a process that occurs in some structure, it must have at least some part in that structure.",
+    "comment": "",
+    "synonyms": [
+      "enables activity in"
+    ]
+  },
+  {
+    "id": "RO:0002092",
+    "label": "happens during",
+    "definition": "",
+    "comment": "X happens_during Y iff: (start(Y) before_or_simultaneous_with start(X)) AND (end(X) before_or_simultaneous_with end(Y))",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002211",
+    "label": "regulates",
+    "definition": "p regulates q iff p is causally upstream of q, the execution of p is not constant and varies according to specific conditions, and p influences the rate or magnitude of execution of q due to an effect either on some enabler of q or some enabler of a part of q.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002212",
+    "label": "negatively regulates",
+    "definition": "p negatively regulates q iff p regulates q, and p decreases the rate or magnitude of execution of q.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002213",
+    "label": "positively regulates",
+    "definition": "p positively regulates q iff p regulates q, and p increases the rate or magnitude of execution of q.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002578",
+    "label": "directly regulates",
+    "definition": "p directly regulates q iff p is immediately causally upstream of q and p regulates q.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002630",
+    "label": "directly negatively regulates",
+    "definition": "p directly negatively regulates q iff p is immediately causally upstream of q, and p negatively regulates q.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002406",
+    "label": "obsolete directly activates",
+    "definition": "",
+    "comment": "This term was obsoleted because it has the same meaning as 'directly positively regulates'.",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0012012",
+    "label": "indirectly regulates",
+    "definition": "p indirectly regulates q iff p is indirectly causally upstream of q and p regulates q.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002407",
+    "label": "indirectly positively regulates",
+    "definition": "p indirectly positively regulates q iff p is indirectly causally upstream of q and p positively regulates q.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002409",
+    "label": "indirectly negatively regulates",
+    "definition": "p indirectly negatively regulates q iff p is indirectly causally upstream of q and p negatively regulates q.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0012009",
+    "label": "constitutively upstream of",
+    "definition": "p is constitutively upstream of q iff p is causally upstream of q, p is required for execution of q or a part of q, and the execution of p is approximately constant.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0012010",
+    "label": "removes input for",
+    "definition": "p removes input for q iff p is causally upstream of q, there exists some c such that p has_input c and q has_input c, p reduces the levels of c, and c is rate limiting for execution of q.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002418",
+    "label": "causally upstream of or within",
+    "definition": "p is 'causally upstream or within' q iff p is causally related to q, and the end of p precedes, or is coincident with, the end of q.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0004046",
+    "label": "causally upstream of or within, negative effect",
+    "definition": "",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0004047",
+    "label": "causally upstream of or within, positive effect",
+    "definition": "",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002411",
+    "label": "causally upstream of",
+    "definition": "p is causally upstream of q iff p is causally related to q, the end of p precedes the end of q, and p is not an occurrent part of q.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002305",
+    "label": "causally upstream of, negative effect",
+    "definition": "p is causally upstream of, negative effect q iff p is casually upstream of q, and the execution of p decreases the execution of q.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002304",
+    "label": "causally upstream of, positive effect",
+    "definition": "p is causally upstream of, positive effect q iff p is casually upstream of q, and the execution of p is required for the execution of q.",
+    "comment": "holds between x and y if and only if x is causally upstream of y and the progression of x increases the frequency, rate or extent of y",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0012003",
+    "label": "acts on population of",
+    "definition": "p acts on population of c iff c' is a collection, has members of type c, and p has participant c",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002296",
+    "label": "results in development of",
+    "definition": "p 'results in development of' c if and only if p is a developmental process and p results in the state of c changing from its initial state as a primordium or anlage through its mature state and to its final state.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002297",
+    "label": "results in formation of",
+    "definition": "",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002298",
+    "label": "results in morphogenesis of",
+    "definition": "The relationship that links an entity with the process that results in the formation and shaping of that entity over time from an immature to a mature state.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002315",
+    "label": "results in acquisition of features of",
+    "definition": "The relationship that links a specified entity with the process that results in an unspecified entity acquiring the features and characteristics of the specified entity",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002348",
+    "label": "results in commitment to",
+    "definition": "p 'results in commitment to' c if and only if p is a developmental process and c is a cell and p results in the state of c changing such that is can only develop into a single cell type.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002349",
+    "label": "results in determination of",
+    "definition": "p 'results in determination of' c if and only if p is a developmental process and c is a cell and p results in the state of c changing to be determined. Once a cell becomes determined, it becomes committed to differentiate down a particular pathway regardless of its environment.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002356",
+    "label": "results in specification of",
+    "definition": "The relationship linking a cell and its participation in a process that results in the fate of the cell being specified. Once specification has taken place, a cell will be committed to differentiate down a specific pathway if left in its normal environment. ",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002588",
+    "label": "results in assembly of",
+    "definition": "",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002590",
+    "label": "results in disassembly of",
+    "definition": "",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002592",
+    "label": "results in organization of",
+    "definition": "p results in organization of c iff p results in the assembly, arrangement of constituent parts, or disassembly of c",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002299",
+    "label": "results in maturation of",
+    "definition": "The relationship that links an entity with a process that results in the progression of the entity over time that is independent of changes in it's shape and results in an end point state of that entity.",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002343",
+    "label": "results in growth of",
+    "definition": "",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002565",
+    "label": "results in movement of",
+    "definition": "Holds between p and c when p is locomotion process and the outcome of this process is the change of location of c",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  },
+  {
+    "id": "RO:0002591",
+    "label": "results in remodeling of",
+    "definition": "",
+    "comment": "",
+    "synonyms": [
+      ""
+    ]
+  }
+]

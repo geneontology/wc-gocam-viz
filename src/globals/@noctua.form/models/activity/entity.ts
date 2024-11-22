@@ -1,5 +1,13 @@
 import { NoctuaFormUtils } from './../../utils/noctua-form-utils';
 
+
+export enum RootTypes {
+  COMPLEX = 'complex',
+  MF = 'mf',
+  BP = 'bp',
+  CC = 'cc',
+}
+
 export enum EntityType {
   ACTIVITY_NODE = 'activity_node',
   EVIDENCE = 'evidence',
@@ -25,6 +33,8 @@ export class Entity implements EntityBase {
   frequency: number;
 
   private _uuid: string = null;
+
+  inverseEntity: Entity
 
   constructor(public id: string,
     public label: string,

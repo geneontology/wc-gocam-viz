@@ -8,12 +8,37 @@ import { Triple } from './triple';
 import { Entity } from './entity';
 import { each, find, orderBy, groupBy } from 'lodash';
 import { NoctuaFormUtils } from './../../utils/noctua-form-utils';
+import { PendingChange } from './pending-change';
+
+export enum ReloadType {
+  RESET = 'reset',
+  STORE = 'store'
+}
+
+export enum CamRebuildSignal {
+  NONE = 'none',
+  MERGE = 'merge',
+  REBUILD = 'rebuild'
+}
+
+export enum CamOperation {
+  NONE = 'none',
+  ADD_ACTIVITY = 'add_activity',
+  ADD_CAUSAL_RELATION = 'add_causal_relation'
+}
+
+export class CamQueryMatch {
+  modelId?: string;
+  terms?: Entity[] = [];
+  reference?: Entity[] = [];
+}
 
 export class CamSortBy {
   field: ActivitySortField = ActivitySortField.GP
   label = "";
   ascending = true;
 }
+
 
 export class CamStats {
   totalChanges = 0;
@@ -38,27 +63,55 @@ export class CamStats {
   }
 }
 
+export class CamLoadingIndicator {
+  status = false;
+  message = ''
+
+  constructor(status = false, message = '') {
+    this.status = status;
+    this.message = message;
+  }
+
+  reset() {
+    this.status = false;
+    this.message = '';
+  }
+}
+
 export class Cam {
   title: string;
+  comments: string[] = [];
   state: any;
   groups: Group[] = [];
   contributors: Contributor[] = [];
   groupId: any;
   expanded = false;
   model: any;
+  //connectorActivities: ConnectorActivity[] = [];
   causalRelations: Triple<Activity>[] = [];
   sortBy: CamSortBy = new CamSortBy();
+  error = false;
   date: string;
   modified = false;
   modifiedStats = new CamStats();
+  matchedCount = 0;
+  queryMatch = new CamQueryMatch();
+  dateReviewAdded = Date.now();
 
 
+  //bbop graphs
   graph;
+  storedGraph;
+  pendingGraph;
 
   // bbop managers 
   baristaClient;
   engine;
   manager;
+  copyModelManager;
+  artManager;
+  groupManager;
+  replaceManager;
 
   // Display 
 
@@ -67,14 +120,28 @@ export class Cam {
    */
   displayId: string;
   moreDetail = false;
+  displayNumber = '1';
 
   displayType;
 
+
+  loading = new CamLoadingIndicator(false)
+
+  // Error Handling
+  isReasoned = false;
+  hasViolations = false;
+
+  //Graph
+  manualLayout = false;
+  layoutChanged = false;
+
   private _filteredActivities: Activity[] = [];
-  private _activities: Activity[] = [];
+  activities: Activity[] = [];
+  storedActivities: Activity[] = [];
   private _id: string;
 
   constructor() {
+
   }
 
   get id() {
@@ -86,34 +153,6 @@ export class Cam {
     this.displayId = NoctuaFormUtils.cleanID(id);
   }
 
-  get activities() {
-    const direction = this.sortBy.ascending ? 'asc' : 'desc';
-    switch (this.sortBy?.field) {
-      case ActivitySortField.DATE:
-        return orderBy(this._activities, ['date', this._getGPText], [direction, direction]);
-      case ActivitySortField.MF:
-        return orderBy(this._activities, [this._getMFText, this._getGPText], [direction, direction]);
-      case ActivitySortField.BP:
-        return orderBy(this._activities, [this._getBPText, this._getGPText], [direction, direction]);
-      case ActivitySortField.CC:
-        return orderBy(this._activities, [this._getCCText, this._getGPText], [direction, direction]);
-      default:
-        return orderBy(this._activities, [this._getGPText], [direction, direction])
-    }
-  }
-
-  set activities(srcActivities: Activity[]) {
-    each(srcActivities, (activity: Activity) => {
-      const prevActivity = this.findActivityById(activity.id);
-
-      if (prevActivity) {
-        activity.expanded = prevActivity.expanded;
-      }
-    });
-
-    this._activities = srcActivities;
-  }
-
   updateSortBy(field: ActivitySortField, label: string) {
     this.sortBy.field = field
     this.sortBy.label = label
@@ -122,6 +161,19 @@ export class Cam {
   toggleExpand() {
     this.expanded = !this.expanded;
   }
+
+  groupActivitiesByProcess() {
+    const groupedActivities = groupBy(this.activities, (activity: Activity) => {
+      if (activity.activityType === ActivityType.molecule) {
+        return 'Small Molecules';
+      }
+
+      return activity.bpNode ? activity.bpNode.term.label : 'No Process Assigned'
+    })
+
+    return groupedActivities;
+  }
+
 
   expandAllActivities(expand: boolean) {
     const self = this;
@@ -142,6 +194,20 @@ export class Cam {
     })
   }
 
+  clearHighlight() {
+    const self = this;
+
+    each(self.activities, (activity: Activity) => {
+      each(activity.nodes, (node: ActivityNode) => {
+        node.term.highlight = false;
+        each(node.predicate.evidence, (evidence: Evidence) => {
+          evidence.evidence.highlight = false;
+          evidence.referenceEntity.highlight = false;
+          evidence.withEntity.highlight = false;
+        });
+      });
+    });
+  }
 
   findNodeById(uuid, activities: Activity[]): ActivityNode {
     const self = this;
@@ -172,7 +238,7 @@ export class Cam {
 
     const result: Activity[] = [];
 
-    each(self._activities, (activity: Activity) => {
+    each(self.activities, (activity: Activity) => {
       each(activity.nodes, (node: ActivityNode) => {
         if (node.uuid === nodeId) {
           result.push(activity)
@@ -185,6 +251,106 @@ export class Cam {
       });
     });
     return result;
+  }
+
+
+  applyFilter() {
+    const self = this;
+
+    self.clearHighlight();
+
+    if (self.queryMatch && self.queryMatch.terms.length > 0) {
+      self._filteredActivities = [];
+      self.matchedCount = 0;
+
+      each(self.activities, (activity: Activity) => {
+        let match = false;
+        each(activity.nodes, (node: ActivityNode) => {
+          each(self.queryMatch.terms, (term) => {
+
+            if (node.term.uuid === term.uuid) {
+              node.term.highlight = true;
+              node.term.activityDisplayId = term.activityDisplayId = activity.displayId;
+
+              self.matchedCount += 1;
+              match = true;
+            }
+          });
+
+          each(node.predicate.evidence, (evidence: Evidence) => {
+            each(self.queryMatch.terms, (term) => {
+
+              if (evidence.uuid === term.uuid) {
+                evidence.referenceEntity.highlight = true;
+                evidence.referenceEntity.activityDisplayId = term.activityDisplayId = activity.displayId;
+
+                self.matchedCount += 1;
+                match = true;
+              }
+            });
+          });
+        });
+
+        if (match) {
+          self._filteredActivities.push(activity);
+        }
+      });
+    }
+  }
+
+  applyWeights(weight = 0) {
+    const self = this;
+
+    if (self.queryMatch && self.queryMatch.terms.length > 0) {
+
+      each(self.activities, (activity: Activity) => {
+        each(activity.nodes, (node: ActivityNode) => {
+          const matchNode = find(self.queryMatch.terms, { uuid: node.term.uuid }) as Entity;
+
+          if (matchNode) {
+            matchNode.weight = node.term.weight = weight;
+            weight++;
+          }
+
+          each(node.predicate.evidence, (evidence: Evidence) => {
+            const matchNode = find(self.queryMatch.terms, { uuid: evidence.referenceEntity.uuid }) as Entity;
+
+            if (matchNode) {
+              matchNode.weight = evidence.referenceEntity.weight = weight;
+              weight++;
+            }
+          });
+        });
+
+      });
+    }
+  }
+
+  addPendingChanges(findEntities: Entity[], replaceWith: string, category) {
+    const self = this;
+
+    each(self.activities, (activity: Activity) => {
+      each(activity.nodes, (node: ActivityNode) => {
+        each(findEntities, (entity: Entity) => {
+          if (category.name === noctuaFormConfig.findReplaceCategory.options.reference.name) {
+            each(node.predicate.evidence, (evidence: Evidence, key) => {
+              if (evidence.uuid === entity.uuid) {
+                const oldReference = new Entity(evidence.reference, evidence.reference);
+                const newReference = new Entity(replaceWith, replaceWith);
+
+                evidence.pendingReferenceChanges = new PendingChange(evidence.uuid, oldReference, newReference);
+                evidence.pendingReferenceChanges.uuid = evidence.uuid;
+              }
+            });
+          } else {
+            if (node.term.uuid === entity.uuid) {
+              const newValue = new Entity(replaceWith, replaceWith);
+              node.pendingEntityChanges = new PendingChange(node.uuid, node.term, newValue);
+            }
+          }
+        });
+      });
+    });
   }
 
   getNodesByType(type: ActivityNodeType): any[] {
@@ -232,16 +398,53 @@ export class Cam {
     return result;
   }
 
-  groupActivitiesByProcess() {
-    const groupedActivities = groupBy(this.activities, (activity: Activity) => {
-      if (activity.activityType === ActivityType.molecule) {
-        return 'Small Molecules';
-      }
+  getEvidences(formActivity?: Activity) {
+    const self = this;
+    const result = [];
 
-      return activity.bpNode ? activity.bpNode.term.label : 'No Process Assigned'
-    })
+    if (formActivity && formActivity.nodes) {
+      each(formActivity.nodes, (node: ActivityNode) => {
+        each(node.predicate.evidence, (evidence: Evidence) => {
+          if (evidence.hasValue()) {
+            result.push(evidence);
+          }
+        });
+      });
+    }
 
-    return groupedActivities;
+    each(self.activities, (activity: Activity) => {
+      each(activity.edges, (triple: Triple<ActivityNode>) => {
+        each(triple.predicate.evidence, (evidence: Evidence) => {
+          if (evidence.hasValue()) {
+            result.push(evidence);
+          }
+        });
+      });
+    });
+
+    return result;
+  }
+
+  tableCanDisplayEnabledBy(node: ActivityNode) {
+    return node.predicate.edge && node.predicate.edge.id === noctuaFormConfig.edge.enabledBy.id;
+  }
+
+  tableDisplayExtension(node: ActivityNode) {
+    if (node.id === 'mf') {
+      return '';
+    } else if (node.isComplement) {
+      return 'NOT ' + node.predicate.edge.label;
+    } else {
+      return node.predicate.edge.label;
+    }
+  }
+
+  updateActivityDisplayNumber() {
+    const self = this;
+
+    each(self.activities, (activity: Activity, key) => {
+      activity.displayNumber = self.displayNumber + '.' + (key + 1).toString();
+    });
   }
 
   updateProperties() {
@@ -255,7 +458,7 @@ export class Cam {
   }
 
   private _getGPText(a: Activity): string {
-    return a.gpNode?.term.label.toLowerCase() || ''
+    return a.presentation.gpText.toLowerCase()
   }
 
   private _getMFText(a: Activity): string {

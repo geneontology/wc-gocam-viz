@@ -1,12 +1,8 @@
 import { Entity, EntityType } from './entity';
-import { ActivityNode } from './activity-node';
-import { find, isEqual } from 'lodash';
-
-import { noctuaFormConfig } from './../../noctua-form-config';
-import { CamStats } from "./cam";
+import { isEqual } from 'lodash';
 import { Contributor } from "../contributor";
 import { Group } from "../group";
-import { NoctuaFormUtils } from "../../utils/noctua-form-utils";
+import { PendingChange } from "./pending-change";
 
 export class EvidenceExt {
   term: Entity;
@@ -29,9 +25,14 @@ export class Evidence {
   evidenceRequired = false;
   referenceRequired = false;
   ontologyClass = [];
+  pendingEvidenceChanges: PendingChange;
+  pendingReferenceChanges: PendingChange;
+  pendingWithChanges: PendingChange;
   frequency: number;
   date: string;
+  formattedDate: string
   evidenceExts: EvidenceExt[] = [];
+
 
   constructor() {
 
@@ -70,64 +71,6 @@ export class Evidence {
     result = result && isEqual(self.evidence, evidence.evidence);
     result = result && isEqual(self.reference, evidence.reference);
     result = result && isEqual(self.with, evidence.with);
-
-    return result;
-  }
-
-  checkStored(oldEvidence: Evidence) {
-    const self = this;
-
-    if (oldEvidence && self.evidence.id !== oldEvidence.evidence.id) {
-      self.evidence.termHistory.unshift(new Entity(oldEvidence.evidence.id, oldEvidence.evidence.label));
-      self.evidence.modified = true;
-    }
-
-    if (oldEvidence && self.reference !== oldEvidence.reference) {
-      self.referenceEntity.termHistory.unshift(new Entity(oldEvidence.referenceEntity.id, oldEvidence.referenceEntity.label));
-      self.referenceEntity.modified = true;
-
-    }
-
-    if (oldEvidence && self.with !== oldEvidence.with) {
-      self.withEntity.termHistory.unshift(new Entity(oldEvidence.withEntity.id, oldEvidence.withEntity.label));
-      self.withEntity.modified = true;
-    }
-
-  }
-
-
-  public static formatReference(reference: string) {
-    const DBAccession = NoctuaFormUtils.splitAndAppend(reference, ':', 1);
-    const db = DBAccession[0].trim();
-    const accession = DBAccession[1].trim();
-
-    return db + ':' + accession;
-  }
-
-  public static getReferenceNumber(reference: string) {
-    const DBAccession = NoctuaFormUtils.splitAndAppend(reference, ':', 1);
-    const accession = DBAccession[1]?.trim();
-
-    return accession;
-  }
-
-  public static checkReference(reference: string) {
-    let result = false;
-
-    if (reference.includes(':')) {
-      const DBAccession = NoctuaFormUtils.splitAndAppend(reference, ':', 1);
-      const db = DBAccession[0].trim().toUpperCase();
-      const accession = DBAccession[1].trim();
-      const dbs = [
-        noctuaFormConfig.evidenceDB.options.pmid,
-        noctuaFormConfig.evidenceDB.options.doi,
-        noctuaFormConfig.evidenceDB.options.goRef,
-      ];
-
-      const found = find(dbs, { name: db });
-      const accessionFound = accession.length > 0;
-      result = found && accessionFound;
-    }
 
     return result;
   }

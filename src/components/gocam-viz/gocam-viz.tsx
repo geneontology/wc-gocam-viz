@@ -761,40 +761,45 @@ export class GoCamViz {
 
         return (
             <Host>
-                <div class="panel w-8" part="gocam-panel">
-                    <div class="panel-header">
-                        <div part="gocam-title">{this.cam?.title}</div>
-                        <div class="gocam-panel-header-buttons">
-                            <button onClick={() => this.toggleComplex()}>
-                                {this.expandComplex ? 'Collapse Protein Complexes' : 'Expand Protein Complexes'}
-                            </button>
-                            <button onClick={() => this.resetView()}>Reset View</button>
+                <div class="gocam-container">
+                    <div class="gocam-top-section">
+                        <div class="panel w-8" part="gocam-panel">
+                            <div class="panel-header">
+                                <div part="gocam-title">{this.cam?.title}</div>
+                                <div class="gocam-panel-header-buttons">
+                                    <button onClick={() => this.toggleComplex()}>
+                                        {this.expandComplex ? 'Collapse Protein Complexes' : 'Expand Protein Complexes'}
+                                    </button>
+                                    <button onClick={() => this.resetView()}>Reset View</button>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="gocam-graph" part="gocam-graph" ref={(el) => this.graphDiv = el}>
+                                    {this.loading &&
+                                        <go-loading-spinner message={`Loading GO-CAM ${this.gocamId}`}></go-loading-spinner>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel w-4" part="activities-panel">
+                            <div class="panel-header">
+                                Processes and Activities
+                            </div>
+                            <div class="panel-body">
+                                <wc-genes-panel
+                                    cam={this.cam}
+                                    exportparts="process, activity, gene-product, function-label"
+                                    ref={el => this.genesPanel = el}
+                                >
+                                </wc-genes-panel>
+                            </div>
                         </div>
                     </div>
-                    <div class="panel-body">
-                        <div class="gocam-graph" part="gocam-graph" ref={(el) => this.graphDiv = el}>
-                            {this.loading &&
-                                <go-loading-spinner message={`Loading GO-CAM ${this.gocamId}`}></go-loading-spinner>
-                            }
-                        </div>
-                        {this.showLegend && (
+                    {this.showLegend && (
+                        <div class="panel gocam-legend-container">
                             <wc-gocam-legend exportparts="header : legend-header, section : legend-section" />
-                        )}
-                    </div>
-                </div>
-
-                <div class="panel w-4" part="activities-panel">
-                    <div class="panel-header">
-                        Processes and Activities
-                    </div>
-                    <div class="panel-body">
-                        <wc-genes-panel
-                            cam={this.cam}
-                            exportparts="process, activity, gene-product, function-label"
-                            ref={el => this.genesPanel = el}
-                        >
-                        </wc-genes-panel>
-                    </div>
+                        </div>
+                    )}
                 </div>
             </Host>
         );

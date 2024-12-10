@@ -1,21 +1,21 @@
 import { Relations } from "./relations";
 
 export const LEGEND_COLUMNS = {
-  regulation: [
-    Relations.DIRECTLY_POSITIVELY_REGULATES, // RO:0002629
-    Relations.DIRECTLY_NEGATIVELY_REGULATES, // RO:0002630
-    Relations.INDIRECTLY_POSITIVELY_REGULATES, // RO:0002409
-    Relations.INDIRECTLY_NEGATIVELY_REGULATES  // RO:0002407
-  ],
-  input: [
-    Relations.PROVIDES_INPUT_FOR, // RO:0002413
-    Relations.REMOVES_INPUT_FOR, // RO:0012010
-    Relations.HAS_INPUT, // RO:0002233
-    Relations.HAS_OUTPUT  // RO:0002234
-  ],
-  upstream: [
-    Relations.CONSTITUTIVELY_UPSTREAM_OF, // RO:0012009
-    Relations.CAUSALLY_UPSTREAM_OF_POSITIVE_EFFECT, // RO:0002304
-    Relations.CAUSALLY_UPSTREAM_OF_NEGATIVE_EFFECT  // RO:0002305
-  ]
+  regulation: {
+    [Relations.DIRECTLY_POSITIVELY_REGULATES]: 'direct positive regulation/activation',
+    [Relations.DIRECTLY_NEGATIVELY_REGULATES]: 'direct negative regulation/inhibition',
+    [Relations.INDIRECTLY_POSITIVELY_REGULATES]: 'indirect positive regulation',
+    [Relations.INDIRECTLY_NEGATIVELY_REGULATES]: 'indirect negative regulation'
+  },
+  input: {
+    [Relations.PROVIDES_INPUT_FOR]: 'provides input for',
+    [Relations.REMOVES_INPUT_FOR]: 'removes input for',
+    [Relations.HAS_INPUT]: 'input of',
+    [Relations.HAS_OUTPUT]: 'has output'
+  },
+  upstream: {
+    [Relations.CONSTITUTIVELY_UPSTREAM_OF]: 'constitutively upstream',
+    [Relations.CAUSALLY_UPSTREAM_OF_POSITIVE_EFFECT]: 'upstream positive effect',
+    [Relations.CAUSALLY_UPSTREAM_OF_NEGATIVE_EFFECT]: 'upstream negative effect'
+  }
 };

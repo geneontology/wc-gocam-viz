@@ -32,52 +32,30 @@
   margin-bottom: 0.5em;
 }
 
-.sections {
-  display: flex;
-}
-
-.section {
-  flex: 1 1 auto;
-}
-
-img {
-  display: inline-block;
-  max-height: 1.25em;
-  min-width: 3.5em;
-  max-width: 3.75em;
-  object-fit: scale-down;
-}
-
 .item {
   display: flex;
   align-items: center;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.2em;
+  gap: 0.25em;
+  height: 2em;
+
+  svg {
+    flex-shrink: 0;
+  }
 }
 
 .item-label {
   display: inline-block;
-  margin-left: 0.5em;
+  margin-left: 0.2em;
 }
 
 .columns {
   display: flex;
-  gap: 20px;
+  gap: 0.25em;
 
   .column {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-  }
-}
-
-.item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  height: 30px;
-
-  svg {
-    flex-shrink: 0;
   }
 }

@@ -40,13 +40,13 @@ export class GocamLegend {
         </svg>
 
         <div class='header'>Relation Types</div>
-        <div class='columns'>
-          {Object.entries(LEGEND_COLUMNS).map(([columnName, ids]) => (
+        <div class="columns">
+          {Object.entries(LEGEND_COLUMNS).map(([columnName, relations]) => (
             <div class={`column ${columnName}`}>
-              {ids.map(id => {
-                const config = RELATION_MAP[id];
+              {Object.entries(relations).map(([relationId, label]) => {
+                const config = RELATION_MAP[relationId];
                 return (
-                  <div class='item'>
+                  <div class="item">
                     <svg height="30" width="60">
                       <line
                         x1="5" y1="15"
@@ -54,16 +54,17 @@ export class GocamLegend {
                         stroke={config.color}
                         stroke-width={STYLES.SIZES.DEFAULT}
                         stroke-dasharray={config.lineStyle === 'dashed' ? '5,5' : 'none'}
-                        marker-end={config.glyph ? `url(#${config.glyph}-${id})` : 'none'}
+                        marker-end={config.glyph ? `url(#${config.glyph}-${relationId})` : 'none'}
                       />
                     </svg>
-                    <span>{config.label}</span>
+                    <span>{label}</span>
                   </div>
                 );
               })}
             </div>
           ))}
         </div>
+
       </Host>
     );
   }

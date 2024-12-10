@@ -1,5 +1,5 @@
-@import "../../scss/panel";
-@import "../../scss/mixins";
+@import '../../scss/panel';
+@import '../../scss/mixins';
 
 :host {
   /**
@@ -100,16 +100,10 @@
 
   @include standard-var-declarations(process, $border-color: var(--border-color));
 
-  @include standard-var-declarations(process-label,
-    $border-color: var(--border-color),
-    $border-width: 0 0 2px 0
-  );
+  @include standard-var-declarations(process-label, $border-color: var(--border-color), $border-width: 0 0 2px 0);
 
-  @include standard-var-declarations(activity,
-    $border-color: var(--border-color),
-    $border-width: 0 0 1px 0,
-    $padding: 0.25em 0
-  );
+  @include standard-var-declarations(activity, $border-color: var(--border-color), $border-width: 0 0 1px 0, $padding: 0.25em 0);
+
   --activity-background-active: #f0f0f0;
   --activity-color-active: black;
 
@@ -123,6 +117,27 @@
 
   display: flex;
   align-items: flex-start;
+}
+
+.gocam-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.gocam-top-section {
+  display: flex;
+  flex: 1;
+  margin-bottom: 1rem;
+}
+
+.gocam-legend-container {
+  width: 100%;
+
+  wc-gocam-legend {
+    height: 100%;
+    width: 100%;
+  }
 }
 
 .panel {
@@ -164,8 +179,9 @@ button {
   cursor: pointer;
   user-select: none;
 
-  &:focus, &:hover {
-    background-color: var(--button-background-hover)
+  &:focus,
+  &:hover {
+    background-color: var(--button-background-hover);
   }
 
   &:first-child {

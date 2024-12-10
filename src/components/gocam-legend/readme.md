@@ -5,14 +5,6 @@
 <!-- Auto Generated Below -->
 
 
-## Shadow Parts
-
-| Part        | Description             |
-| ----------- | ----------------------- |
-| `"header"`  | The header              |
-| `"section"` | Group of legend entries |
-
-
 ## CSS Custom Properties
 
 | Name                    | Description                    |

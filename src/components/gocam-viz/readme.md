@@ -153,15 +153,15 @@ Type: `Promise<void>`
 ### Depends on
 
 - [go-loading-spinner](../loading-spinner)
-- [wc-gocam-legend](../gocam-legend)
 - [wc-genes-panel](../genes-panel)
+- [wc-gocam-legend](../gocam-legend)
 
 ### Graph
 ```mermaid
 graph TD;
   wc-gocam-viz --> go-loading-spinner
-  wc-gocam-viz --> wc-gocam-legend
   wc-gocam-viz --> wc-genes-panel
+  wc-gocam-viz --> wc-gocam-legend
   style wc-gocam-viz fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

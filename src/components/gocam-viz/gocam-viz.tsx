@@ -2,7 +2,6 @@ import { Component, Host, Prop, Element, Event, EventEmitter, Watch, h } from '@
 import { Listen, Method, State } from '@stencil/core';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import { glyph } from '../../globals/utils';
 import * as dbxrefs from "@geneontology/dbxrefs";
 import {
     Activity, ActivityType, Cam,
@@ -11,6 +10,7 @@ import {
     NoctuaGraphService,
     Triple
 } from '../../globals/@noctua.form';
+import { glyph } from '../../globals/relations';
 
 
 
@@ -477,6 +477,20 @@ export class GoCamViz {
                 {
                     selector: 'edge',
                     style: this.defaultEdgeStyle
+                },
+                {
+                    selector: 'edge',
+                    style: {
+                        ...this.defaultEdgeStyle,
+                        'arrow-shape': function (edge) {
+                            return {
+                                width: 3,
+                                height: 3,
+                                name: 'custom-tee-circle',
+                                path: 'M 0,0 m -1,-1 l 2,0 l 0,2 l -2,0 z M 2,0 a 1,1 0 1,0 2,0 a 1,1 0 1,0 -2,0'
+                            };
+                        }
+                    }
                 }
             ],
 

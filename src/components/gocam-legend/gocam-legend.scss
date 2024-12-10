@@ -58,3 +58,26 @@ img {
   display: inline-block;
   margin-left: 0.5em;
 }
+
+.columns {
+  display: flex;
+  gap: 20px;
+
+  .column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+
+  svg {
+    flex-shrink: 0;
+  }
+}

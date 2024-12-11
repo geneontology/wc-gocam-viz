@@ -3,7 +3,11 @@ import { RELATION_MAP, STYLES } from '../../globals/relations';
 import { LEGEND_COLUMNS } from '../../globals/legend';
 
 
-
+/**
+ * @part header - The header
+ * @part sections - Group of legend entries
+ * @part section - An individual legend entry
+ */
 @Component({
   tag: 'wc-gocam-legend',
   styleUrl: 'gocam-legend.scss',
@@ -40,9 +44,9 @@ export class GocamLegend {
         </svg>
 
         <div class='header'>Relation Types</div>
-        <div class="columns">
+        <div class="sections">
           {Object.entries(LEGEND_COLUMNS).map(([columnName, relations]) => (
-            <div class={`column ${columnName}`}>
+            <div class={`section ${columnName}`}>
               {Object.entries(relations).map(([relationId, label]) => {
                 const config = RELATION_MAP[relationId];
                 return (

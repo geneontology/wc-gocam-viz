@@ -80,7 +80,8 @@ Type: `Promise<void>`
 | `"gocam-panel"`      | The panel containing the GO-CAM graph and legend     |
 | `"gocam-title"`      | The GO-CAM title                                     |
 | `"legend-header"`    | The header of the legend                             |
-| `"legend-section"`   | A group of entries in the legend                     |
+| `"legend-section"`   | An individual legend entry                           |
+| `"legend-sections"`  | A group of entries in the legend                     |
 | `"process"`          | A process group in the process and activities list   |
 
 

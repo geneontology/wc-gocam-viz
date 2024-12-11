@@ -96,6 +96,8 @@
   --legend-border-width: 0;
   --legend-border-color: var(--border-color);
   --legend-padding: 0;
+  --legend-margin: 1rem 0 0 0;
+
   @include standard-var-declarations(legend-header, $border-color: var(--border-color));
 
   @include standard-var-declarations(process, $border-color: var(--border-color));
@@ -116,7 +118,8 @@
   --function-nodes-padding: 0;
 
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
+  flex-direction: column;
 }
 
 .gocam-container {
@@ -125,19 +128,9 @@
   flex-direction: column;
 }
 
-.gocam-top-section {
+.gocam-graph-and-activities-container {
   display: flex;
-  flex: 1;
-  margin-bottom: 1rem;
-}
-
-.gocam-legend-container {
-  width: 100%;
-
-  wc-gocam-legend {
-    height: 100%;
-    width: 100%;
-  }
+  align-items: flex-start;
 }
 
 .panel {
@@ -197,6 +190,7 @@ button {
 }
 
 wc-gocam-legend {
+  margin: var(--legend-margin);
   --border-width: var(--legend-border-width);
   --border-color: var(--legend-border-color);
   --padding: var(--legend-padding);

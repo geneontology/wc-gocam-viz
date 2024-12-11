@@ -478,20 +478,6 @@ export class GoCamViz {
                 {
                     selector: 'edge',
                     style: this.defaultEdgeStyle
-                },
-                {
-                    selector: 'edge',
-                    style: {
-                        ...this.defaultEdgeStyle,
-                        'arrow-shape': function (edge) {
-                            return {
-                                width: 3,
-                                height: 3,
-                                name: 'custom-tee-circle',
-                                path: 'M 0,0 m -1,-1 l 2,0 l 0,2 l -2,0 z M 2,0 a 1,1 0 1,0 2,0 a 1,1 0 1,0 -2,0'
-                            };
-                        }
-                    }
                 }
             ],
 

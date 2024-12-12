@@ -2,7 +2,6 @@ import { Component, Host, Prop, Element, Event, EventEmitter, Watch, h } from '@
 import { Listen, Method, State } from '@stencil/core';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import * as dbxrefs from "@geneontology/dbxrefs";
 import {
     Activity, ActivityType, Cam,
     ActivityNodeType,
@@ -11,6 +10,7 @@ import {
     Triple
 } from '../../globals/@noctua.form';
 import { glyph } from '../../globals/relations';
+import { DBXrefService } from '../../globals/dbxref.service';
 
 
 
@@ -71,8 +71,10 @@ export class GoCamViz {
      */
     @State() error: boolean = false;
 
+    dbxrefService = new DBXrefService();
     configService = new NoctuaFormConfigService();
-    graphService = new NoctuaGraphService(this.configService)
+
+    graphService = new NoctuaGraphService(this.configService, this.dbxrefService)
     // variables for bbop graph
     currentGraph = undefined;
 
@@ -259,13 +261,6 @@ export class GoCamViz {
         }
     }
 
-
-    relations_enabled_by = ['http://purl.obolibrary.org/obo/RO_0002333', 'RO_0002333', 'RO:0002333'];
-    relations_collapsible = ["RO:0002333", "BFO:0000066", "RO:0002233", "RO:0002488", "RO:0002234"]; // 2233 : has input ; 2234 : has output
-    // relations_collapsible = ["RO:0002333", "BFO:0000066", "RO:0002233", "RO:0002488", "RO:0002234"]; // 2233 : has input ; 2234 : has output
-    relations_nestable = {};
-
-
     initCytoscape() {
         cytoscape.use(dagre);
     }
@@ -274,8 +269,19 @@ export class GoCamViz {
      * Init the GO dbxrefs.yaml, in order to build URL meta
     */
     async initDBXrefs() {
-        await dbxrefs.init();
-        this.dbXrefsReady = true;
+        try {
+            await this.dbxrefService.init();
+            while (!this.dbxrefService.isReady()) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            if (this.dbxrefService.hasError()) {
+                throw new Error('Failed to initialize dbxrefs');
+            }
+            this.dbXrefsReady = true;
+        } catch (error) {
+            console.error('Failed to initialize dbxrefs:', error);
+            this.dbXrefsReady = false;
+        }
     }
 
     /**

@@ -13,21 +13,17 @@ import { Triple } from './../models/activity/triple';
 import { TermsSummary } from './../models/activity/summary';
 import moment from 'moment';
 import { graph as bbopGraph } from 'bbop-graph-noctua';
-import * as dbxrefs from "@geneontology/dbxrefs";
+import { DBXrefService } from '../../dbxref.service';
 
 
 export class NoctuaGraphService {
-  curieUtil: any;
-
 
   constructor(
-    public noctuaFormConfigService: NoctuaFormConfigService) {
+    public noctuaFormConfigService: NoctuaFormConfigService,
+    private dbXrefService: DBXrefService) {
   }
 
-
   getTermURL(id: string) {
-    const self = this;
-
     if (!id) {
       return ""
     }
@@ -45,9 +41,8 @@ export class NoctuaGraphService {
     } else {
       const dbId = id.split(/:(.+)/, 2);
       if (dbId.length > 1) {
-        return dbxrefs.getURL(dbId[0], undefined, dbId[1]);
+        return this.dbXrefService.getURL(dbId[0], undefined, dbId[1]);
       }
-
     }
   }
 
@@ -63,7 +58,6 @@ export class NoctuaGraphService {
 
     return cam;
   }
-
 
 
   getMetadata(responseData) {
@@ -98,9 +92,7 @@ export class NoctuaGraphService {
     })
 
     return cam;
-
   }
-
 
   loadCam(cam: Cam) {
     const self = this;
@@ -118,8 +110,6 @@ export class NoctuaGraphService {
     cam.updateActivityDisplayNumber();
   }
 
-
-
   getNodeInfo(node) {
     const result: any = {};
 
@@ -133,7 +123,6 @@ export class NoctuaGraphService {
 
     return result;
   }
-
 
   getNodeRootInfo(node): Entity[] {
     const result = node.root_types().map((srcType) => {
@@ -222,7 +211,6 @@ export class NoctuaGraphService {
     return new ActivityNode(result);
   }
 
-
   edgeComments(edge): string[] {
 
     const commentAnnotations = edge.get_annotations_by_key('comment');
@@ -230,7 +218,6 @@ export class NoctuaGraphService {
     return commentAnnotations.map(c => {
       return c.value();
     })
-
   }
 
   edgeToEvidence(graph, edge): Evidence[] {

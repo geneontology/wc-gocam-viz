@@ -27,6 +27,7 @@
    *
    * @prop --legend-border-color: Border color of legend container
    * @prop --legend-border-width: Border width of legend container
+   * @prop --legend-margin: Margin of legend container
    * @prop --legend-padding: Padding of legend container
    *
    * @prop --legend-header-background: Background of legend header
@@ -116,16 +117,6 @@
   @include standard-var-declarations(node, $border-color: var(--border-color), $padding: 0 1em 0 0);
 
   --function-nodes-padding: 0;
-
-  display: flex;
-  align-items: stretch;
-  flex-direction: column;
-}
-
-.gocam-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
 .gocam-graph-and-activities-container {

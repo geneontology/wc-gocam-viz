@@ -43,10 +43,10 @@ export class GocamLegend {
           </defs>
         </svg>
 
-        <div class='header'>Relation Types</div>
-        <div class="sections">
+        <div class='header' part="header">Relation Types</div>
+        <div class="sections" part="sections">
           {Object.entries(LEGEND_COLUMNS).map(([columnName, relations]) => (
-            <div class={`section ${columnName}`}>
+            <div class={`section ${columnName}`} part="section">
               {Object.entries(relations).map(([relationId, label]) => {
                 const config = RELATION_MAP[relationId];
                 return (

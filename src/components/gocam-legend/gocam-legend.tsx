@@ -28,14 +28,19 @@ export class GocamLegend {
                   markerWidth="12"
                   markerHeight="4"
                   orient="auto">
-                  <circle cx="7" cy="5" r="3.5" fill={config.color} />
-                  <path d="M 12 0 L 18 5 L 12 10 z" fill={config.color} />
+                  <path d="M 6 0 L 12 5 L 6 10 z" fill={config.color} />
+                  <circle cx="15" cy="5" r="3.5" fill={config.color} />
                 </marker>
                 :
-                <marker id={`${config.glyph}-${id}`} viewBox="0 0 10 10" refX="9" refY="5"
-                  markerWidth="4" markerHeight="4" orient="auto">
-                  {config.glyph === 'triangle' && <path d="M 0 0 L 10 5 L 0 10 z" fill={config.color} />}
-                  {config.glyph === 'tee' && <rect x="6" y="0" width="4" height="10" fill={config.color} />}
+                <marker id={`${config.glyph}-${id}`}
+                  viewBox="-2 0 12 10"
+                  refX="5"
+                  refY="5"
+                  markerWidth="4"
+                  markerHeight="4"
+                  orient="auto">
+                  {config.glyph === 'triangle' && <path d="M -2 0 L 8 5 L -2 10 z" fill={config.color} />}
+                  {config.glyph === 'tee' && <rect x="5" y="0" width="4" height="10" fill={config.color} />}
                   {config.glyph === 'circle' && <circle cx="5" cy="5" r="4" fill={config.color} />}
                   {config.glyph === 'square' && <rect x="0" y="0" width="10" height="10" fill={config.color} />}
                 </marker>

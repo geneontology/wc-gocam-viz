@@ -123,6 +123,7 @@ Type: `Promise<void>`
 | `--legend-header-border-width`  | Border width of legend header                                                        |
 | `--legend-header-color`         | Text color of legend header                                                          |
 | `--legend-header-padding`       | Padding of legend header                                                             |
+| `--legend-margin`               | Margin of legend container                                                           |
 | `--legend-padding`              | Padding of legend container                                                          |
 | `--node-background`             | Background of related node info in processes and activities panel                    |
 | `--node-border-color`           | Border color of related node info in processes and activities panel                  |

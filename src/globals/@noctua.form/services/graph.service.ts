@@ -102,7 +102,7 @@ export class NoctuaGraphService {
   }
 
 
-  loadCam(cam: Cam, publish = true) {
+  loadCam(cam: Cam) {
     const self = this;
     const activities = self.graphToActivities(cam.graph);
     const molecules = self.graphToMolecules(cam.graph);

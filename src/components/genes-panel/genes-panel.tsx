@@ -169,7 +169,7 @@ export class GenesPanel {
 
     renderActivity(activity: Activity) {
         const nodes = activity.nodes.filter((node: ActivityNode) => (
-            node.type !== ActivityNodeType.GoMolecularFunction)
+            node.predicate?.edge?.id !== '' && node.predicate?.edge?.id !== noctuaFormConfig.edge.enabledBy.id)
         );
 
         return (
@@ -177,14 +177,14 @@ export class GenesPanel {
                 <div class='gene-product' part="gene-product">
                     {
                         activity.gpNode &&
-                            <a href={activity.gpNode?.term.url} target='_blank'>{activity.gpNode?.term.label}</a>
+                        <a href={activity.gpNode?.term.url} target='_blank'>{activity.gpNode?.term.label}</a>
                     }
                 </div>
-                {activity.mfNode &&
+                {activity.rootNode &&
                     <div class='function'>
                         <div class='function-label' part="function-label">
-                            <a href={activity.mfNode?.term.url} target='_blank'>
-                                {activity.mfNode?.term.label}
+                            <a href={activity.rootNode?.term.url} target='_blank'>
+                                {activity.rootNode?.term.label}
                             </a>
                         </div>
                         <div class="function-nodes">

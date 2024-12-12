@@ -1,4 +1,4 @@
-import { Component, Host, h } from '@stencil/core';
+import { Component, Fragment, Host, h } from '@stencil/core';
 import { RELATION_MAP, STYLES } from '../../globals/relations';
 import { LEGEND_COLUMNS } from '../../globals/legend';
 
@@ -20,30 +20,24 @@ export class GocamLegend {
         <svg height="0" width="0" style={{ position: 'absolute' }}>
           <defs>
             {Object.entries(RELATION_MAP).map(([id, config]) => (
-              config.glyph === 'circle-triangle' ?
-                <marker id={`${config.glyph}-${id}`}
-                  viewBox="0 0 20 10"
-                  refX="18"
-                  refY="5"
-                  markerWidth="12"
-                  markerHeight="4"
-                  orient="auto">
-                  <path d="M 6 0 L 12 5 L 6 10 z" fill={config.color} />
-                  <circle cx="15" cy="5" r="3.5" fill={config.color} />
-                </marker>
-                :
-                <marker id={`${config.glyph}-${id}`}
-                  viewBox="-2 0 12 10"
-                  refX="5"
-                  refY="5"
-                  markerWidth="4"
-                  markerHeight="4"
-                  orient="auto">
-                  {config.glyph === 'triangle' && <path d="M -2 0 L 8 5 L -2 10 z" fill={config.color} />}
-                  {config.glyph === 'tee' && <rect x="5" y="0" width="4" height="10" fill={config.color} />}
-                  {config.glyph === 'circle' && <circle cx="5" cy="5" r="4" fill={config.color} />}
-                  {config.glyph === 'square' && <rect x="0" y="0" width="10" height="10" fill={config.color} />}
-                </marker>
+              <marker id={`${config.glyph}-${id}`}
+                viewBox="-2 0 18 10"
+                refX="18"
+                refY="5"
+                markerWidth="12"
+                markerHeight="4"
+                orient="auto">
+                {config.glyph === 'circle-triangle' && (
+                  <Fragment>
+                    <path d="M 4 0 L 12 5 L 4 10 z" fill={config.color} />
+                    <circle cx="16" cy="5" r="5" fill={config.color} />
+                  </Fragment>
+                )}
+                {config.glyph === 'triangle' && <path d="M 12 0 L 20 5 L 12 10 z" fill={config.color} />}
+                {config.glyph === 'tee' && <rect x="14" y="0" width="4" height="10" fill={config.color} />}
+                {config.glyph === 'circle' && <circle cx="16" cy="5" r="5" fill={config.color} />}
+                {config.glyph === 'square' && <rect x="12" y="0" width="8" height="10" fill={config.color} />}
+              </marker>
             ))}
           </defs>
         </svg>

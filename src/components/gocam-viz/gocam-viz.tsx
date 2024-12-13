@@ -2,8 +2,6 @@ import { Component, Host, Prop, Element, Event, EventEmitter, Watch, h } from '@
 import { Listen, Method, State } from '@stencil/core';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import { glyph } from '../../globals/utils';
-import * as dbxrefs from "@geneontology/dbxrefs";
 import {
     Activity, ActivityType, Cam,
     ActivityNodeType,
@@ -11,6 +9,8 @@ import {
     NoctuaGraphService,
     Triple
 } from '../../globals/@noctua.form';
+import { glyph } from '../../globals/relations';
+import { DBXrefService } from '../../globals/dbxref.service';
 
 
 
@@ -28,7 +28,8 @@ const GOMODEL_PREFIX = "gomodel:"
  * @part gene-product - A gene product name in process and activities list
  * @part function-label - A function term name in process and activities list
  * @part legend-header - The header of the legend
- * @part legend-section - A group of entries in the legend
+ * @part legend-sections - A group of entries in the legend
+ * @part legend-section - An individual legend entry
  */
 @Component({
     tag: 'wc-gocam-viz',
@@ -70,8 +71,10 @@ export class GoCamViz {
      */
     @State() error: boolean = false;
 
+    dbxrefService = new DBXrefService();
     configService = new NoctuaFormConfigService();
-    graphService = new NoctuaGraphService(this.configService)
+
+    graphService = new NoctuaGraphService(this.configService, this.dbxrefService)
     // variables for bbop graph
     currentGraph = undefined;
 
@@ -258,13 +261,6 @@ export class GoCamViz {
         }
     }
 
-
-    relations_enabled_by = ['http://purl.obolibrary.org/obo/RO_0002333', 'RO_0002333', 'RO:0002333'];
-    relations_collapsible = ["RO:0002333", "BFO:0000066", "RO:0002233", "RO:0002488", "RO:0002234"]; // 2233 : has input ; 2234 : has output
-    // relations_collapsible = ["RO:0002333", "BFO:0000066", "RO:0002233", "RO:0002488", "RO:0002234"]; // 2233 : has input ; 2234 : has output
-    relations_nestable = {};
-
-
     initCytoscape() {
         cytoscape.use(dagre);
     }
@@ -273,8 +269,19 @@ export class GoCamViz {
      * Init the GO dbxrefs.yaml, in order to build URL meta
     */
     async initDBXrefs() {
-        await dbxrefs.init();
-        this.dbXrefsReady = true;
+        try {
+            await this.dbxrefService.init();
+            while (!this.dbxrefService.isReady()) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            if (this.dbxrefService.hasError()) {
+                throw new Error('Failed to initialize dbxrefs');
+            }
+            this.dbXrefsReady = true;
+        } catch (error) {
+            console.error('Failed to initialize dbxrefs:', error);
+            this.dbXrefsReady = false;
+        }
     }
 
     /**
@@ -747,41 +754,44 @@ export class GoCamViz {
 
         return (
             <Host>
-                <div class="panel w-8" part="gocam-panel">
-                    <div class="panel-header">
-                        <div part="gocam-title">{this.cam?.title}</div>
-                        <div class="gocam-panel-header-buttons">
-                            <button onClick={() => this.toggleComplex()}>
-                                {this.expandComplex ? 'Collapse Protein Complexes' : 'Expand Protein Complexes'}
-                            </button>
-                            <button onClick={() => this.resetView()}>Reset View</button>
+                <div class="gocam-graph-and-activities-container">
+                    <div class="panel w-8" part="gocam-panel">
+                        <div class="panel-header">
+                            <div part="gocam-title">{this.cam?.title}</div>
+                            <div class="gocam-panel-header-buttons">
+                                <button onClick={() => this.toggleComplex()}>
+                                    {this.expandComplex ? 'Collapse Protein Complexes' : 'Expand Protein Complexes'}
+                                </button>
+                                <button onClick={() => this.resetView()}>Reset View</button>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="gocam-graph" part="gocam-graph" ref={(el) => this.graphDiv = el}>
+                                {this.loading &&
+                                    <go-loading-spinner message={`Loading GO-CAM ${this.gocamId}`}></go-loading-spinner>
+                                }
+                            </div>
                         </div>
                     </div>
-                    <div class="panel-body">
-                        <div class="gocam-graph" part="gocam-graph" ref={(el) => this.graphDiv = el}>
-                            {this.loading &&
-                                <go-loading-spinner message={`Loading GO-CAM ${this.gocamId}`}></go-loading-spinner>
-                            }
+                    <div class="panel w-4" part="activities-panel">
+                        <div class="panel-header">
+                            Processes and Activities
                         </div>
-                        {this.showLegend && (
-                            <wc-gocam-legend exportparts="header : legend-header, section : legend-section" />
-                        )}
+                        <div class="panel-body">
+                            <wc-genes-panel
+                                cam={this.cam}
+                                exportparts="process, activity, gene-product, function-label"
+                                ref={el => this.genesPanel = el}
+                            >
+                            </wc-genes-panel>
+                        </div>
                     </div>
                 </div>
-
-                <div class="panel w-4" part="activities-panel">
-                    <div class="panel-header">
-                        Processes and Activities
+                {this.showLegend && (
+                    <div class="panel">
+                        <wc-gocam-legend exportparts="header : legend-header, sections : legend-sections, section : legend-section" />
                     </div>
-                    <div class="panel-body">
-                        <wc-genes-panel
-                            cam={this.cam}
-                            exportparts="process, activity, gene-product, function-label"
-                            ref={el => this.genesPanel = el}
-                        >
-                        </wc-genes-panel>
-                    </div>
-                </div>
+                )}
             </Host>
         );
     }

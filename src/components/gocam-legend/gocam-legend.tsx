@@ -1,37 +1,12 @@
-import { Component, Host, h } from '@stencil/core';
-import { legend } from '../../globals/constants';
+import { Component, Fragment, Host, h } from '@stencil/core';
+import { RELATION_MAP, STYLES } from '../../globals/relations';
+import { LEGEND_COLUMNS } from '../../globals/legend';
 
-import direct_regulation from './assets/relation/direct_regulation.png';
-import indirect_regulation from './assets/relation/indirect_regulation.png';
-import positive_regulation from './assets/relation/positive_regulation.png';
-import negative_regulation from './assets/relation/negative_regulation.png';
-import provides_input_for from './assets/relation/provides_input_for.png';
-import neutral from './assets/relation/neutral.png';
-import input_of from './assets/relation/input_of.png';
-import has_output from './assets/relation/has_output.png';
-
-// Stencil's Assets feature[1] makes client applications jump through a lot of hoops[2] in order
-// to get the assets served from the right location if they choose to the NPM package instead of
-// a <script> tag. Since these legend images are quite small, it's a good tradeoff to just inline
-// them via the rollup image plugin[3].
-// [1] https://stenciljs.com/docs/assets
-// [2] https://github.com/ionic-team/stencil/issues/1868
-// [3] https://github.com/rollup/plugins/tree/master/packages/image
-
-const IMAGE_DATA = {
-  direct_regulation,
-  indirect_regulation,
-  positive_regulation,
-  negative_regulation,
-  provides_input_for,
-  neutral,
-  input_of,
-  has_output
-};
 
 /**
  * @part header - The header
- * @part section - Group of legend entries
+ * @part sections - Group of legend entries
+ * @part section - An individual legend entry
  */
 @Component({
   tag: 'wc-gocam-legend',
@@ -42,25 +17,57 @@ export class GocamLegend {
   render() {
     return (
       <Host>
+        <svg height="0" width="0" style={{ position: 'absolute' }}>
+          <defs>
+            {Object.entries(RELATION_MAP).map(([id, config]) => (
+              <marker id={`${config.glyph}-${id}`}
+                viewBox="-2 0 18 10"
+                refX="18"
+                refY="5"
+                markerWidth="12"
+                markerHeight="4"
+                orient="auto">
+                {config.glyph === 'circle-triangle' && (
+                  <Fragment>
+                    <path d="M 4 0 L 12 5 L 4 10 z" fill={config.color} />
+                    <circle cx="16" cy="5" r="5" fill={config.color} />
+                  </Fragment>
+                )}
+                {config.glyph === 'triangle' && <path d="M 12 0 L 20 5 L 12 10 z" fill={config.color} />}
+                {config.glyph === 'tee' && <rect x="14" y="0" width="4" height="10" fill={config.color} />}
+                {config.glyph === 'circle' && <circle cx="16" cy="5" r="5" fill={config.color} />}
+                {config.glyph === 'square' && <rect x="12" y="0" width="8" height="10" fill={config.color} />}
+              </marker>
+            ))}
+          </defs>
+        </svg>
+
         <div class='header' part="header">Relation Types</div>
-        <div class='sections'>
-          {Object.keys(legend).map((section) => {
-            return (
-              <div class={'section ' + section} part="section">
-                {legend[section].map((item) => {
-                  return (
-                    <div class='item'>
-                      <img alt={item.label} src={IMAGE_DATA[item.id]}></img>
-                      <div class='item-label'>
-                        {item.label}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
+        <div class="sections" part="sections">
+          {Object.entries(LEGEND_COLUMNS).map(([columnName, relations]) => (
+            <div class={`section ${columnName}`} part="section">
+              {Object.entries(relations).map(([relationId, label]) => {
+                const config = RELATION_MAP[relationId];
+                return (
+                  <div class="item">
+                    <svg height="30" width="60">
+                      <line
+                        x1="5" y1="15"
+                        x2="45" y2="15"
+                        stroke={config.color}
+                        stroke-width={STYLES.SIZES.DEFAULT}
+                        stroke-dasharray={config.lineStyle === 'dashed' ? '5,5' : 'none'}
+                        marker-end={config.glyph ? `url(#${config.glyph}-${relationId})` : 'none'}
+                      />
+                    </svg>
+                    <span>{label}</span>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
         </div>
+
       </Host>
     );
   }

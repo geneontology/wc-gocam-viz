@@ -7,10 +7,11 @@
 
 ## Shadow Parts
 
-| Part        | Description             |
-| ----------- | ----------------------- |
-| `"header"`  | The header              |
-| `"section"` | Group of legend entries |
+| Part         | Description                |
+| ------------ | -------------------------- |
+| `"header"`   | The header                 |
+| `"section"`  | An individual legend entry |
+| `"sections"` | Group of legend entries    |
 
 
 ## CSS Custom Properties

@@ -1,5 +1,5 @@
-@import "../../scss/panel";
-@import "../../scss/mixins";
+@import '../../scss/panel';
+@import '../../scss/mixins';
 
 :host {
   /**
@@ -27,6 +27,7 @@
    *
    * @prop --legend-border-color: Border color of legend container
    * @prop --legend-border-width: Border width of legend container
+   * @prop --legend-margin: Margin of legend container
    * @prop --legend-padding: Padding of legend container
    *
    * @prop --legend-header-background: Background of legend header
@@ -96,20 +97,16 @@
   --legend-border-width: 0;
   --legend-border-color: var(--border-color);
   --legend-padding: 0;
+  --legend-margin: 1rem 0 0 0;
+
   @include standard-var-declarations(legend-header, $border-color: var(--border-color));
 
   @include standard-var-declarations(process, $border-color: var(--border-color));
 
-  @include standard-var-declarations(process-label,
-    $border-color: var(--border-color),
-    $border-width: 0 0 2px 0
-  );
+  @include standard-var-declarations(process-label, $border-color: var(--border-color), $border-width: 0 0 2px 0);
 
-  @include standard-var-declarations(activity,
-    $border-color: var(--border-color),
-    $border-width: 0 0 1px 0,
-    $padding: 0.25em 0
-  );
+  @include standard-var-declarations(activity, $border-color: var(--border-color), $border-width: 0 0 1px 0, $padding: 0.25em 0);
+
   --activity-background-active: #f0f0f0;
   --activity-color-active: black;
 
@@ -120,7 +117,9 @@
   @include standard-var-declarations(node, $border-color: var(--border-color), $padding: 0 1em 0 0);
 
   --function-nodes-padding: 0;
+}
 
+.gocam-graph-and-activities-container {
   display: flex;
   align-items: flex-start;
 }
@@ -164,8 +163,9 @@ button {
   cursor: pointer;
   user-select: none;
 
-  &:focus, &:hover {
-    background-color: var(--button-background-hover)
+  &:focus,
+  &:hover {
+    background-color: var(--button-background-hover);
   }
 
   &:first-child {
@@ -181,6 +181,7 @@ button {
 }
 
 wc-gocam-legend {
+  margin: var(--legend-margin);
   --border-width: var(--legend-border-width);
   --border-color: var(--legend-border-color);
   --padding: var(--legend-padding);

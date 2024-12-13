@@ -80,7 +80,8 @@ Type: `Promise<void>`
 | `"gocam-panel"`      | The panel containing the GO-CAM graph and legend     |
 | `"gocam-title"`      | The GO-CAM title                                     |
 | `"legend-header"`    | The header of the legend                             |
-| `"legend-section"`   | A group of entries in the legend                     |
+| `"legend-section"`   | An individual legend entry                           |
+| `"legend-sections"`  | A group of entries in the legend                     |
 | `"process"`          | A process group in the process and activities list   |
 
 
@@ -122,6 +123,7 @@ Type: `Promise<void>`
 | `--legend-header-border-width`  | Border width of legend header                                                        |
 | `--legend-header-color`         | Text color of legend header                                                          |
 | `--legend-header-padding`       | Padding of legend header                                                             |
+| `--legend-margin`               | Margin of legend container                                                           |
 | `--legend-padding`              | Padding of legend container                                                          |
 | `--node-background`             | Background of related node info in processes and activities panel                    |
 | `--node-border-color`           | Border color of related node info in processes and activities panel                  |
@@ -153,15 +155,15 @@ Type: `Promise<void>`
 ### Depends on
 
 - [go-loading-spinner](../loading-spinner)
-- [wc-gocam-legend](../gocam-legend)
 - [wc-genes-panel](../genes-panel)
+- [wc-gocam-legend](../gocam-legend)
 
 ### Graph
 ```mermaid
 graph TD;
   wc-gocam-viz --> go-loading-spinner
-  wc-gocam-viz --> wc-gocam-legend
   wc-gocam-viz --> wc-genes-panel
+  wc-gocam-viz --> wc-gocam-legend
   style wc-gocam-viz fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

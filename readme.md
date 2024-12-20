@@ -13,8 +13,8 @@ For a simple, static website using `<script>` tags is a quick way to get started
 ```html
 <html>
   <head>
-    <script type="module" src="https://unpkg.com/@geneontology/wc-gocam-viz/dist/wc-gocam-viz/wc-gocam-viz.esm.js"></script>
-    <script nomodule="" src="https://unpkg.com/@geneontology/wc-gocam-viz/dist/wc-gocam-viz/wc-gocam-viz.js"></script> 
+    <script type="module" src="https://unpkg.com/@geneontology/wc-gocam-viz@^1/dist/wc-gocam-viz/wc-gocam-viz.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/@geneontology/wc-gocam-viz@^1/dist/wc-gocam-viz/wc-gocam-viz.js"></script> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>

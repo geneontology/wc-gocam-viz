@@ -4,6 +4,7 @@ import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import {
     Activity, ActivityType, Cam,
+    noctuaFormConfig,
     NoctuaFormConfigService,
     NoctuaGraphService,
     Triple
@@ -395,10 +396,13 @@ export class GoCamViz {
         const edges = activity.getEdges(activity.pccNode?.id)
 
         if (expandComplex && edges) {
-            const gps = edges.map(edge => {
-                const geneShorthand = this.configService.getGeneShorthand(edge.object.term?.label)
-                return geneShorthand
-            });
+            const gps = edges
+                .filter(edge => edge.predicate?.edge?.id === noctuaFormConfig.edge.hasPart.id)
+                .map(edge => {
+                    const geneShorthand = this.configService.getGeneShorthand(edge.object.term?.label);
+                    return geneShorthand;
+                });
+
             const truncatedGps = gps.slice(0, 3)
             let geneString = gps.join(', ')
 

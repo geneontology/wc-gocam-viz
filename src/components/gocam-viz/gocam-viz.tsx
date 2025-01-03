@@ -4,7 +4,7 @@ import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import {
     Activity, ActivityType, Cam,
-    ActivityNodeType,
+    noctuaFormConfig,
     NoctuaFormConfigService,
     NoctuaGraphService,
     Triple
@@ -392,17 +392,17 @@ export class GoCamViz {
     createComplex(activity: Activity, expandComplex = false): any[] {
 
         const label = activity.gpNode?.term.label || activity.label || '';
-
         let el
-        // result.push(el)
-        if (expandComplex) {
+        const edges = activity.getEdges(activity.pccNode?.id)
 
-            const edges = activity.getEdges(ActivityNodeType.GoProteinContainingComplex)
+        if (expandComplex && edges) {
+            const gps = edges
+                .filter(edge => edge.predicate?.edge?.id === noctuaFormConfig.edge.hasPart.id)
+                .map(edge => {
+                    const geneShorthand = this.configService.getGeneShorthand(edge.object.term?.label);
+                    return geneShorthand;
+                });
 
-            const gps = edges.map(edge => {
-                const geneShorthand = this.configService.getGeneShorthand(edge.object.term?.label)
-                return geneShorthand
-            });
             const truncatedGps = gps.slice(0, 3)
             let geneString = gps.join(', ')
 
@@ -418,7 +418,6 @@ export class GoCamViz {
                     width: Math.max(115, geneString.length * 11),
                     textwidth: Math.max(115, geneString.length * 9),
                     "backgroundColor": activity.backgroundColor || 'white',
-                    // degree: (child * 10 + parent)
                 }
             }
 
@@ -432,11 +431,9 @@ export class GoCamViz {
                     width: Math.max(115, label.length * 11),
                     textwidth: Math.max(115, label.length * 9),
                     "backgroundColor": activity.backgroundColor || 'white',
-                    // degree: (child * 10 + parent)
                 }
             }
         }
-        // result.push(...gps)
         return [el]
 
     }

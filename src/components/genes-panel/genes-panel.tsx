@@ -1,6 +1,8 @@
 import { Component, Prop, Element, Event, EventEmitter, Watch, h, Method } from '@stencil/core';
 import { State } from '@stencil/core';
-import { Activity, ActivityNode, ActivityNodeType, Cam, Evidence, noctuaFormConfig } from '../../globals/@noctua.form';
+import { Activity, ActivityNode, Cam, Evidence, noctuaFormConfig } from '../../globals/@noctua.form';
+
+import newspaperPNG from './assets/newspaper.png';
 
 /**
  * @part process - Process containers
@@ -103,22 +105,6 @@ export class GenesPanel {
     }
 
     /**
-     * Render the references of a GP but does not display "with" field for the moment
-     * @param gp a gene product object (see graphHandler)
-     */
-    renderGeneReferences(gp) {
-        return (
-            <span>
-                {
-                    gp.evidences.map(evidence => {
-                        return <a class='far fa-newspaper' href={evidence.url} target='_blank' title={"Source: " + evidence.source + "\nEvidence: " + evidence.evidences.map(ev => ev.label).join(",")}></a>
-                    })
-                }
-            </span>
-        )
-    }
-
-    /**
      * Render the references for a biological context
      * @param context a biological context (see graphHandler)
      */
@@ -127,8 +113,10 @@ export class GenesPanel {
             <span>
                 {
                     evidences.map(evidence => {
-                        return <a class='far fa-newspaper' href={evidence.evidence.url} target='_blank'
-                            title={"Source: " + evidence.reference + "\nEvidence: " + evidence.evidence.label}>E</a>
+                        return <a href={evidence.referenceEntity?.url} target='_blank'
+                            title={"Source: " + evidence.reference + "\nEvidence: " + evidence.evidence.label}>
+                            <img class="icon" src={newspaperPNG} alt="newspaper" />
+                        </a>
                     })
                 }
             </span>

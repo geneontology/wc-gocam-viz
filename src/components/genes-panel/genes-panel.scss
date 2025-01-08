@@ -1,4 +1,4 @@
-@import "../../scss/mixins";
+@import '../../scss/mixins';
 
 :host {
   /**
@@ -64,7 +64,7 @@
 }
 
 .process-label {
-  @include standard-var-styles(process-label)
+  @include standard-var-styles(process-label);
 }
 
 .activity {
@@ -90,11 +90,11 @@
 }
 
 .gene-product {
-  @include standard-var-styles(gene-product)
+  @include standard-var-styles(gene-product);
 }
 
 .function-label {
-  @include standard-var-styles(function-label)
+  @include standard-var-styles(function-label);
 }
 
 .function-nodes {
@@ -105,7 +105,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 0.175em;
-  @include standard-var-styles(node)
+  @include standard-var-styles(node);
 }
 
 .node:last-child {
@@ -125,4 +125,10 @@
 }
 
 .node-evidence {
+  text-align: right;
+  .icon {
+    margin-left: 0.25em;
+    height: 1em;
+    width: 1em;
+  }
 }

@@ -1,6 +1,6 @@
 import { Component, Prop, Element, Event, EventEmitter, Watch, h, Method } from '@stencil/core';
 import { State } from '@stencil/core';
-import { Activity, ActivityNode, ActivityNodeType, Cam, Evidence, noctuaFormConfig } from '../../globals/@noctua.form';
+import { Activity, ActivityNode, Cam, Evidence, noctuaFormConfig } from '../../globals/@noctua.form';
 
 /**
  * @part process - Process containers
@@ -102,19 +102,15 @@ export class GenesPanel {
         }
     }
 
-    /**
-     * Render the references of a GP but does not display "with" field for the moment
-     * @param gp a gene product object (see graphHandler)
-     */
-    renderGeneReferences(gp) {
+    renderReferenceIcon() {
+        // SVG originally from https://icons.getbootstrap.com/icons/newspaper/
+        // Modified to remove the width and height attributes in order to allow the size to be
+        // controlled via CSS
         return (
-            <span>
-                {
-                    gp.evidences.map(evidence => {
-                        return <a class='far fa-newspaper' href={evidence.url} target='_blank' title={"Source: " + evidence.source + "\nEvidence: " + evidence.evidences.map(ev => ev.label).join(",")}></a>
-                    })
-                }
-            </span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-newspaper icon" viewBox="0 0 16 16">
+              <path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5zM12 14c.37 0 .654-.211.853-.441.092-.106.147-.279.147-.531V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5z"/>
+              <path d="M2 3h10v2H2zm0 3h4v3H2zm0 4h4v1H2zm0 2h4v1H2zm5-6h2v1H7zm3 0h2v1h-2zM7 8h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2z"/>
+          </svg>
         )
     }
 
@@ -127,8 +123,10 @@ export class GenesPanel {
             <span>
                 {
                     evidences.map(evidence => {
-                        return <a class='far fa-newspaper' href={evidence.evidence.url} target='_blank'
-                            title={"Source: " + evidence.reference + "\nEvidence: " + evidence.evidence.label}>E</a>
+                        return <a href={evidence.referenceEntity?.url} target='_blank'
+                            title={"Source: " + evidence.reference + "\nEvidence: " + evidence.evidence.label}>
+                            { this.renderReferenceIcon() }
+                        </a>
                     })
                 }
             </span>

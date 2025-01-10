@@ -109,6 +109,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 0.175em;
+  width: 100%;
   @include standard-var-styles(node);
 }
 

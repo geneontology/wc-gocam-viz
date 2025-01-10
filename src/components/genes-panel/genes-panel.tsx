@@ -123,6 +123,9 @@ export class GenesPanel {
             <span>
                 {
                     evidences.map(evidence => {
+                        if (!evidence.reference) {
+                            return null; // for extreme case
+                        }
                         return <a href={evidence.referenceEntity?.url} target='_blank'
                             title={"Source: " + evidence.reference + "\nEvidence: " + evidence.evidence.label}>
                             {this.renderReferenceIcon()}

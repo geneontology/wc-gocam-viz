@@ -95,6 +95,10 @@
 
 .function-label {
   @include standard-var-styles(function-label);
+  display: flex;
+  .node-term {
+    font-size: 1em;
+  }
 }
 
 .function-nodes {

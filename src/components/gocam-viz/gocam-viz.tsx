@@ -110,7 +110,7 @@ export class GoCamViz {
         'min-zoomed-font-size': 1, //10,
         'text-valign': 'center',
         'color': 'black',
-        'shape': "rectangle",
+        'shape': "data(shape)",
         'text-wrap': 'wrap',
         // 'text-overflow-wrap': "anywhere",
         'text-max-width': 'data(textwidth)'
@@ -381,7 +381,8 @@ export class GoCamViz {
                 // parent: ??
                 "text-valign": "top",
                 "text-halign": "left",
-                "backgroundColor": activity.backgroundColor || 'white',
+                shape: "rectangle",
+                backgroundColor: activity.backgroundColor || 'white',
                 // degree: (child * 10 + parent)
             }
         }
@@ -417,7 +418,8 @@ export class GoCamViz {
                     height: 200,
                     width: Math.max(115, geneString.length * 11),
                     textwidth: Math.max(115, geneString.length * 9),
-                    "backgroundColor": activity.backgroundColor || 'white',
+                    shape: "rectangle",
+                    backgroundColor: activity.backgroundColor || 'white',
                 }
             }
 
@@ -430,7 +432,8 @@ export class GoCamViz {
                     label: label,
                     width: Math.max(115, label.length * 11),
                     textwidth: Math.max(115, label.length * 9),
-                    "backgroundColor": activity.backgroundColor || 'white',
+                    shape: "rectangle",
+                    backgroundColor: activity.backgroundColor || 'white',
                 }
             }
         }
@@ -446,6 +449,7 @@ export class GoCamViz {
         const el = {
             group: "nodes",
             data: {
+                shape: "ellipse",
                 id: activity.id,
                 label: geneShorthand,
                 width: Math.max(115, geneShorthand.length * 11),
@@ -454,7 +458,7 @@ export class GoCamViz {
                 // parent: ??
                 "text-valign": "top",
                 "text-halign": "left",
-                "backgroundColor": activity.backgroundColor || 'white',
+                backgroundColor: activity.backgroundColor || 'white',
                 // degree: (child * 10 + parent)
             }
         }

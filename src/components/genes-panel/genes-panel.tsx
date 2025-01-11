@@ -107,10 +107,10 @@ export class GenesPanel {
         // Modified to remove the width and height attributes in order to allow the size to be
         // controlled via CSS
         return (
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-newspaper icon" viewBox="0 0 16 16">
-              <path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5zM12 14c.37 0 .654-.211.853-.441.092-.106.147-.279.147-.531V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5z"/>
-              <path d="M2 3h10v2H2zm0 3h4v3H2zm0 4h4v1H2zm0 2h4v1H2zm5-6h2v1H7zm3 0h2v1h-2zM7 8h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2z"/>
-          </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-newspaper icon" viewBox="0 0 16 16">
+                <path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5zM12 14c.37 0 .654-.211.853-.441.092-.106.147-.279.147-.531V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5z" />
+                <path d="M2 3h10v2H2zm0 3h4v3H2zm0 4h4v1H2zm0 2h4v1H2zm5-6h2v1H7zm3 0h2v1h-2zM7 8h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2z" />
+            </svg>
         )
     }
 
@@ -123,9 +123,12 @@ export class GenesPanel {
             <span>
                 {
                     evidences.map(evidence => {
+                        if (!evidence.reference) {
+                            return null; // for extreme case
+                        }
                         return <a href={evidence.referenceEntity?.url} target='_blank'
                             title={"Source: " + evidence.reference + "\nEvidence: " + evidence.evidence.label}>
-                            { this.renderReferenceIcon() }
+                            {this.renderReferenceIcon()}
                         </a>
                     })
                 }
@@ -181,9 +184,14 @@ export class GenesPanel {
                 {activity.rootNode &&
                     <div class='function'>
                         <div class='function-label' part="function-label">
-                            <a href={activity.rootNode?.term.url} target='_blank'>
-                                {activity.rootNode?.term.label}
-                            </a>
+                            <div class="node-term">
+                                <a href={activity.rootNode?.term.url} target='_blank'>
+                                    {activity.rootNode?.term.label}
+                                </a>
+                            </div>
+                            <div class="node-evidence">
+                                {this.renderReferences(activity.rootNode.predicate.evidence)}
+                            </div>
                         </div>
                         <div class="function-nodes">
                             {nodes.map((node: ActivityNode) => {

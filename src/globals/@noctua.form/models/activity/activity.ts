@@ -134,11 +134,13 @@ export class Activity extends SaeGraph<ActivityNode> {
   get backgroundColor() {
     switch (this.activityType) {
       case ActivityType.ccOnly:
-        return 'purple'
+        return '#DDDDDD'
       case ActivityType.bpOnly:
-        return 'brown'
+        return '#d7ccc8' //brownish
       case ActivityType.molecule:
         return '#b2dfdb'
+      case ActivityType.proteinComplex:
+        return '#e2bde7'
       default:
         return this._backgroundColor;
     }

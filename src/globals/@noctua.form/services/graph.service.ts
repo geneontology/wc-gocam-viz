@@ -3,14 +3,13 @@ import * as EntityDefinition from './../data/config/entity-definition';
 import { noctuaFormConfig } from './../noctua-form-config';
 import { NoctuaFormConfigService } from './noctua-form-config.service';
 import { Activity, ActivityType } from './../models/activity/activity';
-import { find, each, chain } from 'lodash';
-import { ActivityNode, ActivityNodeType, compareTerm, GoCategory } from './../models/activity/activity-node';
-import { Cam, CamOperation } from './../models/activity/cam';
+import { find, each } from 'lodash';
+import { ActivityNode, GoCategory } from './../models/activity/activity-node';
+import { Cam } from './../models/activity/cam';
 import { Entity } from './../models/activity/entity';
 import { Evidence } from './../models/activity/evidence';
 import { Predicate } from './../models/activity/predicate';
 import { Triple } from './../models/activity/triple';
-import { TermsSummary } from './../models/activity/summary';
 import moment from 'moment';
 import { graph as bbopGraph } from 'bbop-graph-noctua';
 import { DBXrefService } from '../../dbxref.service';
@@ -94,17 +93,23 @@ export class NoctuaGraphService {
     return cam;
   }
 
-  loadCam(cam: Cam) {
-    const self = this;
-    const activities = self.graphToActivities(cam.graph);
-    const molecules = self.graphToMolecules(cam.graph, activities.map((activity) => activity.id));
+  loadCam(cam: Cam, removeCC: boolean = false) {
+    let activities = this.graphToActivities(cam.graph);
+
+    if (removeCC) {
+      activities = activities?.filter((activity) =>
+        activity.activityType === ActivityType.default ||
+        activity.activityType === ActivityType.bpOnly ||
+        activity.activityType === ActivityType.proteinComplex);
+    }
+
+    const molecules = this.graphToMolecules(cam.graph, activities.map((activity) => activity.id));
 
     activities.push(...molecules);
 
     cam.activities = activities;
     cam.updateProperties()
-    cam.causalRelations = self.getCausalRelations(cam);
-
+    cam.causalRelations = this.getCausalRelations(cam);
   }
 
   getNodeInfo(node) {
@@ -386,13 +391,13 @@ export class NoctuaGraphService {
   getCausalRelations(cam: Cam) {
     const self = this;
     const triples: Triple<Activity>[] = [];
+
     each(cam.activities, (subjectActivity: Activity) => {
       each(cam.graph.get_edges_by_subject(subjectActivity.id), (bbopEdge) => {
         const predicateId = bbopEdge.predicate_id();
         const evidence = self.edgeToEvidence(cam.graph, bbopEdge);
         const objectId = bbopEdge.object_id();
         const objectInfo = self.nodeToActivityNode(cam.graph, objectId);
-        const edges = noctuaFormConfig.allEdges
         const causalEdge = this.noctuaFormConfigService.findEdge(predicateId)
 
         if (objectInfo.hasRootType(EntityDefinition.GoMolecularFunction)
@@ -423,8 +428,6 @@ export class NoctuaGraphService {
     for (const bbopEdge of bbopEdges) {
       const bbopObjectId = bbopEdge.object_id();
       const bbopPredicateId = bbopEdge.predicate_id();
-
-      console.log('object', bbopObjectId, 'predicate', bbopPredicateId, 'visitedNodeIds', visitedNodeIds)
 
       if (visitedNodeIds.includes(bbopObjectId)) {
         continue

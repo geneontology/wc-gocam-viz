@@ -135,7 +135,6 @@ export class Cam {
   manualLayout = false;
   layoutChanged = false;
 
-  private _filteredActivities: Activity[] = [];
   activities: Activity[] = [];
   storedActivities: Activity[] = [];
   private _id: string;
@@ -254,49 +253,6 @@ export class Cam {
   }
 
 
-  applyFilter() {
-    const self = this;
-
-    self.clearHighlight();
-
-    if (self.queryMatch && self.queryMatch.terms.length > 0) {
-      self._filteredActivities = [];
-      self.matchedCount = 0;
-
-      each(self.activities, (activity: Activity) => {
-        let match = false;
-        each(activity.nodes, (node: ActivityNode) => {
-          each(self.queryMatch.terms, (term) => {
-
-            if (node.term.uuid === term.uuid) {
-              node.term.highlight = true;
-              node.term.activityDisplayId = term.activityDisplayId = activity.displayId;
-
-              self.matchedCount += 1;
-              match = true;
-            }
-          });
-
-          each(node.predicate.evidence, (evidence: Evidence) => {
-            each(self.queryMatch.terms, (term) => {
-
-              if (evidence.uuid === term.uuid) {
-                evidence.referenceEntity.highlight = true;
-                evidence.referenceEntity.activityDisplayId = term.activityDisplayId = activity.displayId;
-
-                self.matchedCount += 1;
-                match = true;
-              }
-            });
-          });
-        });
-
-        if (match) {
-          self._filteredActivities.push(activity);
-        }
-      });
-    }
-  }
 
   applyWeights(weight = 0) {
     const self = this;
@@ -425,28 +381,6 @@ export class Cam {
     return result;
   }
 
-  tableCanDisplayEnabledBy(node: ActivityNode) {
-    return node.predicate.edge && node.predicate.edge.id === noctuaFormConfig.edge.enabledBy.id;
-  }
-
-  tableDisplayExtension(node: ActivityNode) {
-    if (node.id === 'mf') {
-      return '';
-    } else if (node.isComplement) {
-      return 'NOT ' + node.predicate.edge.label;
-    } else {
-      return node.predicate.edge.label;
-    }
-  }
-
-  updateActivityDisplayNumber() {
-    const self = this;
-
-    each(self.activities, (activity: Activity, key) => {
-      activity.displayNumber = self.displayNumber + '.' + (key + 1).toString();
-    });
-  }
-
   updateProperties() {
     const self = this;
 
@@ -456,24 +390,6 @@ export class Cam {
 
     this.sortBy.label = noctuaFormConfig.activitySortField.options[this.sortBy.field]?.label
   }
-
-  private _getGPText(a: Activity): string {
-    return a.presentation.gpText.toLowerCase()
-  }
-
-  private _getMFText(a: Activity): string {
-    if (!a.mfNode) return ''
-    return a.mfNode.term.label;
-  }
-  private _getBPText(a: Activity): string {
-    if (!a.bpNode) return ''
-    return a.bpNode.term.label;
-  }
-  private _getCCText(a: Activity): string {
-    if (!a.ccNode) return ''
-    return a.ccNode.term.label;
-  }
-
 
 }
 

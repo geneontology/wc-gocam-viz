@@ -97,7 +97,7 @@ export class NoctuaGraphService {
   loadCam(cam: Cam) {
     const self = this;
     const activities = self.graphToActivities(cam.graph);
-    const molecules = self.graphToMolecules(cam.graph);
+    const molecules = self.graphToMolecules(cam.graph, activities.map((activity) => activity.id));
 
     activities.push(...molecules);
 
@@ -105,9 +105,6 @@ export class NoctuaGraphService {
     cam.updateProperties()
     cam.causalRelations = self.getCausalRelations(cam);
 
-
-    cam.applyFilter();
-    cam.updateActivityDisplayNumber();
   }
 
   getNodeInfo(node) {
@@ -283,67 +280,6 @@ export class NoctuaGraphService {
         subjectNode.hasRootType(EntityDefinition.GoMolecularEntity))
   }
 
-  getTerms(camGraph): TermsSummary {
-    const self = this;
-    const termsSummary = new TermsSummary()
-    const nodes = []
-    const frequency = {}
-
-    each(camGraph.all_nodes(), (bbopNode) => {
-      const node = self.nodeToActivityNode(camGraph, bbopNode.id());
-      node.id = node.uuid;
-      nodes.push(node)
-      frequency[node.term.id] = frequency[node.term.id] ? frequency[node.term.id] + 1 : 1;
-
-
-      if (node.hasRootType(EntityDefinition.GoMolecularEntity)) {
-        termsSummary.gp.frequency++;
-      } else if (node.hasRootType(EntityDefinition.GoMolecularFunction)) {
-        termsSummary.mf.frequency++;
-      } else if (node.hasRootType(EntityDefinition.GoBiologicalProcess)) {
-        termsSummary.bp.frequency++;
-      } else if (node.hasRootType(EntityDefinition.GoCellularComponent)) {
-        termsSummary.cc.frequency++;
-      } else if (node.hasRootType(EntityDefinition.GoEvidenceNode)) {
-        // continue
-      } else {
-        termsSummary.other.frequency++;
-      }
-    });
-
-    const uniqueNodes = chain(nodes)
-      .uniqWith(compareTerm)
-      .value();
-
-    each(uniqueNodes, (node: ActivityNode) => {
-      node.frequency = frequency[node.term.id]
-
-      if (node.hasRootType(EntityDefinition.GoMolecularEntity)) {
-        node.type = ActivityNodeType.GoMolecularEntity
-        termsSummary.gp.append(node)
-      } else if (node.hasRootType(EntityDefinition.GoMolecularFunction)) {
-        node.type = ActivityNodeType.GoMolecularFunction
-        termsSummary.mf.append(node)
-      } else if (node.hasRootType(EntityDefinition.GoBiologicalProcess)) {
-        node.type = ActivityNodeType.GoBiologicalProcess
-        termsSummary.bp.append(node)
-      } else if (node.hasRootType(EntityDefinition.GoCellularComponent)) {
-        node.type = ActivityNodeType.GoCellularComponent
-        termsSummary.cc.append(node)
-      } else if (node.hasRootType(EntityDefinition.GoEvidenceNode)) {
-        // continue
-      } else {
-        termsSummary.other.append(node)
-      }
-    })
-
-    termsSummary.allTerms = uniqueNodes
-
-    return termsSummary
-  }
-
-
-
   getActivityPreset(subjectNode: Partial<ActivityNode>, objectNode: Partial<ActivityNode>, predicateId, bbopSubjectEdges): Activity {
     const self = this;
     let activityType = ActivityType.default;
@@ -407,12 +343,16 @@ export class NoctuaGraphService {
 
   }
 
-  graphToMolecules(camGraph): Activity[] {
+  graphToMolecules(camGraph, visitedMFNodeIds?: string[]): Activity[] {
     const self = this;
-    const activities: Activity[] = [];
+    const mols: Activity[] = [];
 
-    each(camGraph.all_nodes(), (bbopNode) => {
+    for (const bbopNode of camGraph.all_nodes()) {
       const subjectNode = self.nodeToActivityNode(camGraph, bbopNode.id());
+
+      if (visitedMFNodeIds.includes(bbopNode.id())) {
+        continue
+      }
 
       if (subjectNode.hasRootType(EntityDefinition.GoChemicalEntity) && !subjectNode.hasRootType(EntityDefinition.GoMolecularEntity)) {
         const subjectEdges = camGraph.get_edges_by_subject(bbopNode.id())
@@ -431,15 +371,15 @@ export class NoctuaGraphService {
           subjectActivityNode.classExpression = subjectNode.classExpression;
           subjectActivityNode.uuid = bbopNode.id();
           activity.id = bbopNode.id();
-          self._graphToActivityDFS(camGraph, activity, subjectEdges, subjectActivityNode);
+          self._graphToActivityDFS(camGraph, activity, subjectEdges, subjectActivityNode, visitedMFNodeIds);
           //activity.postRunUpdate();
-          activities.push(activity);
+          mols.push(activity);
         }
       }
 
-    });
+    };
 
-    return activities
+    return mols
   }
 
 
@@ -477,12 +417,18 @@ export class NoctuaGraphService {
   }
 
 
-  private _graphToActivityDFS(camGraph, activity: Activity, bbopEdges, subjectNode: ActivityNode) {
+  private _graphToActivityDFS(camGraph, activity: Activity, bbopEdges, subjectNode: ActivityNode, visitedNodeIds: string[] = []): Activity {
     const self = this;
 
     for (const bbopEdge of bbopEdges) {
-
+      const bbopObjectId = bbopEdge.object_id();
       const bbopPredicateId = bbopEdge.predicate_id();
+
+      console.log('object', bbopObjectId, 'predicate', bbopPredicateId, 'visitedNodeIds', visitedNodeIds)
+
+      if (visitedNodeIds.includes(bbopObjectId)) {
+        continue
+      }
 
       const allowedPredicate = this.noctuaFormConfigService.shapePredicates.find((predicate) => {
         return predicate === bbopPredicateId;
@@ -505,8 +451,6 @@ export class NoctuaGraphService {
       if (!result.includes(bbopPredicateId)) continue;
 
 
-
-      const bbopObjectId = bbopEdge.object_id();
       const evidence = self.edgeToEvidence(camGraph, bbopEdge);
       const comments = self.edgeComments(bbopEdge);
       const partialObjectNode = self.nodeToActivityNode(camGraph, bbopObjectId);
@@ -529,7 +473,7 @@ export class NoctuaGraphService {
           triple.predicate.evidence = evidence;
           triple.predicate.comments = comments;
           triple.predicate.uuid = bbopEdge.id();
-          self._graphToActivityDFS(camGraph, activity, camGraph.get_edges_by_subject(bbopObjectId), triple.object);
+          self._graphToActivityDFS(camGraph, activity, camGraph.get_edges_by_subject(bbopObjectId), triple.object, visitedNodeIds);
         }
       }
     }

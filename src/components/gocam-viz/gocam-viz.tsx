@@ -405,7 +405,7 @@ export class GoCamViz {
                 });
 
             const truncatedGps = gps.slice(0, 3)
-            let geneString = gps.join(', ')
+            let geneString = truncatedGps.join(', ')
 
             if (gps.length > truncatedGps.length) {
                 geneString += ' and ' + (gps.length - truncatedGps.length).toString() + ' more'

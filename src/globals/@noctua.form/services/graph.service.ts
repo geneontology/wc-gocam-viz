@@ -53,7 +53,7 @@ export class NoctuaGraphService {
     cam.modified = responseData['modified-p'];
 
     this.getMetadata(cam)
-    this.loadCam(cam)
+    this.loadCam(cam, true)
 
     return cam;
   }

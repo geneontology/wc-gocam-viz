@@ -24,6 +24,7 @@ const GOMODEL_PREFIX = "gomodel:"
  * @part gocam-graph - The GO-CAM graph container
  * @part activities-panel - The panel containing the process and activities list
  * @part process - A process group in the process and activities list
+ * @part process-label - A process label in the process and activities list
  * @part activity - An activity in the process and activities list
  * @part gene-product - A gene product name in process and activities list
  * @part function-label - A function term name in process and activities list
@@ -781,7 +782,7 @@ export class GoCamViz {
                         <div class="panel-body">
                             <wc-genes-panel
                                 cam={this.cam}
-                                exportparts="process, activity, gene-product, function-label"
+                                exportparts="process, process-label, activity, gene-product, function-label"
                                 ref={el => this.genesPanel = el}
                             >
                             </wc-genes-panel>

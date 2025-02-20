@@ -4,6 +4,7 @@ import { Activity, ActivityNode, Cam, Evidence, noctuaFormConfig } from '../../g
 
 /**
  * @part process - Process containers
+ * @part process-label - Process label
  * @part activity - Activity containers
  * @part gene-product - Gene product labels
  * @part function-label - Molecular function labels
@@ -154,7 +155,7 @@ export class GenesPanel {
 
         return (
             <div class="process" part="process">
-                <div class="process-label">
+                <div class="process-label" part="process-label">
                     {process}
                 </div>
                 <div class="process-activities">

@@ -1,7 +1,5 @@
 # wc-genes-panel
 
-
-
 <!-- Auto Generated Below -->
 
 
@@ -26,6 +24,12 @@
 
 
 
+#### Parameters
+
+| Name     | Type  | Description |
+| -------- | ----- | ----------- |
+| `nodeId` | `any` |             |
+
 #### Returns
 
 Type: `Promise<void>`
@@ -41,6 +45,7 @@ Type: `Promise<void>`
 | `"function-label"` | Molecular function labels |
 | `"gene-product"`   | Gene product labels       |
 | `"process"`        | Process containers        |
+| `"process-label"`  | Process label             |
 
 
 ## CSS Custom Properties
@@ -66,6 +71,7 @@ Type: `Promise<void>`
 | `--gene-product-color`          | Text color of gene product labels                  |
 | `--gene-product-padding`        | Padding of gene product labels                     |
 | `--height`                      | Height of the panel                                |
+| `--node-align-items`            | Align-items of related node info                   |
 | `--node-background`             | Background of related node info                    |
 | `--node-border-color`           | Border color of related node info                  |
 | `--node-border-width`           | Border width of related node info                  |

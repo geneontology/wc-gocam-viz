@@ -41,6 +41,7 @@
    * @prop --node-border-width: Border width of related node info
    * @prop --node-color: Text color of related node info
    * @prop --node-padding: Padding of related node info
+   * @prop --node-align-items: Align-items of related node info
    *
    * @prop --function-nodes-padding: Padding of related nodes container
    */
@@ -107,7 +108,7 @@
 
 .node {
   display: flex;
-  align-items: center;
+  align-items: var(--node-align-items, center);
   margin-bottom: 0.175em;
   width: 100%;
   @include standard-var-styles(node);

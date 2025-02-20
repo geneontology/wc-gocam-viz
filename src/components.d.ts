@@ -75,18 +75,7 @@ declare global {
         prototype: HTMLGoLoadingSpinnerElement;
         new (): HTMLGoLoadingSpinnerElement;
     };
-    interface HTMLWcGenesPanelElementEventMap {
-        "selectChanged": any;
-    }
     interface HTMLWcGenesPanelElement extends Components.WcGenesPanel, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLWcGenesPanelElementEventMap>(type: K, listener: (this: HTMLWcGenesPanelElement, ev: WcGenesPanelCustomEvent<HTMLWcGenesPanelElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLWcGenesPanelElementEventMap>(type: K, listener: (this: HTMLWcGenesPanelElement, ev: WcGenesPanelCustomEvent<HTMLWcGenesPanelElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLWcGenesPanelElement: {
         prototype: HTMLWcGenesPanelElement;
@@ -98,38 +87,13 @@ declare global {
         prototype: HTMLWcGocamLegendElement;
         new (): HTMLWcGocamLegendElement;
     };
-    interface HTMLWcGocamSelectorElementEventMap {
-        "selectGOCAM": any;
-    }
     interface HTMLWcGocamSelectorElement extends Components.WcGocamSelector, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLWcGocamSelectorElementEventMap>(type: K, listener: (this: HTMLWcGocamSelectorElement, ev: WcGocamSelectorCustomEvent<HTMLWcGocamSelectorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLWcGocamSelectorElementEventMap>(type: K, listener: (this: HTMLWcGocamSelectorElement, ev: WcGocamSelectorCustomEvent<HTMLWcGocamSelectorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLWcGocamSelectorElement: {
         prototype: HTMLWcGocamSelectorElement;
         new (): HTMLWcGocamSelectorElement;
     };
-    interface HTMLWcGocamVizElementEventMap {
-        "nodeOver": any;
-        "nodeOut": any;
-        "nodeClick": any;
-        "layoutChange": any;
-    }
     interface HTMLWcGocamVizElement extends Components.WcGocamViz, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLWcGocamVizElementEventMap>(type: K, listener: (this: HTMLWcGocamVizElement, ev: WcGocamVizCustomEvent<HTMLWcGocamVizElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLWcGocamVizElementEventMap>(type: K, listener: (this: HTMLWcGocamVizElement, ev: WcGocamVizCustomEvent<HTMLWcGocamVizElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLWcGocamVizElement: {
         prototype: HTMLWcGocamVizElement;

@@ -1,7 +1,5 @@
 # wc-gocam-viz
 
-
-
 <!-- Auto Generated Below -->
 
 
@@ -108,6 +106,7 @@ Type: `Promise<void>`
 | `--activity-border-width`       | Border width of activity containers in processes and activities panel                |
 | `--activity-color`              | Text color of activity containers in processes and activities panel                  |
 | `--activity-color-active`       | Text color of activity containers in processes and activities panel when highlighted |
+| `--activity-color-link-hover`   | Anchor link hover color in processes and activities panel                            |
 | `--activity-padding`            | Padding of activity containers in processes and activities panel                     |
 | `--border-color`                | Default color of various borders used in the widget                                  |
 | `--button-background`           | Background of buttons in widget                                                      |

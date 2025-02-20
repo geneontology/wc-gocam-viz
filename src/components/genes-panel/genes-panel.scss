@@ -22,6 +22,7 @@
    * @prop --activity-border-width: Border width of activity containers
    * @prop --activity-color: Text color of activity containers
    * @prop --activity-color-active: Text color of activity containers when highlighted
+   * @prop activity-color-active-link-hover: Hover anchor link color within activity containers when highlighted
    * @prop --activity-padding: Padding of activity containers
    *
    * @prop --gene-product-background: Background of gene product labels
@@ -74,6 +75,10 @@
   a {
     color: var(--activity-color);
     text-decoration: none;
+
+    &:hover {
+      color: var(--activity-color-link-hover);
+    }
   }
 
   &.active {

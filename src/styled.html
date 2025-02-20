@@ -1,95 +1,87 @@
-<html dir='ltr' lang='en'>
+<html dir="ltr" lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script type="module" src="/build/wc-gocam-viz.esm.js"></script>
+    <script nomodule src="/build/wc-gocam-viz.js"></script>
 
-
-<head>
-  <meta name='viewport' content='width=device-width, initial-scale=1' />
-  <script type='module' src='/build/wc-gocam-viz.esm.js'></script>
-  <script nomodule src='/build/wc-gocam-viz.js'></script>
-
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
-  <link rel='stylesheet' href='/reset.css'>
-  <title>wc-gocam-viz -- styled</title>
-  <style>
-    wc-gocam-viz {
-      --panel-border-width: 1px;
-      --panel-header-background: rgba(0, 0, 0, 0.03);
-      --panel-header-padding: 0.5rem 1rem;
-      --panel-header-font-weight: normal;
-      --button-background: #0d6efd;
-      --button-color: white;
-      --button-background-hover: #0b5ed7;
-      --legend-border-width: 1px 0 0 0;
-      --legend-padding: 0.5rem 1rem;
-      --process-label-background: #7a548d;
-      --process-label-color: white;
-      --process-label-padding: 0.5rem 1rem;
-      --process-label-border-width: 0;
-      --activity-border-color: #d1b6df;
-      --activity-border-width: 0 0 3px 0;
-      --activity-background-active: #af732a;
-      --activity-color-active: #eee;
-      --gene-product-color: #333;
-      --gene-product-padding: 0.5rem 1rem;
-      --gene-product-border-width: 0 0 1px 0;
-      --function-label-padding: 0.5rem 1rem;
-      --function-nodes-padding: 0px 1rem 0.5rem 1rem;
-      --node-border-width: 0 0 1px 0;
-      --graph-padding: 1rem;
-    }
-
-    wc-gocam-viz::part(gene-product) {
-      font-size: 1.125rem;
-      font-weight: bold;
-    }
-
-    wc-gocam-viz::part(legend-header) {
-      text-align: center;
-    }
-
-    wc-gocam-viz::part(gocam-title) {
-      font-weight: bold;
-    }
-  </style>
-</head>
-
-
-<body>
-
-  <div style='max-width: 1200px; margin: 0 auto'>
-    <wc-gocam-viz id='gocam-1' gocam-id='568b0f9600000284' show-legend='true'>
-    </wc-gocam-viz>
-  </div>
-
-
-  <!-- OPTIONAL: SPECIAL HANDLING OF EVENTS -->
-  <script>
-    /**
-     * General Key listener, here to recenter the graph visualization
-     */
-    document.addEventListener('keydown', (key) => {
-      if (key.code == 'Space') {
-        key.preventDefault();
-        let viz = document.getElementById('gocam-1');
-        if (viz) {
-          viz.resetView();
-        }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/reset.css" />
+    <title>wc-gocam-viz -- styled</title>
+    <style>
+      wc-gocam-viz {
+        --panel-border-width: 1px;
+        --panel-header-background: rgba(0, 0, 0, 0.03);
+        --panel-header-padding: 0.5rem 1rem;
+        --panel-header-font-weight: normal;
+        --button-background: #0d6efd;
+        --button-color: white;
+        --button-background-hover: #0b5ed7;
+        --legend-border-width: 1px 0 0 0;
+        --legend-padding: 0.5rem 1rem;
+        --process-label-background: #7a548d;
+        --process-label-color: white;
+        --process-label-padding: 0.5rem 1rem;
+        --process-label-border-width: 0;
+        --activity-border-color: #d1b6df;
+        --activity-border-width: 0 0 3px 0;
+        --activity-background-active: #af732a;
+        --activity-color-active: #eee;
+        --activity-color-link-hover: #eee;
+        --gene-product-color: #333;
+        --gene-product-padding: 0.5rem 1rem;
+        --gene-product-border-width: 0 0 1px 0;
+        --function-label-padding: 0.5rem 1rem;
+        --function-nodes-padding: 0px 1rem 0.5rem 1rem;
+        --node-border-width: 0 0 1px 0;
+        --graph-padding: 1rem;
       }
-    });
 
-    /**
-     * Listen to a mouse over event on an activity node
-     */
-    document.addEventListener('nodeOver', function hideMenu(e, v) {
-      let payload = e.detail;
-    });
+      wc-gocam-viz::part(gene-product) {
+        font-size: 1.125rem;
+        font-weight: bold;
+      }
 
-    /**
-     * Listen to a mouse out event from an activity node
-     */
-    document.addEventListener('nodeOut', function hideMenu(e, v) {
-    });
+      wc-gocam-viz::part(legend-header) {
+        text-align: center;
+      }
 
-  </script>
+      wc-gocam-viz::part(gocam-title) {
+        font-weight: bold;
+      }
+    </style>
+  </head>
 
-</body>
+  <body>
+    <div style="max-width: 1200px; margin: 0 auto">
+      <wc-gocam-viz id="gocam-1" gocam-id="568b0f9600000284" show-legend="true"> </wc-gocam-viz>
+    </div>
+
+    <!-- OPTIONAL: SPECIAL HANDLING OF EVENTS -->
+    <script>
+      /**
+       * General Key listener, here to recenter the graph visualization
+       */
+      document.addEventListener('keydown', key => {
+        if (key.code == 'Space') {
+          key.preventDefault();
+          let viz = document.getElementById('gocam-1');
+          if (viz) {
+            viz.resetView();
+          }
+        }
+      });
+
+      /**
+       * Listen to a mouse over event on an activity node
+       */
+      document.addEventListener('nodeOver', function hideMenu(e, v) {
+        let payload = e.detail;
+      });
+
+      /**
+       * Listen to a mouse out event from an activity node
+       */
+      document.addEventListener('nodeOut', function hideMenu(e, v) {});
+    </script>
+  </body>
 </html>

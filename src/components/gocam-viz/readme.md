@@ -38,12 +38,6 @@ Type: `Promise<void>`
 
 Define if the GO-CAM viz should capture the mouse scroll
 
-#### Parameters
-
-| Name       | Type  | Description                                                            |
-| ---------- | ----- | ---------------------------------------------------------------------- |
-| `shouldAF` | `any` | set to true if you want a mouse scroll to be captured by the component |
-
 #### Returns
 
 Type: `Promise<void>`
@@ -54,12 +48,6 @@ Type: `Promise<void>`
 
 Manually supply GO-CAM data to be rendered. This will overwrite any data previously
 fetched using the gocamId and apiUrl props, if they were provided.
-
-#### Parameters
-
-| Name    | Type  | Description   |
-| ------- | ----- | ------------- |
-| `model` | `any` | GO-CAM object |
 
 #### Returns
 

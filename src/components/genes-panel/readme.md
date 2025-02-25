@@ -24,12 +24,6 @@
 
 
 
-#### Parameters
-
-| Name     | Type  | Description |
-| -------- | ----- | ----------- |
-| `nodeId` | `any` |             |
-
 #### Returns
 
 Type: `Promise<void>`

@@ -1,7 +1,5 @@
 # wc-gocam-viz
 
-
-
 <!-- Auto Generated Below -->
 
 
@@ -83,6 +81,7 @@ Type: `Promise<void>`
 | `"legend-section"`   | An individual legend entry                           |
 | `"legend-sections"`  | A group of entries in the legend                     |
 | `"process"`          | A process group in the process and activities list   |
+| `"process-label"`    | A process label in the process and activities list   |
 
 
 ## CSS Custom Properties
@@ -95,6 +94,7 @@ Type: `Promise<void>`
 | `--activity-border-width`       | Border width of activity containers in processes and activities panel                |
 | `--activity-color`              | Text color of activity containers in processes and activities panel                  |
 | `--activity-color-active`       | Text color of activity containers in processes and activities panel when highlighted |
+| `--activity-color-link-hover`   | Anchor link hover color in processes and activities panel                            |
 | `--activity-padding`            | Padding of activity containers in processes and activities panel                     |
 | `--border-color`                | Default color of various borders used in the widget                                  |
 | `--button-background`           | Background of buttons in widget                                                      |
@@ -125,6 +125,7 @@ Type: `Promise<void>`
 | `--legend-header-padding`       | Padding of legend header                                                             |
 | `--legend-margin`               | Margin of legend container                                                           |
 | `--legend-padding`              | Padding of legend container                                                          |
+| `--node-align-items`            | Align-items of related node info                                                     |
 | `--node-background`             | Background of related node info in processes and activities panel                    |
 | `--node-border-color`           | Border color of related node info in processes and activities panel                  |
 | `--node-border-width`           | Border width of related node info in processes and activities panel                  |

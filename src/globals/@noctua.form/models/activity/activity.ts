@@ -10,7 +10,6 @@ import * as ShapeDescription from './../../data/config/shape-definition';
 import { each, filter, find, orderBy } from 'lodash';
 import { NoctuaFormUtils } from './../../utils/noctua-form-utils';
 import { TermsSummary } from './summary';
-import moment from 'moment';
 
 export enum ActivityState {
   creation = 1,
@@ -55,7 +54,7 @@ export class ActivityPosition {
 export class Activity extends SaeGraph<ActivityNode> {
   gp;
   label: string;
-  date: moment.Moment;
+  date: Date;
 
   validateEvidence = true;
 
@@ -235,11 +234,11 @@ export class Activity extends SaeGraph<ActivityNode> {
 
     if (!rootNode) return;
 
-    this.date = (moment as any)(rootNode.date, 'YYYY-MM-DD')
+    this.date = new Date(rootNode.date);
 
 
     this.nodes.forEach((node: ActivityNode) => {
-      const nodeDate = (moment as any)(node.date, 'YYYY-MM-DD')
+      const nodeDate = new Date(node.date)
 
       if (nodeDate > this.date) {
         this.date = nodeDate
@@ -249,7 +248,7 @@ export class Activity extends SaeGraph<ActivityNode> {
     each(this.edges, (triple: Triple<ActivityNode>) => {
       each(triple.predicate.evidence, (evidence: Evidence) => {
 
-        const evidenceDate = (moment as any)(evidence.date, 'YYYY-MM-DD')
+        const evidenceDate = new Date(evidence.date);
 
         if (evidenceDate > this.date) {
           this.date = evidenceDate
@@ -257,7 +256,12 @@ export class Activity extends SaeGraph<ActivityNode> {
       })
     });
 
-    this.formattedDate = this.date.format('ll');
+    this.formattedDate = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }).format(this.date);
+
   }
 
   updateSummary() {

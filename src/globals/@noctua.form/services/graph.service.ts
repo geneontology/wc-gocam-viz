@@ -10,7 +10,6 @@ import { Entity } from './../models/activity/entity';
 import { Evidence } from './../models/activity/evidence';
 import { Predicate } from './../models/activity/predicate';
 import { Triple } from './../models/activity/triple';
-import moment from 'moment';
 import { graph as bbopGraph } from 'bbop-graph-noctua';
 import { DBXrefService } from '../../dbxref.service';
 
@@ -248,9 +247,13 @@ export class NoctuaGraphService {
         const groupAnnotations = annotationNode.get_annotations_by_key('providedBy');
 
         const date = self.getNodeDate(annotationNode);
-        const formattedDate = (moment as any)(date, 'YYYY-MM-DD')
+        const formattedDate = new Date(date)
         evidence.date = date
-        evidence.formattedDate = formattedDate.format('ll');
+        evidence.formattedDate = new Intl.DateTimeFormat('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        }).format(formattedDate);
 
         if (sources.length > 0) {
           const sorted = sources.sort(self._compareSources)

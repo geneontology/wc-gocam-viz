@@ -199,7 +199,7 @@ export class GenesPanel {
                                 return (
                                     <div class='node'>
                                         <div class="node-relation">
-                                            <a target='_blank' href="">{node.predicate?.edge.label}</a>
+                                            {node.predicate?.edge.label}
                                         </div>
                                         <div class="node-term">
                                             <a target='_blank' href={node.term.url}>{node.term.label}</a>

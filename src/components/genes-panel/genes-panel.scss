@@ -125,6 +125,7 @@
 }
 
 .node-relation {
+  cursor: default;
   font-size: 0.625em;
   @include deep-width(8em);
 }

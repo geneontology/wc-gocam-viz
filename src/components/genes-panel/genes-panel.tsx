@@ -124,13 +124,29 @@ export class GenesPanel {
             <span>
                 {
                     evidences.map(evidence => {
-                        if (!evidence.reference || !evidence.referenceEntity) {
+                        if (!evidence.reference) {
                             return null; // for extreme case
                         }
-                        return <a href={evidence.referenceEntity.url} target='_blank'
-                            title={"Source: " + evidence.reference + "\nEvidence: " + evidence.evidence.label}>
-                            {this.renderReferenceIcon()}
-                        </a>
+                        const elementTitle = "Source: " + evidence.reference + "\nEvidence: " + evidence.evidence.label;
+                        if (evidence.referenceEntity?.url) {
+                            return (
+                                <a
+                                    href={evidence.referenceEntity.url}
+                                    target='_blank'
+                                    title={elementTitle}
+                                >
+                                    {this.renderReferenceIcon()}
+                              </a>
+                            )
+                        } else {
+                            return (
+                                <span
+                                    title={elementTitle}
+                                >
+                                    {this.renderReferenceIcon()}
+                                </span>
+                            )
+                        }
                     })
                 }
             </span>
